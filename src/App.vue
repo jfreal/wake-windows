@@ -9,7 +9,7 @@ import Summary from './components/Summary.vue'
 
 <template>
   <div class="max-w-2xl mx-auto">
-    <img class="h-20" src="/src/assets/logo.png">
+
     <Summary msg="Vittte + Vue" />
   </div>
 </template>

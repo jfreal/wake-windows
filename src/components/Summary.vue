@@ -26,9 +26,12 @@ export default defineComponent({
 
 
 
-  <div class="grid grid-cols-[30%_70%] w-full h-64">
-    <div>
+  <div class="grid grid-cols-[30%_70%] w-full h-64 mt-20">
 
+    <div>
+      <img class="h-20" src="/src/assets/logo.png">
+
+      <span class="text-gray-400 text-sm">WAKE TIME</span>
       <select class="bg-gray-800 text-gray-300 text-sm rounded-lg block h-8 p-1" v-model="schedule.dwt" dir="rtl">
         <option value="">12:00</option>
         <option value=".5">12:30</option>
@@ -56,15 +59,14 @@ export default defineComponent({
         <option value="11.5">11:30</option>
       </select>
 
-      DWT
 
-      WWs
+      <span class="text-gray-400 text-sm">WAKE WINDOWS</span>
+      <div v-for="(find, index) in schedule.wws">
+        <input type="number" class="bg-gray-800  text-gray-300 text-sm rounded-lg block p-2.5 " placeholder="WW1"
+          v-model="schedule.wws[index]" min="0" step="0.25" />
+      </div>
 
-      <input type="text" class="bg-gray-800  text-gray-300 text-sm rounded-lg block p-2.5 " placeholder="WW1" required>
-      <input type="text" class="bg-gray-800  text-gray-300 text-sm rounded-lg block p-2.5 " placeholder="WW2" required>
-      <input type="text" class="bg-gray-800  text-gray-300 text-sm rounded-lg block p-2.5 " placeholder="WW3" required>
-      <input type="text" class="bg-gray-800  text-gray-300 text-sm rounded-lg block p-2.5 " placeholder="WW4" required>
-      Bed
+      <span class="text-gray-400 text-sm">BEDTIME</span>
 
       <select class="bg-gray-800 text-gray-300 text-sm rounded-lg block p-2.5" v-model="schedule.bed" dir="rtl">
         <option value="">12:00</option>
@@ -94,27 +96,42 @@ export default defineComponent({
       </select>
 
     </div>
-    <div class="pr-7">
 
-      <div class="block bg-cyan-700 rounded" :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%`}">
-        <span class="float-right p-1">{{schedule.totalNightSleep}}h</span>
-        <img src="/src/assets/moon.png" class="h-8 p-1" />
+
+    <div>
+
+      <div class="text-xl"><strong>{{schedule.dwt}}</strong>-<span v-for="(find, index) in schedule.wws"
+          class="text-gray-600">
+          <span v-if="find" class="text-gray-200">{{find}}</span><span
+            v-if="index != schedule.wws.length-1">/</span></span>-<strong>{{schedule.bed}}</strong>
       </div>
-      <div class="text-gray-400 text-xs mb-2 uppercase">Night Sleep</div>
 
+      <div class="block mt-4 h-12">
 
-      <div class="block bg-violet-700 rounded" :style="{ width: `${(schedule.totalDaySleep/ 24) * 100}%`}">
-        <span class="float-right p-1">{{schedule.totalDaySleep}}h</span>
-        <img src="/src/assets/sleeping-baby2.png" class="h-8 p-1" />
+        <div class="bg-orange-500 rounded-l-lg float-left" :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%`}">
+          <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" />
+          <span class="float-right  text-xl m-2">
+            {{schedule.totalWakeTime}}h</span>
+        </div>
+
+        <div class="bg-cyan-500 float-left" :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%`}">
+          <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" />
+          <span class="float-right  text-xl m-2">
+            {{schedule.totalNightSleep}}h</span>
+        </div>
+
+        <div class="bg-violet-500 rounded-r-lg float-left" :style="{ width: `${(schedule.totalNap/ 24) * 100}%`}">
+          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" />
+          <span class="float-right text-xl m-2">
+            {{schedule.totalNap}}h</span>
+        </div>
       </div>
-      <div class="text-gray-400 text-xs mb-2 uppercase">Naps</div>
 
+      <div class="text-xl mt-4">
 
-      <div class="block bg-teal-700 rounded" :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%`}">
-        <span class="float-right p-1">{{schedule.totalWakeTime}}h</span>
-        <img src="/src/assets/sun.png" class="h-8 p-1" />
+        Total Sleep: {{schedule.totalSleep}}h <br />
+        Total Wake: {{schedule.totalWakeTime}}h
       </div>
-      <div class="text-gray-400 text-xs uppercase">Wake Time</div>
 
     </div>
   </div>

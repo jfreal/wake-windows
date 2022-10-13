@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import { Schedule } from '../models/Schedule'
 
+console.log(window.location.hash)
 
 export default defineComponent({
   data() {
@@ -108,27 +109,60 @@ export default defineComponent({
 
       <div class="block mt-4 h-12">
 
-        <div class="bg-orange-500 rounded-l-lg float-left" :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%`}">
+        <div class="bg-orange-500 rounded-l-lg text-right inline-block h-10 overflow-hidden"
+          :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%`}">
           <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" />
-          <span class="float-right  text-xl m-2">
+          <span class="text-xl m-2">
             {{schedule.totalWakeTime}}h</span>
         </div>
 
-        <div class="bg-cyan-500 float-left" :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%`}">
+        <div class="bg-cyan-500 text-right inline-block h-10 overflow-hidden"
+          :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%`}">
           <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" />
-          <span class="float-right  text-xl m-2">
+          <span class="text-xl m-2">
             {{schedule.totalNightSleep}}h</span>
         </div>
 
-        <div class="bg-violet-500 rounded-r-lg float-left" :style="{ width: `${(schedule.totalNap/ 24) * 100}%`}">
+        <div class="bg-violet-500 rounded-r-lg  text-right h-10 inline-block overflow-hidden"
+          :style="{ width: `${(schedule.totalNap/ 24) * 100}%`}">
           <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" />
-          <span class="float-right text-xl m-2">
+          <span class="text-xl m-2">
             {{schedule.totalNap}}h</span>
         </div>
       </div>
 
       <div class="text-xl mt-4">
 
+        <table class="border-separate border-spacing-y-2">
+          <tr>
+            <td class="text-gray-400 text-sm uppercase">Naps</td>
+            <td>{{schedule.totalNap}}h</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400 text-sm uppercase">Night Sleep</td>
+            <td>{{schedule.totalNightSleep}}h</td>
+          </tr>
+          <tr class="border-t">
+            <td class="text-gray-400 text-sm uppercase">Total Sleep</td>
+            <td>{{schedule.totalSleep}}h</td>
+          </tr>
+        </table>
+        <hr />
+
+        <table class="border-separate border-spacing-y-2">
+          <tr>
+            <td class="text-gray-400 text-sm uppercase">Naps</td>
+            <td>{{schedule.totalNap}}h</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400 text-sm uppercase">Night Sleep</td>
+            <td>{{schedule.totalNightSleep}}h</td>
+          </tr>
+          <tr class="border-t">
+            <td class="text-gray-400 text-sm uppercase">Total Sleep</td>
+            <td>{{schedule.totalSleep}}h</td>
+          </tr>
+        </table>
         Total Sleep: {{schedule.totalSleep}}h <br />
         Total Wake: {{schedule.totalWakeTime}}h
       </div>

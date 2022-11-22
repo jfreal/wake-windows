@@ -19,5 +19,4 @@ export default defineComponent({
     <div>I'm a validation</div>
     {{ sleepSchedule?.totalNap }}
 
-    {{ }}
 </template>

@@ -8,7 +8,7 @@ class SleepRecommendationRepository {
           this.recommendations = [
                new SleepRecommendation({
                     name: "Twins, Triplets, & Quads: Safe Sleep Training & Learning for Multiples", brackets: [
-                         new DevelopmentBracket(true, { minTime: 0, maxTime: 4 })
+                         new DevelopmentBracket(true, { minTime: 0, maxTime: 4, maxNap: 3, maxNight: 11 })
                     ]
                }),
                new SleepRecommendation({
@@ -23,18 +23,23 @@ class SleepRecommendationRepository {
 
 class SleepRecommendation {
      name: string = "";
-     time: number = 0;
      brackets: DevelopmentBracket[] = [];
 
      constructor(init?: Partial<SleepRecommendation>) {
           Object.assign(this, init);
      }
 
-     validate(schedule: ScheduleSetting): ValidationError[] {
+     validate(schedule: ScheduleSetting, time: number): ValidationError[] {
           let errors: Array<ValidationError> = [];
 
-          if (schedule.totalSleep > this.currentBracket.maxSleep) {
-               errors.push(new ValidationError(`At this age, this schedule recommends ${this.currentBracket.maxSleep} hours of sleep.`))
+          //STOP
+          if (!this.currentBracket(time)) {
+               errors.push(new ValidationError(`🚧 There isn't enough information in the schedule settings to apply this recommendation.`))
+               return errors;
+          }
+
+          if (schedule.totalSleep > this.currentBracket(time).maxSleep) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends ${this.currentBracket(time).maxSleep} hours of sleep.`))
           }
 
           return errors;
@@ -44,12 +49,11 @@ class SleepRecommendation {
           return this.brackets.sort((n1, n2) => n1.minTime - n2.minTime)[0];
      }
 
-     public get currentBracket(): DevelopmentBracket {
+     public currentBracket(time: number): DevelopmentBracket {
           console.log(this.brackets)
-          debugger;
-          return this.brackets.filter(_ => _.minTime < this.time && _.maxTime < this.time)[0];
+          let bracket = this.brackets.filter(_ => _.minTime <= time && _.maxTime >= time);
+          return bracket[0];
      }
-
 }
 
 class ValidationError {
@@ -79,6 +83,7 @@ class DevelopmentBracket {
 
      minNight: number = 0;
      maxNight: number = 0;
+
      minNap: number = 0;
      maxNap: number = 0;
 

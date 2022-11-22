@@ -3,8 +3,6 @@ import { defineComponent } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
 
-
-import Validations from './Validations.vue'
 import Recommendations from './Recommendations.vue'
 
 let repo = new SleepRecommendationRepository();
@@ -12,22 +10,18 @@ let repo = new SleepRecommendationRepository();
 export default defineComponent({
   data() {
     return {
-      count: 1,
       schedule: new ScheduleSetting(),
       sleepRecommendations: repo.recommendations
     }
   },
   components: {
-    Validations,
     Recommendations
   }
 })
-
 </script>
 
 <template>
   <div class="grid grid-cols-[30%_70%] w-full">
-
     <img class="h-20" src="/src/assets/logo.png">
   </div>
 
@@ -75,7 +69,6 @@ export default defineComponent({
         <option value="11">11:00</option>
         <option value="11.5">11:30</option>
       </select>
-
 
       <span class="text-gray-400 text-sm">WAKE WINDOWS</span>
       <div v-for="(find, index) in schedule.wws">
@@ -188,7 +181,6 @@ export default defineComponent({
       </div>
 
       <div class="mt-4">
-        <Validations :sleep-schedule="schedule" />
         <Recommendations :sleep-schedule="schedule" :recommendations="sleepRecommendations" />
       </div>
 

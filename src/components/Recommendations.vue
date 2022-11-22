@@ -7,25 +7,17 @@ export default defineComponent({
     props: {
         sleepSchedule: ScheduleSetting,
         recommendations: Array<SleepRecommendation>
-    },
-    data() {
-        return {
-
-        }
     }
 })
 </script>
 
 <template>
-    d
     <div v-for="rec in this.recommendations">
-        rec
-        <div v-for="err in rec.validate(this.sleepSchedule)">
-            err
+        <strong>{{ rec.name }}</strong>
+        {{ sleepSchedule?.monthsSinceBirth }}
+        <div v-for="err in rec.validate(sleepSchedule, sleepSchedule.monthsSinceBirth)">
+            {{ err.text }} {{ rec.time }}
         </div>
-
+        <hr />
     </div>
-
-
-
 </template>

@@ -12,12 +12,11 @@ export default defineComponent({
 </script>
 
 <template>
-    <div v-for="rec in this.recommendations">
+    <div v-for="rec in this.recommendations" class="my-4">
         <strong>{{ rec.name }}</strong>
-        {{ sleepSchedule?.monthsSinceBirth }}
         <div v-for="err in rec.validate(sleepSchedule, sleepSchedule.monthsSinceBirth)">
             {{ err.text }} {{ rec.time }}
         </div>
-        <hr />
+        <hr class="mt-2" />
     </div>
 </template>

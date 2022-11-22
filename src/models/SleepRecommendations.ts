@@ -50,7 +50,6 @@ class SleepRecommendation {
      }
 
      public currentBracket(time: number): DevelopmentBracket {
-          console.log(this.brackets)
           let bracket = this.brackets.filter(_ => _.minTime <= time && _.maxTime >= time);
           return bracket[0];
      }

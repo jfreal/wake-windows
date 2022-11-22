@@ -8,7 +8,7 @@ class ScheduleSetting {
     weeks: number;
 
     constructor() {
-        this.wws = [1, 1.5, 1.5, 2, 0]
+        this.wws = [0, 0, 0, 0, 0]
         this.bed = 7;
         this.birthday = new Date();
         this.weeks = 40;
@@ -21,11 +21,10 @@ class ScheduleSetting {
     set birthdayDate(value: string) {
         this._birthdayDate = value;
 
+        console.log(value)
+
         let [year, month, day] = value.split("-");
         let date = new Date(+year, +month - 1, +day);
-
-        console.log(value)
-        console.log(date)
 
         this.birthday = date;
     }

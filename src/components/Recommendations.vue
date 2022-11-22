@@ -14,9 +14,11 @@ export default defineComponent({
 <template>
     <div v-for="rec in this.recommendations" class="my-4">
         <strong>{{ rec.name }}</strong>
-        <div v-for="err in rec.validate(sleepSchedule, sleepSchedule.monthsSinceBirth)">
+
+        <div v-for="err in rec.validate(sleepSchedule, sleepSchedule?.monthsSinceBirth)">
             {{ err.text }} {{ rec.time }}
         </div>
+
         <hr class="mt-2" />
     </div>
 </template>

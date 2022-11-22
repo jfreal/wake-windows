@@ -7,10 +7,28 @@ import Recommendations from './Recommendations.vue'
 
 let repo = new SleepRecommendationRepository();
 
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+
+
+let ss = new ScheduleSetting();
+
+if (params.bd) {
+  ss.birthdayDate = params.bd;
+}
+
+if (params.s) {
+  let [dwt, wwString, bed] = params.s.split("-");
+
+  ss.wws = wwString.split('/').map(Number)
+  ss.dwt = +dwt;
+  ss.bed = +bed;
+}
+
 export default defineComponent({
   data() {
     return {
-      schedule: new ScheduleSetting(),
+      schedule: ss,
       sleepRecommendations: repo.recommendations
     }
   },
@@ -29,21 +47,21 @@ export default defineComponent({
 
     <div class="pr-2">
 
-      <span class="text-gray-400 text-sm">BIRTHDAY</span>
+      <span class="text-gray-400 text-sm">Birthday</span>
 
-      <div>
+      <div class="mb-4">
         <input type="date" class="peer bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
           placeholder="WW1" v-model="schedule.birthdayDate" required="true" />
         <span class="hidden peer-invalid:block text-amber-100 text-sm">please enter a birthdate</span>
       </div>
 
-      <span class="text-gray-400 text-sm">WEEKS</span>
+      <span class="text-gray-400 text-sm">Weeks in Womb</span>
 
-      <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
+      <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full  mb-4"
         placeholder="WW1" min="0" step="1" v-model="schedule.weeks" />
 
-      <span class="text-gray-400 text-sm">WAKE TIME</span>
-      <select class="bg-slate-800 text-gray-300 text-sm block h-8 p-1 w-full" v-model="schedule.dwt" dir="rtl">
+      <span class="text-gray-400 text-sm">Desired Wake Time</span>
+      <select class="bg-slate-800 text-gray-300 text-sm block h-8 p-1 w-full mb-4" v-model="schedule.dwt" dir="rtl">
         <option value="">12:00</option>
         <option value=".5">12:30</option>
         <option value="1">1:00</option>
@@ -70,13 +88,15 @@ export default defineComponent({
         <option value="11.5">11:30</option>
       </select>
 
-      <span class="text-gray-400 text-sm">WAKE WINDOWS</span>
-      <div v-for="(find, index) in schedule.wws">
-        <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
-          placeholder="WW1" v-model="schedule.wws[index]" min="0" step="0.25" />
+      <span class="text-gray-400 text-sm">Wake Windows</span>
+      <div class="mb-4">
+        <div v-for="(find, index) in schedule.wws">
+          <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
+            placeholder="WW1" v-model="schedule.wws[index]" min="0" step="0.25" />
+        </div>
       </div>
 
-      <span class="text-gray-400 text-sm">BEDTIME</span>
+      <span class="text-gray-400 text-sm">Bedtime</span>
 
       <select class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 w-full" v-model="schedule.bed" dir="rtl">
         <option value="">12:00</option>

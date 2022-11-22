@@ -8,12 +8,16 @@ class SleepRecommendationRepository {
           this.recommendations = [
                new SleepRecommendation({
                     name: "Twins, Triplets, & Quads: Safe Sleep Training & Learning for Multiples", brackets: [
-                         new DevelopmentBracket(true, { minTime: 0, maxTime: 4, maxNap: 3, maxNight: 11 })
+                         new DevelopmentBracket([4, 5], [0, 4.5], [10, 12], [3, 4], [75, 105]),
+                         new DevelopmentBracket([5, 6], [0, 4], [10, 12], [3, 3], [90, 135]),
+                         new DevelopmentBracket([6, 7], [0, 3.5], [10, 12], [3, 3], [120, 150]),
                     ]
                }),
                new SleepRecommendation({
                     name: "Huckelberry", brackets: [
-                         new DevelopmentBracket(true, { minTime: 4, maxTime: 5, minNaps: 3, maxNaps: 4 })
+                         new DevelopmentBracket([3, 4], [4, 5], [10, 12], [4, 5], [60, 120]),
+                         new DevelopmentBracket([4, 5], [3.5, 4.5], [10, 12], [3, 4], [90, 150]),
+                         new DevelopmentBracket([5, 6], [2.5, 3.5], [11, 12], [3, 4], [120, 240]),
                     ]
                }),
 
@@ -42,15 +46,20 @@ class SleepRecommendation {
                errors.push(new ValidationError(`⚠️ At this age, this schedule recommends ${this.currentBracket(time).maxSleep} hours of sleep.`))
           }
 
+          // if (schedule.naps > this.currentBracket(time).maxSleep) {
+          //      errors.push(new ValidationError(`⚠️ At this age, this schedule recommends ${this.currentBracket(time).maxSleep} hours of sleep.`))
+          // }
+
           return errors;
      }
 
      public get startBracket(): DevelopmentBracket {
-          return this.brackets.sort((n1, n2) => n1.minTime - n2.minTime)[0];
+          return this.brackets.sort((n1, n2) => n1.months[0] - n2.months[1])[0];
      }
 
      public currentBracket(time: number): DevelopmentBracket {
-          let bracket = this.brackets.filter(_ => _.minTime <= time && _.maxTime >= time);
+          console.log(time)
+          let bracket = this.brackets.filter(_ => _.months[0] <= time && _.months[1] >= time);
           return bracket[0];
      }
 }
@@ -65,29 +74,19 @@ class ValidationError {
 
 class DevelopmentBracket {
 
-     constructor(monthMode: boolean, init?: Partial<DevelopmentBracket>) {
-          Object.assign(this, init);
-     }
+     constructor(
+          public months: [number, number],
+          public daySleep: [number, number],
+          public nightSleep: [number, number],
+          public naps: [number, number],
+          public wwTime: [number, number]
+     ) { }
 
-     minTime: number = 0;
-     maxTime: number = 0;
-
-     exampleNap: number = 0;
      dwt: number = 7;
      bed: number = 7;
-     wwMax: number = 2;
-
-     minNaps: number = 0;
-     maxNaps: number = 0;
-
-     minNight: number = 0;
-     maxNight: number = 0;
-
-     minNap: number = 0;
-     maxNap: number = 0;
 
      get maxSleep() {
-          return this.maxNight + this.maxNap;
+          return this.daySleep[1] + this.nightSleep[1];
      }
 }
 

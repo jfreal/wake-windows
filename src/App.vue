@@ -3,7 +3,7 @@ import Summary from './components/Summary.vue'
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto">
+  <div class="max-w-3xl mx-auto">
 
     <Summary />
   </div>

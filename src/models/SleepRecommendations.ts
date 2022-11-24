@@ -42,13 +42,17 @@ class SleepRecommendation {
                return errors;
           }
 
-          if (schedule.totalSleep > this.currentBracket(time).maxSleep) {
-               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends ${this.currentBracket(time).maxSleep} hours of sleep.`))
+          if (this.currentBracket(time).maxSleep > schedule.totalSleep) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends no more than ${this.currentBracket(time).maxSleep} hours of sleep.`))
           }
 
-          // if (schedule.naps > this.currentBracket(time).maxSleep) {
-          //      errors.push(new ValidationError(`⚠️ At this age, this schedule recommends ${this.currentBracket(time).maxSleep} hours of sleep.`))
-          // }
+          if (schedule.totalSleep < this.currentBracket(time).minSleep) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).maxSleep} hours of sleep.`))
+          }
+
+          if (schedule.wws.length - 1 < this.currentBracket(time).naps[0]) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).naps[0]} naps.`))
+          }
 
           return errors;
      }
@@ -58,7 +62,6 @@ class SleepRecommendation {
      }
 
      public currentBracket(time: number): DevelopmentBracket {
-          console.log(time)
           let bracket = this.brackets.filter(_ => _.months[0] <= time && _.months[1] >= time);
           return bracket[0];
      }
@@ -87,6 +90,10 @@ class DevelopmentBracket {
 
      get maxSleep() {
           return this.daySleep[1] + this.nightSleep[1];
+     }
+
+     get minSleep() {
+          return this.daySleep[0] + this.nightSleep[0];
      }
 }
 

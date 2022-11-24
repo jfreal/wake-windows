@@ -1,5 +1,7 @@
 class ScheduleSetting {
-    private _birthdayDate?: string = "2022/1/1";
+    //this date should never apply to anything, TS complains if I make this nullable 
+    //and I'm not smart enough to figure out why
+    private _birthdayDate: string = "2022/1/1";
 
     dwt: number = 7;
     wws: number[];
@@ -20,8 +22,6 @@ class ScheduleSetting {
 
     set birthdayDate(value: string) {
         this._birthdayDate = value;
-
-        console.log(value)
 
         let [year, month, day] = value.split("-");
         let date = new Date(+year, +month - 1, +day);
@@ -52,6 +52,10 @@ class ScheduleSetting {
         return this.wws.reduce((accumulator, current) => {
             return accumulator + current;
         }, 0);
+    }
+
+    public get naps() {
+        return this.wws.length - 1;
     }
 
     public get totalNap() {

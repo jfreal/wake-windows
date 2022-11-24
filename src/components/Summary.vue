@@ -10,6 +10,8 @@ let repo = new SleepRecommendationRepository();
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
 
+const hash = window.location.hash;
+console.log(hash)
 
 let ss = new ScheduleSetting();
 
@@ -34,6 +36,28 @@ export default defineComponent({
   },
   components: {
     Recommendations
+  },
+  methods: {
+    addWW() {
+      this.schedule.wws.push(1);
+    },
+    removeWW(index) {
+      this.schedule.wws.splice(index, 1);
+    }
+  },
+  computed: {
+    scheduleSummary() {
+
+      let shorthand = `${this.schedule.dwt}-${this.schedule.wws.join('/')}-${this.schedule.bed}`;
+
+      // // Replace current querystring with the new one.
+      history.replaceState(null, "", `?bd=${this.schedule.birthdayDate}&s=${shorthand}`);
+
+
+      // history.pushState(null, "null", `#${shorthand}`);
+
+      return shorthand;
+    }
   }
 })
 </script>
@@ -91,9 +115,13 @@ export default defineComponent({
       <span class="text-gray-400 text-sm">Wake Windows</span>
       <div class="mb-4">
         <div v-for="(find, index) in schedule.wws">
-          <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
-            placeholder="WW1" v-model="schedule.wws[index]" min="0" step="0.25" />
+          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 mb-1" placeholder="WW1"
+            v-model="schedule.wws[index]" min="0" step="0.25" />
+          <button class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 mb-1 float-right"
+            v-on:click="removeWW(index)">-</button>
+
         </div>
+        <button class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 mb-1" v-on:click="addWW">+</button>
       </div>
 
       <span class="text-gray-400 text-sm">Bedtime</span>
@@ -132,8 +160,11 @@ export default defineComponent({
         <div class="basis-1/2">
           <span class="text-slate-400 text-sm uppercase">Summary</span>
 
-          <div class="text-xl"><strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws"
-              class="text-gray-600">
+          <div class="text-xl">
+            {{ scheduleSummary }}
+
+
+            <strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws" class="text-gray-600">
               <span v-if="find" class="text-gray-200">{{ find }}</span><span
                 v-if="index != schedule.wws.length - 1">/</span></span>-<strong>{{ schedule.bed }}</strong>
           </div>

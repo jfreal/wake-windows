@@ -9,13 +9,17 @@ export default defineComponent({
             type: ScheduleSetting,
             required: true
         },
-        recommendations: Array<SleepRecommendation>
+        recommendations: {
+            type: Array<SleepRecommendation>,
+            required: true
+
+        }
     }
 })
 </script>
 
 <template>
-    <div v-for="rec in this.recommendations" class="my-4">
+    <div v-for="rec in recommendations" class="my-4">
         {{ rec.name }}
 
         <div v-for="b in rec.brackets" class="mt-4">
@@ -71,7 +75,7 @@ export default defineComponent({
 
         <div v-for="err in rec.validate(sleepSchedule, sleepSchedule?.monthsSinceBirth)">
 
-            {{ err.text }} {{ rec.time }}
+            {{ err.text }} {{ rec.brackets }}
         </div>
 
         <hr class="mt-2" />

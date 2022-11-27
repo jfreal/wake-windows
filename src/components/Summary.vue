@@ -41,7 +41,7 @@ export default defineComponent({
     addWW() {
       this.schedule.wws.push(1);
     },
-    removeWW(index) {
+    removeWW(index: number) {
       this.schedule.wws.splice(index, 1);
     }
   },

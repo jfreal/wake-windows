@@ -5,7 +5,10 @@ import { SleepRecommendation } from '../models/SleepRecommendations';
 
 export default defineComponent({
     props: {
-        sleepSchedule: ScheduleSetting,
+        sleepSchedule: {
+            type: ScheduleSetting,
+            required: true
+        },
         recommendations: Array<SleepRecommendation>
     }
 })
@@ -15,13 +18,13 @@ export default defineComponent({
     <div v-for="rec in this.recommendations" class="my-4">
         {{ rec.name }}
 
-        <div v-for="b in rec.brackets">
-            {{ b.months[0] }} to {{ b.months[1] }} Months
-            <table class="table-auto w-full">
+        <div v-for="b in rec.brackets" class="mt-4">
+            <table class="table-auto w-full border-separate">
                 <thead>
                     <tr class="text-sm">
                         <th class="w-6"></th>
-                        <th class="text-left">Requirement</th>
+                        <th class="text-left"> {{ b.months[0] }} to {{ b.months[1] }} Months
+                        </th>
                         <th class="w-4">Min</th>
                         <th>You</th>
                         <th class="w-4">Max</th>
@@ -37,7 +40,7 @@ export default defineComponent({
                     </tr>
                     <tr v-if="sleepSchedule.wws.length - 1 < b.naps[0]" class="border-b border-slate-700 ">
                         <td colspan="4">
-                            sdf
+                            ⚠️ At this age, this schedule recommends a minimum of {{ b.naps[0] }} naps
                         </td>
                     </tr>
                     <tr>
@@ -46,9 +49,9 @@ export default defineComponent({
                         <td class="w-4">{{ b.daySleep[0] }}</td>
                         <td class="w-4">{{ b.daySleep[1] }}</td>
                     </tr>
-                    <tr class="border-b border-slate-700 ">
+                    <tr v-if="sleepSchedule.wws.length === 99" class="border-b border-slate-700 ">
                         <td colspan="4">
-                            sdf
+                            qwer {{ sleepSchedule.wws.length }}ss
                         </td>
                     </tr>
                     <tr>
@@ -57,7 +60,7 @@ export default defineComponent({
                         <td class="w-4">{{ b.nightSleep[0] }}</td>
                         <td class="w-4">{{ b.nightSleep[1] }}</td>
                     </tr>
-                    <tr class="border-b border-slate-700 ">
+                    <tr v-if="false" class="border-b border-slate-700 ">
                         <td colspan="4">
                             sdf
                         </td>
@@ -67,7 +70,6 @@ export default defineComponent({
         </div>
 
         <div v-for="err in rec.validate(sleepSchedule, sleepSchedule?.monthsSinceBirth)">
-
 
             {{ err.text }} {{ rec.time }}
         </div>

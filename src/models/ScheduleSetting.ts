@@ -1,7 +1,7 @@
 class ScheduleSetting {
     //this date should never apply to anything, TS complains if I make this nullable 
     //and I'm not smart enough to figure out why
-    private _birthdayDate: string = "2022/1/1";
+    private _birthdayDate?: string = "2022/1/1";
 
     dwt: number = 7;
     wws: number[];

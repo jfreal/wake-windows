@@ -1,65 +1,60 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { reactive, computed, watch } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
-
 import Recommendations from './Recommendations.vue'
 
-let repo = new SleepRecommendationRepository();
+const repo = new SleepRecommendationRepository();
+const sleepRecommendations = repo.recommendations;
 
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
 
-const hash = window.location.hash;
-console.log(hash)
-
-let ss = new ScheduleSetting();
+const schedule = reactive(new ScheduleSetting());
 
 if (params.bd) {
-  ss.birthdayDate = params.bd;
+  schedule.birthdayDate = params.bd;
 }
 
 if (params.s) {
   let [dwt, wwString, bed] = params.s.split("-");
-
-  ss.wws = wwString.split('/').map(Number)
-  ss.dwt = +dwt;
-  ss.bed = +bed;
+  schedule.wws = wwString.split('/').map(Number);
+  schedule.dwt = +dwt;
+  schedule.bed = +bed;
 }
 
-export default defineComponent({
-  data() {
-    return {
-      schedule: ss,
-      sleepRecommendations: repo.recommendations
-    }
-  },
-  components: {
-    Recommendations
-  },
-  methods: {
-    addWW() {
-      this.schedule.wws.push(1);
-    },
-    removeWW(index: number) {
-      this.schedule.wws.splice(index, 1);
-    }
-  },
-  computed: {
-    scheduleSummary() {
+function addWW() {
+  schedule.wws.push(1);
+}
 
-      let shorthand = `${this.schedule.dwt}-${this.schedule.wws.join('/')}-${this.schedule.bed}`;
+function removeWW(index: number) {
+  schedule.wws.splice(index, 1);
+}
 
-      // // Replace current querystring with the new one.
-      history.replaceState(null, "", `?bd=${this.schedule.birthdayDate}&s=${shorthand}`);
+const scheduleSummary = computed(() => {
+  return `${schedule.dwt}-${schedule.wws.join('/')}-${schedule.bed}`;
+});
 
-
-      // history.pushState(null, "null", `#${shorthand}`);
-
-      return shorthand;
-    }
+const scheduleWarnings = computed(() => {
+  const warnings: string[] = [];
+  if (schedule.totalNap < 0) {
+    warnings.push("Total nap time is negative. Your wake windows may be too long for the given wake time and bedtime.");
   }
-})
+  if (schedule.totalNightSleep < 0) {
+    warnings.push("Night sleep is negative. Check your desired wake time and bedtime.");
+  }
+  if (schedule.totalNightSleep > 14) {
+    warnings.push("Night sleep exceeds 14 hours. Check your desired wake time and bedtime.");
+  }
+  if (schedule.weeks < 20 || schedule.weeks > 44) {
+    warnings.push("Weeks in womb should typically be between 20 and 44.");
+  }
+  return warnings;
+});
+
+watch(scheduleSummary, (shorthand) => {
+  history.replaceState(null, "", `?bd=${schedule.birthdayDate}&s=${shorthand}`);
+}, { immediate: true });
 </script>
 
 <template>
@@ -82,7 +77,7 @@ export default defineComponent({
       <span class="text-gray-400 text-sm">Weeks in Womb</span>
 
       <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full  mb-4"
-        placeholder="WW1" min="0" step="1" v-model="schedule.weeks" />
+        placeholder="Weeks" min="20" max="44" step="1" v-model="schedule.weeks" />
 
       <span class="text-gray-400 text-sm">Desired Wake Time</span>
       <select class="bg-slate-800 text-gray-300 text-sm block h-8 p-1 w-full mb-4" v-model="schedule.dwt" dir="rtl">
@@ -115,8 +110,8 @@ export default defineComponent({
       <span class="text-gray-400 text-sm">Wake Windows</span>
       <div class="mb-4">
         <div v-for="(find, index) in schedule.wws">
-          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 mb-1" placeholder="WW1"
-            v-model="schedule.wws[index]" min="0" step="0.25" />
+          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 mb-1" placeholder="Hours"
+            v-model="schedule.wws[index]" min="0" max="6" step="0.25" />
           <button class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 mb-1 float-right"
             v-on:click="removeWW(index)">-</button>
 
@@ -199,6 +194,12 @@ export default defineComponent({
         </div>
       </div>
 
+      <div v-if="scheduleWarnings.length" class="mt-4">
+        <div v-for="warning in scheduleWarnings" class="text-amber-400 text-sm p-2 bg-amber-400/10 rounded mb-1">
+          &#9888;&#65039; {{ warning }}
+        </div>
+      </div>
+
       <div class="mt-4">
         <span class="text-slate-400 text-sm uppercase">Sleep Stats</span>
         <div class="flex flex-row">
@@ -224,7 +225,7 @@ export default defineComponent({
             <table class="table-auto w-full">
               <tr>
                 <td class="text-gray-400  text-sm  uppercase">Total Wake</td>
-                <td>{{ schedule.totalNap }}h</td>
+                <td>{{ schedule.totalWakeTime }}h</td>
               </tr>
             </table>
           </div>

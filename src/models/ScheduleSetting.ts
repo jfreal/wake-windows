@@ -1,7 +1,5 @@
 class ScheduleSetting {
-    //this date should never apply to anything, TS complains if I make this nullable 
-    //and I'm not smart enough to figure out why
-    private _birthdayDate?: string = "2022/1/1";
+    _birthdayDate: string = "";
 
     dwt: number = 7;
     wws: number[];
@@ -12,12 +10,19 @@ class ScheduleSetting {
     constructor() {
         this.wws = [0, 0, 0, 0, 0]
         this.bed = 7;
-        this.birthday = new Date();
         this.weeks = 40;
+
+        const fourMonthsAgo = new Date();
+        fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 4);
+        this.birthday = fourMonthsAgo;
+        const y = fourMonthsAgo.getFullYear();
+        const m = String(fourMonthsAgo.getMonth() + 1).padStart(2, '0');
+        const d = String(fourMonthsAgo.getDate()).padStart(2, '0');
+        this._birthdayDate = `${y}-${m}-${d}`;
     }
 
     get birthdayDate(): string {
-        return this._birthdayDate ?? "";
+        return this._birthdayDate;
     }
 
     set birthdayDate(value: string) {
@@ -29,19 +34,22 @@ class ScheduleSetting {
         this.birthday = date;
     }
 
+    /** Adjusted age in weeks, accounting for gestational age (premature babies get a younger adjusted age). */
     public get weeksSinceBirth(): number {
         const msInWeek = 1000 * 60 * 60 * 24 * 7;
-        let ms = -Math.abs(this.birthday.getTime() - new Date().getTime()) / msInWeek;
-
-        return Math.round((40 - this.weeks) - ms);
+        const chronologicalWeeks = (new Date().getTime() - this.birthday.getTime()) / msInWeek;
+        const gestationalAdjustment = 40 - this.weeks;
+        return Math.max(0, Math.round(chronologicalWeeks - gestationalAdjustment));
     }
 
+    /** Adjusted age in months, accounting for gestational age. */
     public get monthsSinceBirth(): number {
-        var months;
-        months = (new Date().getFullYear() - this.birthday.getFullYear()) * 12;
-        months -= this.birthday.getMonth();
-        months += new Date().getMonth();
-        return months <= 0 ? 0 : months;
+        const chronologicalMonths =
+            (new Date().getFullYear() - this.birthday.getFullYear()) * 12
+            + new Date().getMonth() - this.birthday.getMonth();
+        const gestationalAdjustmentMonths = Math.round((40 - this.weeks) / 4.345);
+        const adjusted = chronologicalMonths - gestationalAdjustmentMonths;
+        return adjusted <= 0 ? 0 : adjusted;
     }
 
     public get totalNightSleep() {

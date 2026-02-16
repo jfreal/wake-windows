@@ -1,4 +1,3 @@
-import { faMultiply } from "@fortawesome/free-solid-svg-icons";
 import { ScheduleSetting } from "./ScheduleSetting";
 
 class SleepRecommendationRepository {
@@ -42,23 +41,23 @@ class SleepRecommendation {
                return errors;
           }
 
-          if (this.currentBracket(time).maxSleep > schedule.totalSleep) {
+          if (schedule.totalSleep > this.currentBracket(time).maxSleep) {
                errors.push(new ValidationError(`⚠️ At this age, this schedule recommends no more than ${this.currentBracket(time).maxSleep} hours of sleep.`))
           }
 
           if (schedule.totalSleep < this.currentBracket(time).minSleep) {
-               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).maxSleep} hours of sleep.`))
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).minSleep} hours of sleep.`))
           }
 
           if (schedule.wws.length - 1 < this.currentBracket(time).naps[0]) {
-               errors.push(new ValidationError(``))
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).naps[0]} naps.`))
           }
 
           return errors;
      }
 
      public get startBracket(): DevelopmentBracket {
-          return this.brackets.sort((n1, n2) => n1.months[0] - n2.months[1])[0];
+          return this.brackets.sort((n1, n2) => n1.months[0] - n2.months[0])[0];
      }
 
      public currentBracket(time: number): DevelopmentBracket {

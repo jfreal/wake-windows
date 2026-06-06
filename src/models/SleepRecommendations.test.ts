@@ -122,6 +122,29 @@ describe('SleepRecommendation', () => {
     });
 });
 
+describe('General Guidance source', () => {
+    function generalRec() {
+        const repo = new SleepRecommendationRepository();
+        return repo.recommendations.find(r => r.name.startsWith("General Guidance"))!;
+    }
+
+    it('exists and spans newborn through 24 months', () => {
+        const rec = generalRec();
+        expect(rec).toBeDefined();
+        expect(rec.currentBracket(1)).toBeDefined();   // newborn
+        expect(rec.currentBracket(12)).toBeDefined();  // toddler
+        expect(rec.currentBracket(24)).toBeDefined();
+    });
+
+    it('covers every month 0..24 with exactly one bracket (contiguous, no gaps/overlaps)', () => {
+        const rec = generalRec();
+        for (let m = 0; m <= 24; m++) {
+            const matches = rec.brackets.filter(b => b.months[0] <= m && b.months[1] >= m);
+            expect(matches.length).toBe(1);
+        }
+    });
+});
+
 describe('DevelopmentBracket', () => {
     it('should calculate maxSleep as sum of max day and night sleep', () => {
         const repo = new SleepRecommendationRepository();

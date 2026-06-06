@@ -9,7 +9,18 @@ describe('ScheduleSetting', () => {
             expect(ss.bed).toBe(7);
             expect(ss.weeks).toBe(40);
             expect(ss.wws).toEqual([0, 0, 0, 0, 0]);
-            expect(ss.birthdayDate).toBe("");
+            expect(ss.birthdayDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        });
+
+        it('should default birthday to four months ago', () => {
+            vi.useFakeTimers();
+            try {
+                vi.setSystemTime(new Date(2024, 5, 15)); // June 15, 2024
+                const ss = new ScheduleSetting();
+                expect(ss.birthdayDate).toBe("2024-02-15"); // Feb 15, 2024
+            } finally {
+                vi.useRealTimers();
+            }
         });
     });
 
@@ -184,6 +195,42 @@ describe('ScheduleSetting', () => {
             ss.weeks = 40;
             ss.birthdayDate = "2024-06-15"; // future
             expect(ss.monthsSinceBirth).toBe(0);
+        });
+    });
+
+    describe('napTimes', () => {
+        it('computes evenly-split nap clock times between wake windows', () => {
+            const ss = new ScheduleSetting();
+            ss.dwt = 7;
+            ss.bed = 7;
+            ss.wws = [2, 2, 2, 2, 2]; // 4 naps, totalNap=2h -> 30min each
+            const naps = ss.napTimes;
+            expect(naps.length).toBe(4);
+            expect(naps[0]).toEqual({ start: 540, end: 570 });   // 9:00-9:30 AM
+            expect(naps[3]).toEqual({ start: 990, end: 1020 });  // 4:30-5:00 PM
+        });
+
+        it('lands wake time and bedtime correctly', () => {
+            const ss = new ScheduleSetting();
+            ss.dwt = 7;
+            ss.bed = 7;
+            ss.wws = [2, 2, 2, 2, 2];
+            expect(ss.wakeMinutes).toBe(420);     // 7:00 AM
+            expect(ss.bedtimeMinutes).toBe(1140); // 7:00 PM
+        });
+
+        it('returns no naps when nap time is non-positive', () => {
+            const ss = new ScheduleSetting();
+            ss.dwt = 7;
+            ss.bed = 7;
+            ss.wws = [5, 5, 5]; // 15h wake -> negative nap time
+            expect(ss.napTimes).toEqual([]);
+        });
+
+        it('returns no naps for a single wake window', () => {
+            const ss = new ScheduleSetting();
+            ss.wws = [5];
+            expect(ss.napTimes).toEqual([]);
         });
     });
 });

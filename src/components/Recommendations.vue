@@ -59,6 +59,6 @@ defineProps<{
             {{ err.text }}
         </div>
 
-        <hr class="mt-2" />
+        <hr class="mt-2 border-slate-700" />
     </div>
 </template>

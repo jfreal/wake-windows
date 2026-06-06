@@ -73,6 +73,39 @@ class ScheduleSetting {
     public get totalSleep() {
         return this.totalNap + this.totalNightSleep;
     }
+
+    /** Morning wake time, in minutes from midnight. */
+    public get wakeMinutes() {
+        return this.dwt * 60;
+    }
+
+    /** Bedtime, in minutes from midnight, derived from wake time + awake time + nap time. */
+    public get bedtimeMinutes() {
+        return (this.dwt + this.totalWakeTime + this.totalNap) * 60;
+    }
+
+    /**
+     * Clock times for each nap (minutes from midnight), walking the day from the
+     * morning wake time through each wake window, splitting total nap time evenly.
+     * A nap follows every wake window except the last. Empty if the schedule has
+     * no naps or non-positive nap time.
+     */
+    public get napTimes(): { start: number; end: number }[] {
+        const napCount = this.naps;
+        if (napCount <= 0 || this.totalNap <= 0) return [];
+
+        const napDuration = (this.totalNap / napCount) * 60;
+        const times: { start: number; end: number }[] = [];
+        let t = this.wakeMinutes;
+        for (let i = 0; i < this.wws.length; i++) {
+            t += this.wws[i] * 60;
+            if (i < this.wws.length - 1) {
+                times.push({ start: t, end: t + napDuration });
+                t += napDuration;
+            }
+        }
+        return times;
+    }
 }
 
 export { ScheduleSetting }

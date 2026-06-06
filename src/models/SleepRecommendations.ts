@@ -19,6 +19,16 @@ class SleepRecommendationRepository {
                          new DevelopmentBracket([5, 6], [2.5, 3.5], [11, 12], [3, 4], [120, 240]),
                     ]
                }),
+               new SleepRecommendation({
+                    name: "General Guidance (AAP / Sleep Foundation ranges)", brackets: [
+                         new DevelopmentBracket([0, 2], [6, 9], [8, 10], [4, 6], [35, 90]),
+                         new DevelopmentBracket([3, 5], [3.5, 5], [10, 12], [3, 5], [75, 150]),
+                         new DevelopmentBracket([6, 8], [2.5, 3.5], [10, 12], [2, 3], [120, 180]),
+                         new DevelopmentBracket([9, 11], [2, 3], [10, 12], [2, 2], [150, 210]),
+                         new DevelopmentBracket([12, 17], [1.5, 3], [10, 12], [1, 2], [180, 240]),
+                         new DevelopmentBracket([18, 24], [1, 2.5], [10, 12], [1, 1], [240, 360]),
+                    ]
+               }),
 
           ];
      }

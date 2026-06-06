@@ -2,6 +2,7 @@
 import { reactive, computed, watch } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
+import { formatClock } from '../models/time';
 import Recommendations from './Recommendations.vue'
 
 const repo = new SleepRecommendationRepository();
@@ -52,7 +53,7 @@ const scheduleWarnings = computed(() => {
   return warnings;
 });
 
-watch(scheduleSummary, (shorthand) => {
+watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
   history.replaceState(null, "", `?bd=${schedule.birthdayDate}&s=${shorthand}`);
 }, { immediate: true });
 </script>
@@ -62,7 +63,7 @@ watch(scheduleSummary, (shorthand) => {
     <img class="h-20" src="/src/assets/logo.png">
   </div>
 
-  <div class="grid grid-cols-[30%_70%] w-full h-64">
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:h-64">
 
     <div class="pr-2">
 
@@ -151,14 +152,11 @@ watch(scheduleSummary, (shorthand) => {
     </div>
     <div>
 
-      <div class="flex flex-row">
+      <div class="flex flex-col sm:flex-row">
         <div class="basis-1/2">
           <span class="text-slate-400 text-sm uppercase">Summary</span>
 
           <div class="text-xl">
-            {{ scheduleSummary }}
-
-
             <strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws" class="text-gray-600">
               <span v-if="find" class="text-gray-200">{{ find }}</span><span
                 v-if="index != schedule.wws.length - 1">/</span></span>-<strong>{{ schedule.bed }}</strong>
@@ -202,7 +200,7 @@ watch(scheduleSummary, (shorthand) => {
 
       <div class="mt-4">
         <span class="text-slate-400 text-sm uppercase">Sleep Stats</span>
-        <div class="flex flex-row">
+        <div class="flex flex-col sm:flex-row">
           <div class="basis-1/2">
             <table class="table-auto w-full">
               <tbody>
@@ -214,7 +212,7 @@ watch(scheduleSummary, (shorthand) => {
                   <td class="text-gray-400 text-sm uppercase">Night Sleep</td>
                   <td>{{ schedule.totalNightSleep }}h</td>
                 </tr>
-                <tr class="border-t">
+                <tr class="border-t border-slate-700">
                   <td class="text-gray-400 text-sm uppercase">Total Sleep</td>
                   <td>{{ schedule.totalSleep }}h</td>
                 </tr>
@@ -229,6 +227,24 @@ watch(scheduleSummary, (shorthand) => {
               </tr>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div v-if="schedule.napTimes.length" class="mt-4">
+        <span class="text-slate-400 text-sm uppercase">Nap Schedule</span>
+        <div class="flex justify-between text-sm py-1 text-gray-300">
+          <span class="flex items-center gap-2"><img src="/src/assets/sun.png" class="h-5 w-5" /> Wake</span>
+          <span>{{ formatClock(schedule.wakeMinutes) }}</span>
+        </div>
+        <div v-for="(nap, i) in schedule.napTimes" :key="i"
+          class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
+          <span class="flex items-center gap-2"><img src="/src/assets/sleeping-baby2.png" class="h-5 w-5" /> Nap {{ i + 1
+            }}</span>
+          <span>{{ formatClock(nap.start) }} – {{ formatClock(nap.end) }}</span>
+        </div>
+        <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
+          <span class="flex items-center gap-2"><img src="/src/assets/moon.png" class="h-5 w-5" /> Bedtime</span>
+          <span>{{ formatClock(schedule.bedtimeMinutes) }}</span>
         </div>
       </div>
 

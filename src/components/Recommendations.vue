@@ -37,7 +37,7 @@ const views = computed(() => {
             months,
             range: b ? `${b.months[0]}–${b.months[1]} mo` : '',
             rows,
-            warnings: rec.validate(s, months).map((e) => e.text),
+            warnings: b ? rec.validate(s, months).map((e) => e.text) : [],
         };
     });
 });

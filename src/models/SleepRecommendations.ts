@@ -50,24 +50,24 @@ class SleepRecommendation {
      }
 
      validate(schedule: ScheduleSetting, time: number): ValidationError[] {
-          let errors: Array<ValidationError> = [];
+          const errors: ValidationError[] = [];
+          const bracket = this.currentBracket(time);
 
-          //STOP
-          if (!this.currentBracket(time)) {
+          if (!bracket) {
                errors.push(new ValidationError(`🚧 There isn't enough information in the schedule settings to apply this recommendation.`))
                return errors;
           }
 
-          if (schedule.totalSleep > this.currentBracket(time).maxSleep) {
-               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends no more than ${this.currentBracket(time).maxSleep} hours of sleep.`))
+          if (schedule.totalSleep > bracket.maxSleep) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends no more than ${bracket.maxSleep} hours of sleep.`))
           }
 
-          if (schedule.totalSleep < this.currentBracket(time).minSleep) {
-               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).minSleep} hours of sleep.`))
+          if (schedule.totalSleep < bracket.minSleep) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${bracket.minSleep} hours of sleep.`))
           }
 
-          if (schedule.wws.length - 1 < this.currentBracket(time).naps[0]) {
-               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${this.currentBracket(time).naps[0]} naps.`))
+          if (schedule.wws.length - 1 < bracket.naps[0]) {
+               errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${bracket.naps[0]} naps.`))
           }
 
           return errors;
@@ -77,7 +77,7 @@ class SleepRecommendation {
           return this.brackets.sort((n1, n2) => n1.months[0] - n2.months[0])[0];
      }
 
-     public currentBracket(time: number): DevelopmentBracket {
+     public currentBracket(time: number): DevelopmentBracket | undefined {
           const matches = this.brackets.filter(_ => _.months[0] <= time && _.months[1] >= time);
           // Brackets can overlap at a boundary month (e.g. [3,4] and [4,5] both contain 4);
           // prefer the more advanced range (highest start) so the age maps to the bracket it enters.

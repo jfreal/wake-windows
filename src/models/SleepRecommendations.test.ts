@@ -33,7 +33,7 @@ describe('SleepRecommendation', () => {
             const rec = makeRec();
             const bracket = rec.currentBracket(5);
             expect(bracket).toBeDefined();
-            expect(bracket.months).toEqual([4, 6]);
+            expect(bracket?.months).toEqual([4, 6]);
         });
 
         it('should return undefined for age outside brackets', () => {

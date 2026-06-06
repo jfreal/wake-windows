@@ -6,7 +6,9 @@ class SleepRecommendationRepository {
      constructor() {
           this.recommendations = [
                new SleepRecommendation({
-                    name: "Twins, Triplets, & Quads: Safe Sleep Training & Learning for Multiples", brackets: [
+                    name: "Twins, Triplets, & Quads: Safe Sleep Training & Learning for Multiples",
+                    url: "https://www.facebook.com/groups/157633598090301/",
+                    brackets: [
                          new DevelopmentBracket([4, 5], [0, 4.5], [10, 12], [3, 4], [75, 105]),
                          new DevelopmentBracket([5, 6], [0, 4], [10, 12], [3, 3], [90, 135]),
                          new DevelopmentBracket([6, 7], [0, 3.5], [10, 12], [3, 3], [120, 150]),

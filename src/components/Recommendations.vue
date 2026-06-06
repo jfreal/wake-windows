@@ -33,6 +33,7 @@ const views = computed(() => {
             : [];
         return {
             name: rec.name,
+            url: rec.url,
             months,
             range: b ? `${b.months[0]}–${b.months[1]} mo` : '',
             rows,
@@ -50,7 +51,12 @@ function inRange(row: Row): boolean {
     <div class="space-y-6">
         <div v-for="view in views" :key="view.name">
             <div class="flex items-baseline justify-between gap-3">
-                <h3 class="text-slate-300 text-sm font-semibold">{{ view.name }}</h3>
+                <h3 class="text-slate-300 text-sm font-semibold">
+                    <a v-if="view.url" :href="view.url" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-sky-400 underline decoration-slate-600 underline-offset-2">{{ view.name }}
+                        <span aria-hidden="true" class="text-slate-500">↗</span></a>
+                    <template v-else>{{ view.name }}</template>
+                </h3>
                 <span v-if="view.range" class="text-slate-500 text-xs whitespace-nowrap">
                     {{ view.range }} · age {{ view.months }} mo
                 </span>

@@ -13,14 +13,18 @@ class SleepRecommendationRepository {
                     ]
                }),
                new SleepRecommendation({
-                    name: "Huckelberry", brackets: [
+                    name: "Huckleberry",
+                    url: "https://huckleberrycare.com/blog/baby-sleep-schedule-by-age-nap-and-sleep-chart",
+                    brackets: [
                          new DevelopmentBracket([3, 4], [4, 5], [10, 12], [4, 5], [60, 120]),
                          new DevelopmentBracket([4, 5], [3.5, 4.5], [10, 12], [3, 4], [90, 150]),
                          new DevelopmentBracket([5, 6], [2.5, 3.5], [11, 12], [3, 4], [120, 240]),
                     ]
                }),
                new SleepRecommendation({
-                    name: "General Guidance (AAP / Sleep Foundation ranges)", brackets: [
+                    name: "General Guidance (AAP / Sleep Foundation ranges)",
+                    url: "https://www.sleepfoundation.org/children-and-sleep/how-much-sleep-do-kids-need",
+                    brackets: [
                          new DevelopmentBracket([0, 2], [6, 9], [8, 10], [4, 6], [35, 90]),
                          new DevelopmentBracket([3, 5], [3.5, 5], [10, 12], [3, 5], [75, 150]),
                          new DevelopmentBracket([6, 8], [2.5, 3.5], [10, 12], [2, 3], [120, 180]),
@@ -36,6 +40,7 @@ class SleepRecommendationRepository {
 
 class SleepRecommendation {
      name: string = "";
+     url: string = "";
      brackets: DevelopmentBracket[] = [];
 
      constructor(init?: Partial<SleepRecommendation>) {

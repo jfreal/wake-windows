@@ -8,7 +8,7 @@ class ScheduleSetting {
     weeks: number;
 
     constructor() {
-        this.wws = [0, 0, 0, 0, 0]
+        this.wws = [2, 2, 2, 2]
         this.bed = 7;
         this.weeks = 40;
 
@@ -52,8 +52,12 @@ class ScheduleSetting {
         return adjusted <= 0 ? 0 : adjusted;
     }
 
+    /**
+     * Night sleep in hours. Wake is `dwt` (AM) and bedtime is `bed` (PM, i.e. bed+12
+     * in 24h), so the awake span is (bed+12) - dwt and night = 24 - awake = 12 + dwt - bed.
+     */
     public get totalNightSleep() {
-        return 12 - (this.dwt - this.bed);
+        return 12 + (this.dwt - this.bed);
     }
 
     public get totalWakeTime() {
@@ -63,7 +67,7 @@ class ScheduleSetting {
     }
 
     public get naps() {
-        return this.wws.length - 1;
+        return Math.max(0, this.wws.length - 1);
     }
 
     public get totalNap() {
@@ -72,6 +76,40 @@ class ScheduleSetting {
 
     public get totalSleep() {
         return this.totalNap + this.totalNightSleep;
+    }
+
+    /** Morning wake time, in minutes from midnight. */
+    public get wakeMinutes() {
+        return this.dwt * 60;
+    }
+
+    /** Bedtime (the selected `bed` evening hour), in minutes from midnight. The nap
+     * walk below ends here too, since wake + wake-windows + naps == 24 - night. */
+    public get bedtimeMinutes() {
+        return (this.bed + 12) * 60;
+    }
+
+    /**
+     * Clock times for each nap (minutes from midnight), walking the day from the
+     * morning wake time through each wake window, splitting total nap time evenly.
+     * A nap follows every wake window except the last. Empty if the schedule has
+     * no naps or non-positive nap time.
+     */
+    public get napTimes(): { start: number; end: number }[] {
+        const napCount = this.naps;
+        if (napCount <= 0 || this.totalNap <= 0) return [];
+
+        const napDuration = (this.totalNap / napCount) * 60;
+        const times: { start: number; end: number }[] = [];
+        let t = this.wakeMinutes;
+        for (let i = 0; i < this.wws.length; i++) {
+            t += this.wws[i] * 60;
+            if (i < this.wws.length - 1) {
+                times.push({ start: t, end: t + napDuration });
+                t += napDuration;
+            }
+        }
+        return times;
     }
 }
 

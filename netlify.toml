@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Tailwind v4's @tailwindcss/oxide requires Node >= 20
+  NODE_VERSION = "20"

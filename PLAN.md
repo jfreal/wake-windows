@@ -8,6 +8,7 @@ clock schedule, and compares the plan against published sleep recommendations by
 age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 
 ## Stack (current)
+
 | Tool | Version |
 |------|---------|
 | Vue | 3.5.x |
@@ -22,7 +23,8 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 - `npm test` — Vitest (44 tests)
 
 ## Architecture
-```
+
+```text
 src/
   main.ts                     Entry — mounts Vue app
   App.vue                     Root shell (max-width, mobile padding)

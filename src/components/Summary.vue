@@ -60,7 +60,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
 <template>
   <div class="grid grid-cols-[30%_70%] w-full">
-    <img class="h-20" src="/src/assets/logo.png">
+    <img class="h-20" src="/src/assets/logo.png" alt="Wake Windows">
   </div>
 
   <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:h-64">
@@ -172,21 +172,21 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
         <div class="bg-orange-500 rounded-l-lg text-right inline-block h-10 overflow-hidden"
           :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%` }">
-          <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" />
+          <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
           <span class="text-xl m-2">
             {{ schedule.totalWakeTime }}h</span>
         </div>
 
         <div class="bg-cyan-500 text-right inline-block h-10 overflow-hidden"
           :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%` }">
-          <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" />
+          <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
           <span class="text-xl m-2">
             {{ schedule.totalNightSleep }}h</span>
         </div>
 
         <div class="bg-violet-500 rounded-r-lg  text-right h-10 inline-block overflow-hidden"
           :style="{ width: `${(schedule.totalNap / 24) * 100}%` }">
-          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" />
+          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
           <span class="text-xl m-2">
             {{ schedule.totalNap }}h</span>
         </div>
@@ -205,7 +205,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
             <table class="table-auto w-full">
               <tbody>
                 <tr>
-                  <td class="text-gray-400 text-sm uppercase"> Naps ({{ schedule.wws.filter((x) => x).length }})</td>
+                  <td class="text-gray-400 text-sm uppercase"> Naps ({{ schedule.naps }})</td>
                   <td>{{ schedule.totalNap }}h</td>
                 </tr>
                 <tr>
@@ -233,17 +233,17 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
       <div v-if="schedule.napTimes.length" class="mt-4">
         <span class="text-slate-400 text-sm uppercase">Nap Schedule</span>
         <div class="flex justify-between text-sm py-1 text-gray-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/sun.png" class="h-5 w-5" /> Wake</span>
+          <span class="flex items-center gap-2"><img src="/src/assets/sun.png" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
           <span>{{ formatClock(schedule.wakeMinutes) }}</span>
         </div>
         <div v-for="(nap, i) in schedule.napTimes" :key="i"
           class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/sleeping-baby2.png" class="h-5 w-5" /> Nap {{ i + 1
+          <span class="flex items-center gap-2"><img src="/src/assets/sleeping-baby2.png" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
             }}</span>
           <span>{{ formatClock(nap.start) }} – {{ formatClock(nap.end) }}</span>
         </div>
         <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/moon.png" class="h-5 w-5" /> Bedtime</span>
+          <span class="flex items-center gap-2"><img src="/src/assets/moon.png" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
           <span>{{ formatClock(schedule.bedtimeMinutes) }}</span>
         </div>
       </div>

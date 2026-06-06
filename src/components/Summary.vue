@@ -29,6 +29,7 @@ function addWW() {
 }
 
 function removeWW(index: number) {
+  if (schedule.wws.length <= 1) return; // keep at least one wake window
   schedule.wws.splice(index, 1);
 }
 

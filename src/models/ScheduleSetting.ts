@@ -67,7 +67,7 @@ class ScheduleSetting {
     }
 
     public get naps() {
-        return this.wws.length - 1;
+        return Math.max(0, this.wws.length - 1);
     }
 
     public get totalNap() {

@@ -86,6 +86,12 @@ describe('ScheduleSetting', () => {
             ss.wws = [5];
             expect(ss.naps).toBe(0);
         });
+
+        it('should clamp to 0 for empty wake windows (no negative naps)', () => {
+            const ss = new ScheduleSetting();
+            ss.wws = [];
+            expect(ss.naps).toBe(0);
+        });
     });
 
     describe('totalNap', () => {

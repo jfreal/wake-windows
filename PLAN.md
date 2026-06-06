@@ -20,7 +20,7 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 
 - `npm run dev` — dev server
 - `npm run build` — `vue-tsc --noEmit && vite build`
-- `npm test` — Vitest (44 tests)
+- `npm test` — Vitest (47 tests)
 
 ## Architecture
 
@@ -50,12 +50,12 @@ Options API, ~12 logic bugs, no tests). Completed:
   `@import "tailwindcss"`, no PostCSS/autoprefixer config).
 - Original bug list fixed (validation logic, gestational-age math, debug remnants,
   side-effect-in-computed, dead code).
-- Vitest suite added (44 tests across the model layer).
+- Vitest suite added (47 tests across the model layer).
 - Features added: nap clock schedule, expanded age coverage (newborn → 24 mo via a
   general-guidance source), mobile-responsive layout.
 
 ## Verified
-`vue-tsc` typecheck clean · `vite build` clean · 44/44 tests pass · dev server renders
+`vue-tsc` typecheck clean · `vite build` clean · 47/47 tests pass · dev server renders
 (dark theme, nap schedule, recommendation tables) with no console/Vite errors.
 
 ## Possible future work

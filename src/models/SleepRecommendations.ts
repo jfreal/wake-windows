@@ -66,7 +66,7 @@ class SleepRecommendation {
                errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${bracket.minSleep} hours of sleep.`))
           }
 
-          if (schedule.wws.length - 1 < bracket.naps[0]) {
+          if (schedule.naps < bracket.naps[0]) {
                errors.push(new ValidationError(`⚠️ At this age, this schedule recommends a minimum of ${bracket.naps[0]} naps.`))
           }
 

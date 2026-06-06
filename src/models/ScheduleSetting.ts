@@ -36,6 +36,7 @@ class ScheduleSetting {
 
     /** Adjusted age in weeks, accounting for gestational age (premature babies get a younger adjusted age). */
     public get weeksSinceBirth(): number {
+        if (isNaN(this.birthday.getTime())) return 0; // no/invalid birthday entered yet
         const msInWeek = 1000 * 60 * 60 * 24 * 7;
         const chronologicalWeeks = (new Date().getTime() - this.birthday.getTime()) / msInWeek;
         const gestationalAdjustment = 40 - this.weeks;
@@ -44,6 +45,7 @@ class ScheduleSetting {
 
     /** Adjusted age in months, accounting for gestational age. */
     public get monthsSinceBirth(): number {
+        if (isNaN(this.birthday.getTime())) return 0; // no/invalid birthday entered yet
         const chronologicalMonths =
             (new Date().getFullYear() - this.birthday.getFullYear()) * 12
             + new Date().getMonth() - this.birthday.getMonth();

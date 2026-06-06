@@ -8,7 +8,7 @@ describe('ScheduleSetting', () => {
             expect(ss.dwt).toBe(7);
             expect(ss.bed).toBe(7);
             expect(ss.weeks).toBe(40);
-            expect(ss.wws).toEqual([0, 0, 0, 0, 0]);
+            expect(ss.wws).toEqual([2, 2, 2, 2]);
             expect(ss.birthdayDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
         });
 
@@ -43,20 +43,20 @@ describe('ScheduleSetting', () => {
             expect(ss.totalNightSleep).toBe(12);
         });
 
-        it('should reduce night sleep when dwt > bed', () => {
+        it('should give more night sleep for a later wake time (dwt > bed)', () => {
             const ss = new ScheduleSetting();
-            ss.dwt = 8;
-            ss.bed = 7;
-            // 12 - (8 - 7) = 11
-            expect(ss.totalNightSleep).toBe(11);
+            ss.dwt = 8; // wake 8 AM
+            ss.bed = 7; // bed 7 PM -> awake 11h, night 13h
+            // 12 + (8 - 7) = 13
+            expect(ss.totalNightSleep).toBe(13);
         });
 
-        it('should increase night sleep when bed > dwt', () => {
+        it('should give less night sleep for an earlier wake time (dwt < bed)', () => {
             const ss = new ScheduleSetting();
-            ss.dwt = 6;
-            ss.bed = 7;
-            // 12 - (6 - 7) = 13
-            expect(ss.totalNightSleep).toBe(13);
+            ss.dwt = 6; // wake 6 AM
+            ss.bed = 7; // bed 7 PM -> awake 13h, night 11h
+            // 12 + (6 - 7) = 11
+            expect(ss.totalNightSleep).toBe(11);
         });
     });
 
@@ -217,6 +217,31 @@ describe('ScheduleSetting', () => {
             ss.wws = [2, 2, 2, 2, 2];
             expect(ss.wakeMinutes).toBe(420);     // 7:00 AM
             expect(ss.bedtimeMinutes).toBe(1140); // 7:00 PM
+        });
+
+        it('keeps bedtime equal to the selected bedtime even when wake time differs', () => {
+            const ss = new ScheduleSetting();
+            ss.dwt = 6;
+            ss.bed = 8;                                    // wake 6 AM, bed 8 PM
+            expect(ss.bedtimeMinutes).toBe((8 + 12) * 60); // 8:00 PM, not derived from wake
+            ss.dwt = 9;
+            ss.bed = 6;                                    // wake 9 AM, bed 6 PM
+            expect(ss.bedtimeMinutes).toBe((6 + 12) * 60); // 6:00 PM
+        });
+
+        it('spaces non-uniform naps and ends the day at the selected bedtime', () => {
+            const ss = new ScheduleSetting();
+            ss.dwt = 7;
+            ss.bed = 7;
+            ss.wws = [1.5, 2, 2.5, 3]; // 9h awake, 3 naps of 1h each
+            const naps = ss.napTimes;
+            expect(naps.length).toBe(3);
+            expect(naps[0]).toEqual({ start: 510, end: 570 });  // after the 1.5h window
+            expect(naps[1]).toEqual({ start: 690, end: 750 });  // interior nap
+            expect(naps[2]).toEqual({ start: 900, end: 960 });
+            // wake + every window + every nap lands exactly at the 7 PM bedtime
+            expect(ss.wakeMinutes + ss.totalWakeTime * 60 + ss.totalNap * 60).toBe(1140);
+            expect(ss.bedtimeMinutes).toBe(1140);
         });
 
         it('returns no naps when nap time is non-positive', () => {

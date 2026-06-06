@@ -9,10 +9,10 @@ defineProps<{
 </script>
 
 <template>
-    <div v-for="rec in recommendations" class="my-4">
+    <div v-for="rec in recommendations" :key="rec.name" class="my-4">
         {{ rec.name }}
 
-        <div v-for="b in rec.brackets" class="mt-4">
+        <div v-for="b in rec.brackets" :key="`${b.months[0]}-${b.months[1]}`" class="mt-4">
             <table class="table-auto w-full border-separate">
                 <thead>
                     <tr class="text-sm">
@@ -55,7 +55,7 @@ defineProps<{
             </table>
         </div>
 
-        <div v-for="err in rec.validate(sleepSchedule, sleepSchedule?.monthsSinceBirth)">
+        <div v-for="err in rec.validate(sleepSchedule, sleepSchedule?.monthsSinceBirth)" :key="err.text">
             {{ err.text }}
         </div>
 

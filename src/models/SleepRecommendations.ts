@@ -71,8 +71,10 @@ class SleepRecommendation {
      }
 
      public currentBracket(time: number): DevelopmentBracket {
-          let bracket = this.brackets.filter(_ => _.months[0] <= time && _.months[1] >= time);
-          return bracket[0];
+          const matches = this.brackets.filter(_ => _.months[0] <= time && _.months[1] >= time);
+          // Brackets can overlap at a boundary month (e.g. [3,4] and [4,5] both contain 4);
+          // prefer the more advanced range (highest start) so the age maps to the bracket it enters.
+          return matches.sort((a, b) => b.months[0] - a.months[0])[0];
      }
 }
 

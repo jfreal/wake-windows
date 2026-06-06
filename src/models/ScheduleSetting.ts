@@ -8,7 +8,7 @@ class ScheduleSetting {
     weeks: number;
 
     constructor() {
-        this.wws = [0, 0, 0, 0, 0]
+        this.wws = [2, 2, 2, 2]
         this.bed = 7;
         this.weeks = 40;
 
@@ -52,8 +52,12 @@ class ScheduleSetting {
         return adjusted <= 0 ? 0 : adjusted;
     }
 
+    /**
+     * Night sleep in hours. Wake is `dwt` (AM) and bedtime is `bed` (PM, i.e. bed+12
+     * in 24h), so the awake span is (bed+12) - dwt and night = 24 - awake = 12 + dwt - bed.
+     */
     public get totalNightSleep() {
-        return 12 - (this.dwt - this.bed);
+        return 12 + (this.dwt - this.bed);
     }
 
     public get totalWakeTime() {
@@ -79,9 +83,10 @@ class ScheduleSetting {
         return this.dwt * 60;
     }
 
-    /** Bedtime, in minutes from midnight, derived from wake time + awake time + nap time. */
+    /** Bedtime (the selected `bed` evening hour), in minutes from midnight. The nap
+     * walk below ends here too, since wake + wake-windows + naps == 24 - night. */
     public get bedtimeMinutes() {
-        return (this.dwt + this.totalWakeTime + this.totalNap) * 60;
+        return (this.bed + 12) * 60;
     }
 
     /**

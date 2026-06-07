@@ -167,6 +167,12 @@ describe('ScheduleSetting', () => {
             // chronological 0 weeks, minus 10 weeks = -10 -> clamped to 0
             expect(ss.weeksSinceBirth).toBe(0);
         });
+
+        it('should return 0 (not NaN) for an empty birthday', () => {
+            const ss = new ScheduleSetting();
+            ss.birthdayDate = ""; // user cleared the date field
+            expect(ss.weeksSinceBirth).toBe(0);
+        });
     });
 
     describe('monthsSinceBirth', () => {
@@ -200,6 +206,12 @@ describe('ScheduleSetting', () => {
             const ss = new ScheduleSetting();
             ss.weeks = 40;
             ss.birthdayDate = "2024-06-15"; // future
+            expect(ss.monthsSinceBirth).toBe(0);
+        });
+
+        it('should return 0 (not NaN) for an empty birthday', () => {
+            const ss = new ScheduleSetting();
+            ss.birthdayDate = ""; // user cleared the date field
             expect(ss.monthsSinceBirth).toBe(0);
         });
     });

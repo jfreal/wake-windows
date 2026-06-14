@@ -1,5 +1,4 @@
 {
-  "$schema": "./citations.schema.json",
   "meta": {
     "title": "Infant Sleep & Nap Citation Tiers",
     "description": "Tiered, credentialed citation data for an infant wake-windows app. Tier 1 = evidence-based (consensus guidelines + peer-reviewed norms). Tier 2 = practice-based heuristic (consultant/parenting frameworks not validated by trials).",

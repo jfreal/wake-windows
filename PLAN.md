@@ -53,6 +53,7 @@ src/
 ```
 
 ## Evidence tiers (spec §6)
+
 Every recommendation carries a Tier 1 (evidence-based) / Tier 2 (practice-based
 heuristic) badge. Total-sleep and nap-count metrics are Tier 1; specific
 wake-window durations are Tier 2 and labeled as not trial-validated. Sources

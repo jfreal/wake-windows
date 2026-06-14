@@ -8,6 +8,7 @@ class SleepRecommendationRepository {
                new SleepRecommendation({
                     name: "Twins, Triplets, & Quads: Safe Sleep Training & Learning for Multiples",
                     url: "https://www.facebook.com/groups/157633598090301/",
+                    tier: 2,
                     brackets: [
                          new DevelopmentBracket([4, 5], [0, 4.5], [10, 12], [3, 4], [75, 105]),
                          new DevelopmentBracket([5, 6], [0, 4], [10, 12], [3, 3], [90, 135]),
@@ -17,6 +18,7 @@ class SleepRecommendationRepository {
                new SleepRecommendation({
                     name: "Huckleberry",
                     url: "https://huckleberrycare.com/blog/baby-sleep-schedule-by-age-nap-and-sleep-chart",
+                    tier: 2,
                     brackets: [
                          new DevelopmentBracket([3, 4], [4, 5], [10, 12], [4, 5], [60, 120]),
                          new DevelopmentBracket([4, 5], [3.5, 4.5], [10, 12], [3, 4], [90, 150]),
@@ -26,6 +28,7 @@ class SleepRecommendationRepository {
                new SleepRecommendation({
                     name: "General Guidance (AAP / Sleep Foundation ranges)",
                     url: "https://www.sleepfoundation.org/children-and-sleep/how-much-sleep-do-kids-need",
+                    tier: 1,
                     brackets: [
                          new DevelopmentBracket([0, 2], [6, 9], [8, 10], [4, 6], [35, 90]),
                          new DevelopmentBracket([3, 5], [3.5, 5], [10, 12], [3, 5], [75, 150]),
@@ -43,6 +46,8 @@ class SleepRecommendationRepository {
 class SleepRecommendation {
      name: string = "";
      url: string = "";
+     // Provenance tier: 1 = evidence-based, 2 = practice-based heuristic (see Citations.ts).
+     tier: number = 2;
      brackets: DevelopmentBracket[] = [];
 
      constructor(init?: Partial<SleepRecommendation>) {

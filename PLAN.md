@@ -20,7 +20,7 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 
 - `npm run dev` — dev server
 - `npm run build` — `vue-tsc --noEmit && vite build`
-- `npm test` — Vitest (47 tests)
+- `npm test` — Vitest (60 tests)
 
 ## Architecture
 
@@ -33,13 +33,33 @@ src/
     Summary.vue               <script setup> — inputs, bar chart, stats,
                               nap schedule, warnings, URL persistence
     Recommendations.vue       Per-source bracket tables + validation
+  components/
+    EvidenceGuidance.vue      Age-tied tier display: per-metric Tier 1/2
+                              badges + tap-to-expand credentialed sources
+    SafeSleep.vue             Prominent Tier 1 safe-sleep essentials
+    SourcesEvidence.vue       Full citation library by tier + tier explainer
+    TierBadge.vue             Tier 1/2 badge (color + shape, a11y-safe)
+  data/
+    citations.json            Source library + per-age-band recommendations
+                              (copied from ../../.research/citations.json)
   models/
     ScheduleSetting.ts        Core model: sleep math, gestational age,
                               napTimes / wake / bedtime (all unit-tested)
-    SleepRecommendations.ts   Recommendation data + validation
+    SleepRecommendations.ts   Bracket data + validation (now tier-tagged)
+    Citations.ts              Typed access to citations.json: sources, tiers,
+                              age-band lookup (unit-tested)
     time.ts                   formatClock(minutes) helper
     *.test.ts                 Vitest unit tests
 ```
+
+## Evidence tiers (spec §6)
+
+Every recommendation carries a Tier 1 (evidence-based) / Tier 2 (practice-based
+heuristic) badge. Total-sleep and nap-count metrics are Tier 1; specific
+wake-window durations are Tier 2 and labeled as not trial-validated. Sources
+expand inline to show author credentials, organization, year, and a working
+link; a "Sources & Evidence" panel lists the full library by tier with a tier
+explainer; a persistent footer carries the medical disclaimer + lastVerified.
 State lives in a single `reactive(ScheduleSetting)` in `Summary.vue`; URL sync is
 handled in a `watch` (keyed on the schedule shorthand **and** birthday).
 
@@ -55,8 +75,8 @@ Options API, ~12 logic bugs, no tests). Completed:
   general-guidance source), mobile-responsive layout.
 
 ## Verified
-`vue-tsc` typecheck clean · `vite build` clean · 47/47 tests pass · dev server renders
-(dark theme, nap schedule, recommendation tables) with no console/Vite errors.
+`vue-tsc` typecheck clean · `vite build` clean · 60/60 tests pass · all Vue/TS
+modules transform through the dev server with no Vite errors or template warnings.
 
 ## Possible future work
 - Migrate the two named commercial sources' brackets beyond their current 3–7 mo range

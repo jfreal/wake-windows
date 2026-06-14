@@ -4,6 +4,9 @@ import { ScheduleSetting } from '../models/ScheduleSetting'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
 import { formatClock } from '../models/time';
 import Recommendations from './Recommendations.vue'
+import EvidenceGuidance from './EvidenceGuidance.vue'
+import SafeSleep from './SafeSleep.vue'
+import SourcesEvidence from './SourcesEvidence.vue'
 
 const repo = new SleepRecommendationRepository();
 const sleepRecommendations = repo.recommendations;
@@ -222,10 +225,12 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
           </div>
           <div class="basis-1/2">
             <table class="table-auto w-full">
-              <tr>
-                <td class="text-gray-400  text-sm  uppercase">Total Wake</td>
-                <td>{{ schedule.totalWakeTime }}h</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td class="text-gray-400  text-sm  uppercase">Total Wake</td>
+                  <td>{{ schedule.totalWakeTime }}h</td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -249,8 +254,25 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-6">
+        <SafeSleep />
+      </div>
+
+      <div class="mt-6">
+        <EvidenceGuidance :months="schedule.monthsSinceBirth" />
+      </div>
+
+      <div class="mt-6">
+        <span class="text-slate-400 text-sm uppercase">How your plan compares</span>
+        <p class="text-slate-500 text-xs mb-2">
+          Total-sleep and nap counts are evidence-based (Tier 1). Wake-window timing is a practice-based
+          heuristic (Tier 2) — a starting estimate, not a rule. Watch your baby's tiredness cues over the clock.
+        </p>
         <Recommendations :sleep-schedule="schedule" :recommendations="sleepRecommendations" />
+      </div>
+
+      <div class="mt-6">
+        <SourcesEvidence />
       </div>
 
     </div>

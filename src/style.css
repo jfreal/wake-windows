@@ -28,7 +28,6 @@
 :focus-visible {
   outline: 2px solid var(--color-sky-400, #38bdf8);
   outline-offset: 2px;
-  border-radius: 2px;
 }
 
 /* Placeholders must clear 4.5:1 too — slate-400 on the slate-800 field. */

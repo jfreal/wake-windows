@@ -63,29 +63,26 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-[30%_70%] w-full">
-    <img class="h-20" src="/src/assets/logo.png" alt="Wake Windows">
-  </div>
+  <img class="h-20 mb-2" src="/src/assets/logo.png" alt="Wake Windows">
 
-  <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:h-64">
+
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:items-start">
 
     <div class="pr-2">
 
-      <span class="text-gray-400 text-sm">Birthday</span>
-
+      <label for="bd" class="block text-slate-400 text-sm mb-1">Birthday</label>
       <div class="mb-4">
-        <input type="date" class="peer bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full "
-          placeholder="WW1" v-model="schedule.birthdayDate" required="true" />
-        <span class="hidden peer-invalid:block text-amber-100 text-sm">please enter a birthdate</span>
+        <input id="bd" type="date" class="peer bg-slate-800 text-slate-200 text-sm rounded block p-2.5 w-full"
+          v-model="schedule.birthdayDate" required />
+        <span class="hidden peer-invalid:block text-amber-100 text-sm mt-1">Please enter a birthdate.</span>
       </div>
 
-      <span class="text-gray-400 text-sm">Weeks in Womb</span>
-
-      <input type="number" class="bg-slate-800  text-gray-300 text-sm rounded block p-2.5 mb-1 w-full  mb-4"
+      <label for="weeks" class="block text-slate-400 text-sm mb-1">Weeks in Womb</label>
+      <input id="weeks" type="number" class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 w-full mb-4"
         placeholder="Weeks" min="20" max="44" step="1" v-model="schedule.weeks" />
 
-      <span class="text-gray-400 text-sm">Desired Wake Time</span>
-      <select class="bg-slate-800 text-gray-300 text-sm block h-8 p-1 w-full mb-4" v-model="schedule.dwt" dir="rtl">
+      <label for="dwt" class="block text-slate-400 text-sm mb-1">Desired Wake Time</label>
+      <select id="dwt" class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 w-full mb-4" v-model="schedule.dwt" dir="rtl">
         <option value="">12:00</option>
         <option value=".5">12:30</option>
         <option value="1">1:00</option>
@@ -112,24 +109,23 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         <option value="11.5">11:30</option>
       </select>
 
-      <span class="text-gray-400 text-sm">Wake Windows</span>
-      <div class="mb-4">
+      <span id="ww-label" class="block text-slate-400 text-sm mb-1">Wake Windows</span>
+      <div role="group" aria-labelledby="ww-label" class="mb-4">
         <div v-for="(find, index) in schedule.wws" class="flex items-center gap-2 mb-1">
-          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 min-h-11" placeholder="Hours"
+          <input type="number" class="bg-slate-800 text-slate-200 text-sm rounded p-2.5 min-h-11 w-full" placeholder="Hours"
             v-model="schedule.wws[index]" min="0" max="6" step="0.25" :aria-label="`Wake window ${index + 1} (hours)`" />
           <button type="button"
-            class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-gray-300 text-lg rounded min-h-11 min-w-11 disabled:opacity-40 disabled:cursor-not-allowed"
+            class="shrink-0 inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-lg rounded min-h-11 min-w-11 disabled:opacity-40 disabled:cursor-not-allowed"
             :disabled="schedule.wws.length <= 1" :aria-label="`Remove wake window ${index + 1}`"
             v-on:click="removeWW(index)">−</button>
         </div>
         <button type="button"
-          class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-gray-300 text-lg rounded min-h-11 min-w-11"
+          class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-lg rounded min-h-11 min-w-11"
           aria-label="Add wake window" v-on:click="addWW">+</button>
       </div>
 
-      <span class="text-gray-400 text-sm">Bedtime</span>
-
-      <select class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 w-full" v-model="schedule.bed" dir="rtl">
+      <label for="bed" class="block text-slate-400 text-sm mb-1">Bedtime</label>
+      <select id="bed" class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 w-full" v-model="schedule.bed" dir="rtl">
         <option value="">12:00</option>
         <option value=".5">12:30</option>
         <option value="1">1:00</option>
@@ -163,9 +159,9 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         <div class="basis-1/2">
           <span class="text-slate-400 text-sm uppercase">Summary</span>
 
-          <div class="text-xl">
+          <div class="text-xl tabular-nums">
             <strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws" class="text-muted">
-              <span v-if="find" class="text-gray-200">{{ find }}</span><span
+              <span v-if="find" class="text-slate-200">{{ find }}</span><span
                 v-if="index != schedule.wws.length - 1">/</span></span>-<strong>{{ schedule.bed }}</strong>
           </div>
         </div>
@@ -175,27 +171,25 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         </div>
       </div>
 
-      <div class="block mt-4 h-12">
+      <div class="flex mt-4 h-10" role="img"
+        :aria-label="`Day: ${schedule.totalWakeTime}h awake, ${schedule.totalNightSleep}h night sleep, ${schedule.totalNap}h naps`">
 
-        <div class="bg-orange-500 rounded-l-lg text-right inline-block h-10 overflow-hidden"
+        <div class="bg-orange-500 rounded-l-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%` }">
-          <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2 text-slate-900 font-semibold">
-            {{ schedule.totalWakeTime }}h</span>
+          <img src="/src/assets/sun.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalWakeTime }}h</span>
         </div>
 
-        <div class="bg-cyan-500 text-right inline-block h-10 overflow-hidden"
+        <div class="bg-cyan-500 flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%` }">
-          <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2 text-slate-900 font-semibold">
-            {{ schedule.totalNightSleep }}h</span>
+          <img src="/src/assets/moon.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNightSleep }}h</span>
         </div>
 
-        <div class="bg-violet-500 rounded-r-lg  text-right h-10 inline-block overflow-hidden"
+        <div class="bg-violet-500 rounded-r-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalNap / 24) * 100}%` }">
-          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2 text-slate-900 font-semibold">
-            {{ schedule.totalNap }}h</span>
+          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNap }}h</span>
         </div>
       </div>
 
@@ -212,16 +206,16 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
             <table class="table-auto w-full">
               <tbody>
                 <tr>
-                  <td class="text-gray-400 text-sm uppercase"> Naps ({{ schedule.naps }})</td>
-                  <td>{{ schedule.totalNap }}h</td>
+                  <td class="text-slate-400 text-sm uppercase">Naps ({{ schedule.naps }})</td>
+                  <td class="text-right text-slate-200 tabular-nums">{{ schedule.totalNap }}h</td>
                 </tr>
                 <tr>
-                  <td class="text-gray-400 text-sm uppercase">Night Sleep</td>
-                  <td>{{ schedule.totalNightSleep }}h</td>
+                  <td class="text-slate-400 text-sm uppercase">Night Sleep</td>
+                  <td class="text-right text-slate-200 tabular-nums">{{ schedule.totalNightSleep }}h</td>
                 </tr>
                 <tr class="border-t border-slate-700">
-                  <td class="text-gray-400 text-sm uppercase">Total Sleep</td>
-                  <td>{{ schedule.totalSleep }}h</td>
+                  <td class="text-slate-400 text-sm uppercase">Total Sleep</td>
+                  <td class="text-right text-slate-200 tabular-nums font-medium">{{ schedule.totalSleep }}h</td>
                 </tr>
               </tbody>
             </table>
@@ -230,8 +224,8 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
             <table class="table-auto w-full">
               <tbody>
                 <tr>
-                  <td class="text-gray-400  text-sm  uppercase">Total Wake</td>
-                  <td>{{ schedule.totalWakeTime }}h</td>
+                  <td class="text-slate-400 text-sm uppercase">Total Wake</td>
+                  <td class="text-right text-slate-200 tabular-nums">{{ schedule.totalWakeTime }}h</td>
                 </tr>
               </tbody>
             </table>
@@ -241,19 +235,19 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
       <div v-if="schedule.napTimes.length" class="mt-4">
         <span class="text-slate-400 text-sm uppercase">Nap Schedule</span>
-        <div class="flex justify-between text-sm py-1 text-gray-300">
+        <div class="flex justify-between text-sm py-1 text-slate-300">
           <span class="flex items-center gap-2"><img src="/src/assets/sun.png" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
-          <span>{{ formatClock(schedule.wakeMinutes) }}</span>
+          <span class="tabular-nums">{{ formatClock(schedule.wakeMinutes) }}</span>
         </div>
         <div v-for="(nap, i) in schedule.napTimes" :key="i"
-          class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
+          class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
           <span class="flex items-center gap-2"><img src="/src/assets/sleeping-baby2.png" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
             }}</span>
-          <span>{{ formatClock(nap.start) }} – {{ formatClock(nap.end) }}</span>
+          <span class="tabular-nums">{{ formatClock(nap.start) }} – {{ formatClock(nap.end) }}</span>
         </div>
-        <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-gray-300">
+        <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
           <span class="flex items-center gap-2"><img src="/src/assets/moon.png" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
-          <span>{{ formatClock(schedule.bedtimeMinutes) }}</span>
+          <span class="tabular-nums">{{ formatClock(schedule.bedtimeMinutes) }}</span>
         </div>
       </div>
 

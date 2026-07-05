@@ -28,7 +28,7 @@ const sources = getSources(['aap-safesleep-2022', 'nichd-safetosleep', 'lullaby-
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
-               >{{ src.org }} <span aria-hidden="true" class="text-slate-500">↗</span></a>
+               >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
           </div>
      </div>
 </template>

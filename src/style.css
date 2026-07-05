@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Project tokens layered onto Tailwind v4's theme. `--color-muted` is the
+   accessible muted-text shade: 5.04:1 on the slate-900 body (slate-500 fails
+   AA at 3.75:1), while staying visibly quieter than slate-400 labels. */
+@theme {
+  --color-muted: #7c899e;
+}
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -14,4 +21,41 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Visible focus for every interactive element — sky-400 ring (8.33:1 on the
+   body). Required for WCAG 2.2 AA; native controls shipped without one. */
+:focus-visible {
+  outline: 2px solid var(--color-sky-400, #38bdf8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Placeholders must clear 4.5:1 too — slate-400 on the slate-800 field. */
+::placeholder {
+  color: var(--color-slate-400, #94a3b8);
+  opacity: 1;
+}
+
+/* Quiet, intentional state motion. Ease-out; state only, never decoration. */
+a,
+button,
+input,
+select,
+summary {
+  transition:
+    color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    outline-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

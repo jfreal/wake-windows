@@ -114,14 +114,17 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
       <span class="text-gray-400 text-sm">Wake Windows</span>
       <div class="mb-4">
-        <div v-for="(find, index) in schedule.wws">
-          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 mb-1" placeholder="Hours"
-            v-model="schedule.wws[index]" min="0" max="6" step="0.25" />
-          <button class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 mb-1 float-right"
-            v-on:click="removeWW(index)">-</button>
-
+        <div v-for="(find, index) in schedule.wws" class="flex items-center gap-2 mb-1">
+          <input type="number" class="bg-slate-800 text-gray-300 text-sm rounded p-2.5 min-h-11" placeholder="Hours"
+            v-model="schedule.wws[index]" min="0" max="6" step="0.25" :aria-label="`Wake window ${index + 1} (hours)`" />
+          <button type="button"
+            class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-gray-300 text-lg rounded min-h-11 min-w-11 disabled:opacity-40 disabled:cursor-not-allowed"
+            :disabled="schedule.wws.length <= 1" :aria-label="`Remove wake window ${index + 1}`"
+            v-on:click="removeWW(index)">−</button>
         </div>
-        <button class="bg-slate-800 text-gray-300 text-sm rounded block p-2.5 mb-1" v-on:click="addWW">+</button>
+        <button type="button"
+          class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-gray-300 text-lg rounded min-h-11 min-w-11"
+          aria-label="Add wake window" v-on:click="addWW">+</button>
       </div>
 
       <span class="text-gray-400 text-sm">Bedtime</span>
@@ -161,7 +164,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
           <span class="text-slate-400 text-sm uppercase">Summary</span>
 
           <div class="text-xl">
-            <strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws" class="text-gray-600">
+            <strong>{{ schedule.dwt }}</strong>-<span v-for="(find, index) in schedule.wws" class="text-muted">
               <span v-if="find" class="text-gray-200">{{ find }}</span><span
                 v-if="index != schedule.wws.length - 1">/</span></span>-<strong>{{ schedule.bed }}</strong>
           </div>
@@ -177,21 +180,21 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         <div class="bg-orange-500 rounded-l-lg text-right inline-block h-10 overflow-hidden"
           :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%` }">
           <img src="/src/assets/sun.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2">
+          <span class="text-xl m-2 text-slate-900 font-semibold">
             {{ schedule.totalWakeTime }}h</span>
         </div>
 
         <div class="bg-cyan-500 text-right inline-block h-10 overflow-hidden"
           :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%` }">
           <img src="/src/assets/moon.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2">
+          <span class="text-xl m-2 text-slate-900 font-semibold">
             {{ schedule.totalNightSleep }}h</span>
         </div>
 
         <div class="bg-violet-500 rounded-r-lg  text-right h-10 inline-block overflow-hidden"
           :style="{ width: `${(schedule.totalNap / 24) * 100}%` }">
           <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 m-1 float-left" alt="" aria-hidden="true" />
-          <span class="text-xl m-2">
+          <span class="text-xl m-2 text-slate-900 font-semibold">
             {{ schedule.totalNap }}h</span>
         </div>
       </div>
@@ -264,7 +267,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
       <div class="mt-6">
         <span class="text-slate-400 text-sm uppercase">How your plan compares</span>
-        <p class="text-slate-500 text-xs mb-2">
+        <p class="text-muted text-xs mb-2">
           Total-sleep and nap counts are evidence-based (Tier 1). Wake-window timing is a practice-based
           heuristic (Tier 2) — a starting estimate, not a rule. Watch your baby's tiredness cues over the clock.
         </p>

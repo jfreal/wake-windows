@@ -59,19 +59,19 @@ function inRange(row: Row): boolean {
             <div class="flex items-baseline justify-between gap-3">
                 <h3 class="text-slate-300 text-sm font-semibold flex flex-wrap items-center gap-2">
                     <a v-if="view.url" :href="view.url" target="_blank" rel="noopener noreferrer"
-                        class="hover:text-sky-400 underline decoration-slate-600 underline-offset-2">{{ view.name }}
-                        <span aria-hidden="true" class="text-slate-500">↗</span></a>
+                        class="hover:text-sky-400 underline decoration-slate-500 underline-offset-2">{{ view.name }}
+                        <span aria-hidden="true" class="text-muted">↗</span></a>
                     <template v-else>{{ view.name }}</template>
                     <TierBadge :tier="view.tier" />
                 </h3>
-                <span v-if="view.range" class="text-slate-500 text-xs whitespace-nowrap">
+                <span v-if="view.range" class="text-muted text-xs whitespace-nowrap">
                     {{ view.range }} · age {{ view.months }} mo
                 </span>
             </div>
 
             <table v-if="view.rows.length" class="w-full text-sm mt-1">
                 <thead>
-                    <tr class="text-slate-500 text-xs">
+                    <tr class="text-muted text-xs">
                         <th class="text-left font-normal"></th>
                         <th class="text-right font-normal w-16">You</th>
                         <th class="text-right font-normal w-24">Range</th>
@@ -93,7 +93,7 @@ function inRange(row: Row): boolean {
                     </tr>
                 </tbody>
             </table>
-            <p v-else class="text-slate-500 text-sm mt-1">
+            <p v-else class="text-muted text-sm mt-1">
                 No guidance for {{ view.months }} months in this source.
             </p>
 

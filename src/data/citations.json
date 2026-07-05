@@ -11,7 +11,7 @@
       "id": 1,
       "label": "Evidence-based",
       "shortLabel": "Tier 1",
-      "color": "#1a7f4b",
+      "color": "#22a05e",
       "description": "Backed by expert consensus statements and/or peer-reviewed normative data. Reliable population ranges — though still ranges with wide normal variation, not targets every baby must hit.",
       "appliesTo": "Total sleep per 24h, broad nap-count trajectories, sleep-consolidation and circadian-development timelines, safe-sleep practices."
     },

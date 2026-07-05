@@ -8,7 +8,7 @@ import { meta } from './models/Citations'
 
     <Summary />
 
-    <footer class="mt-8 border-t border-slate-800 pt-3 pb-6 text-slate-500 text-xs">
+    <footer class="mt-8 border-t border-slate-800 pt-3 pb-6 text-muted text-xs">
       <p>{{ meta.disclaimer }}</p>
       <p class="mt-1">Guidance last reviewed: {{ meta.lastVerified }}.</p>
     </footer>

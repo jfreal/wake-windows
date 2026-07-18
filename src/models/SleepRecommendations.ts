@@ -1,7 +1,5 @@
 import { ScheduleSetting } from "./ScheduleSetting";
 
-// @doc:wake-window-schedule-generator
-// Age-bracketed wake-window / sleep-total ranges used to build the nap schedule.
 class SleepRecommendationRepository {
      recommendations: SleepRecommendation[];
 

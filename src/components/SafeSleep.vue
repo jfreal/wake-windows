@@ -2,7 +2,6 @@
 import { getSources } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
 
-// @doc:safe-sleep-panel
 // Safe-sleep guidance is Tier 1 and applies to every nap and night (spec §7).
 const essentials = [
      'Place baby fully on their back for every sleep, day and night, until age 1.',

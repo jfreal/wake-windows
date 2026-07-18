@@ -3,7 +3,6 @@ import { ref, computed } from 'vue'
 import { recommendationForMonths, getSources } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
 
-// @doc:evidence-tier-badges-citations @doc:sleepy-cues-reference
 const props = defineProps<{ months: number }>()
 
 const rec = computed(() => recommendationForMonths(props.months))

@@ -22,10 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-/test-results/
-/playwright-report/
-/playwright/.cache/
-
-# scratch inspection scripts
-*_inspect.mjs
-_inspect.mjs

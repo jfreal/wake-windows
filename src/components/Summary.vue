@@ -7,6 +7,10 @@ import Recommendations from './Recommendations.vue'
 import EvidenceGuidance from './EvidenceGuidance.vue'
 import SafeSleep from './SafeSleep.vue'
 import SourcesEvidence from './SourcesEvidence.vue'
+import logoUrl from '../assets/logo.png'
+import sunUrl from '../assets/sun.png'
+import moonUrl from '../assets/moon.png'
+import napUrl from '../assets/sleeping-baby2.png'
 
 const repo = new SleepRecommendationRepository();
 const sleepRecommendations = repo.recommendations;
@@ -24,10 +28,14 @@ if (params.bd) {
 }
 
 if (params.s) {
-  let [dwt, wwString, bed] = params.s.split("-");
-  schedule.wws = wwString.split('/').map(Number);
-  schedule.dwt = +dwt;
-  schedule.bed = +bed;
+  const [dwt, wwString, bed] = params.s.split("-");
+  // Only apply when the shorthand is well-formed (dwt-ww/ww/...-bed); a
+  // truncated or malformed link falls back to defaults instead of crashing.
+  if (wwString) {
+    schedule.wws = wwString.split('/').map(Number);
+    schedule.dwt = +dwt;
+    schedule.bed = +bed;
+  }
 }
 
 function addWW() {
@@ -66,7 +74,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 </script>
 
 <template>
-  <img class="h-20 mb-2" src="/src/assets/logo.png" alt="Wake Windows">
+  <img class="h-20 mb-2" :src="logoUrl" alt="Wake Windows">
 
 
   <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:items-start">
@@ -180,19 +188,19 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
 
         <div class="bg-orange-500 rounded-l-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%` }">
-          <img src="/src/assets/sun.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <img :src="sunUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
           <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalWakeTime }}h</span>
         </div>
 
         <div class="bg-cyan-500 flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%` }">
-          <img src="/src/assets/moon.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <img :src="moonUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
           <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNightSleep }}h</span>
         </div>
 
         <div class="bg-violet-500 rounded-r-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0"
           :style="{ width: `${(schedule.totalNap / 24) * 100}%` }">
-          <img src="/src/assets/sleeping-baby2.png" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
+          <img :src="napUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
           <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNap }}h</span>
         </div>
       </div>
@@ -240,17 +248,17 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
       <div v-if="schedule.napTimes.length" class="mt-4">
         <span class="text-slate-400 text-sm uppercase">Nap Schedule</span>
         <div class="flex justify-between text-sm py-1 text-slate-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/sun.png" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
+          <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
           <span class="tabular-nums">{{ formatClock(schedule.wakeMinutes) }}</span>
         </div>
         <div v-for="(nap, i) in schedule.napTimes" :key="i"
           class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/sleeping-baby2.png" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
+          <span class="flex items-center gap-2"><img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
             }}</span>
           <span class="tabular-nums">{{ formatClock(nap.start) }} – {{ formatClock(nap.end) }}</span>
         </div>
         <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
-          <span class="flex items-center gap-2"><img src="/src/assets/moon.png" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
+          <span class="flex items-center gap-2"><img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
           <span class="tabular-nums">{{ formatClock(schedule.bedtimeMinutes) }}</span>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import data from '../data/citations.json'
 
+// @doc:evidence-tier-badges-citations @doc:methodology-sources-page
+
 // Typed access layer over citations.json (the .research source library, copied
 // into the app). Tier 1 = evidence-based; Tier 2 = practice-based heuristic.
 

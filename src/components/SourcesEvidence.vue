@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { sources, tiers, meta, getTier } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
 
+// @doc:methodology-sources-page
 // Full citation library grouped by tier, with the "what do these tiers mean?"
 // explainer (spec §6).
 const byTier = computed(() =>

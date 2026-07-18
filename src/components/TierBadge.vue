@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { getTier } from '../models/Citations'
 
+// @doc:evidence-tier-badges-citations
 const props = defineProps<{ tier: number }>()
 const t = computed(() => getTier(props.tier))
 // Shape, not color alone, distinguishes the tiers for accessibility.

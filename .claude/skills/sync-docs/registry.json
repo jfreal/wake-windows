@@ -1,0 +1,553 @@
+{
+  "wake-window-schedule-generator": {
+    "doc": "docs/features/A01-wake-window-schedule-generator.md",
+    "title": "Wake-Window Schedule Generator",
+    "category": "Scheduling & Prediction",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "Wake-Window Schedule Generator",
+    "sources": [
+      "src/models/ScheduleSetting.ts:1",
+      "src/models/SleepRecommendations.ts:3",
+      "src/models/time.ts:1"
+    ],
+    "tests": [
+      "e2e/wake-window-schedule-generator.spec.ts:1"
+    ]
+  },
+  "24h-visual-day-breakdown": {
+    "doc": "docs/features/A02-24h-visual-day-breakdown.md",
+    "title": "24-Hour Visual Day Breakdown",
+    "category": "Scheduling & Prediction",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "24-Hour Visual Day Breakdown",
+    "sources": [
+      "src/components/Summary.vue:177"
+    ],
+    "tests": [
+      "e2e/24h-visual-day-breakdown.spec.ts:1"
+    ]
+  },
+  "corrected-gestational-age": {
+    "doc": "docs/features/A03-corrected-gestational-age.md",
+    "title": "Corrected / Gestational-Age Adjustment",
+    "category": "Scheduling & Prediction",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "Corrected / Gestational-Age Adjustment",
+    "sources": [
+      "src/models/ScheduleSetting.ts:1"
+    ],
+    "tests": [
+      "e2e/corrected-gestational-age.spec.ts:1"
+    ]
+  },
+  "cues-vs-clock-mode": {
+    "doc": "docs/features/A04-cues-vs-clock-mode.md",
+    "title": "Cues-vs-Clock Mode by Age",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Cues-vs-Clock Mode by Age",
+    "sources": [],
+    "tests": [
+      "e2e/cues-vs-clock-mode.spec.ts:1"
+    ]
+  },
+  "bedtime-calculator": {
+    "doc": "docs/features/A05-bedtime-calculator.md",
+    "title": "Bedtime Calculator + Preferred-Bedtime Cap",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Built",
+    "summary": "Bedtime Calculator + Preferred-Bedtime Cap",
+    "sources": [
+      "src/models/ScheduleSetting.ts:1"
+    ],
+    "tests": [
+      "e2e/bedtime-calculator.spec.ts:1"
+    ]
+  },
+  "nap-transition-detector": {
+    "doc": "docs/features/A06-nap-transition-detector.md",
+    "title": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
+    "sources": [],
+    "tests": [
+      "e2e/nap-transition-detector.spec.ts:1"
+    ]
+  },
+  "atypical-day-flag": {
+    "doc": "docs/features/A07-atypical-day-flag.md",
+    "title": "Atypical Day\" / Disruption Flag",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Atypical Day\" / Disruption Flag",
+    "sources": [],
+    "tests": [
+      "e2e/atypical-day-flag.spec.ts:1"
+    ]
+  },
+  "dst-timezone-shift": {
+    "doc": "docs/features/A08-dst-timezone-shift.md",
+    "title": "Daylight Saving & Time-Zone Shift Tool",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Daylight Saving & Time-Zone Shift Tool",
+    "sources": [],
+    "tests": [
+      "e2e/dst-timezone-shift.spec.ts:1"
+    ]
+  },
+  "sibling-twins-alignment": {
+    "doc": "docs/features/A09-sibling-twins-alignment.md",
+    "title": "Sibling / Twins Schedule Alignment",
+    "category": "Scheduling & Prediction",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Sibling / Twins Schedule Alignment",
+    "sources": [],
+    "tests": [
+      "e2e/sibling-twins-alignment.spec.ts:1"
+    ]
+  },
+  "personalized-from-local-history": {
+    "doc": "docs/features/A10-personalized-from-local-history.md",
+    "title": "Personalized Windows from Local History (optional)",
+    "category": "Scheduling & Prediction",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Personalized Windows from Local History (optional)",
+    "sources": [],
+    "tests": [
+      "e2e/personalized-from-local-history.spec.ts:1"
+    ]
+  },
+  "evidence-tier-badges-citations": {
+    "doc": "docs/features/B01-evidence-tier-badges-citations.md",
+    "title": "Evidence Tier Badges & Inline Citations",
+    "category": "Guidance & Credibility",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "Evidence Tier Badges & Inline Citations",
+    "sources": [
+      "src/components/EvidenceGuidance.vue:6",
+      "src/components/TierBadge.vue:5",
+      "src/models/Citations.ts:3"
+    ],
+    "tests": [
+      "e2e/evidence-tier-badges-citations.spec.ts:1"
+    ]
+  },
+  "methodology-sources-page": {
+    "doc": "docs/features/B02-methodology-sources-page.md",
+    "title": "Methodology & Sources Page",
+    "category": "Guidance & Credibility",
+    "priority": "P1",
+    "status": "Built",
+    "summary": "Methodology & Sources Page",
+    "sources": [
+      "src/components/SourcesEvidence.vue:6",
+      "src/models/Citations.ts:3"
+    ],
+    "tests": [
+      "e2e/methodology-sources-page.spec.ts:1"
+    ]
+  },
+  "safe-sleep-panel": {
+    "doc": "docs/features/B03-safe-sleep-panel.md",
+    "title": "AAP Safe-Sleep Reference Panel",
+    "category": "Guidance & Credibility",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "AAP Safe-Sleep Reference Panel",
+    "sources": [
+      "src/components/SafeSleep.vue:5"
+    ],
+    "tests": [
+      "e2e/safe-sleep-panel.spec.ts:1"
+    ]
+  },
+  "sleepy-cues-reference": {
+    "doc": "docs/features/B04-sleepy-cues-reference.md",
+    "title": "Sleepy-Cues Reference",
+    "category": "Guidance & Credibility",
+    "priority": "P1",
+    "status": "Built",
+    "summary": "Sleepy-Cues Reference",
+    "sources": [
+      "src/components/EvidenceGuidance.vue:6"
+    ],
+    "tests": [
+      "e2e/sleepy-cues-reference.spec.ts:1"
+    ]
+  },
+  "interactive-troubleshooter": {
+    "doc": "docs/features/B05-interactive-troubleshooter.md",
+    "title": "Interactive Sleep Troubleshooter (Decision Tree)",
+    "category": "Guidance & Credibility",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Interactive Sleep Troubleshooter (Decision Tree)",
+    "sources": [],
+    "tests": [
+      "e2e/interactive-troubleshooter.spec.ts:1"
+    ]
+  },
+  "regression-progression-explainer": {
+    "doc": "docs/features/B06-regression-progression-explainer.md",
+    "title": "Regression / Progression Explainer",
+    "category": "Guidance & Credibility",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Regression / Progression Explainer",
+    "sources": [],
+    "tests": [
+      "e2e/regression-progression-explainer.spec.ts:1"
+    ]
+  },
+  "sleep-training-overview": {
+    "doc": "docs/features/B07-sleep-training-overview.md",
+    "title": "Sleep-Training Methods Overview (Neutral)",
+    "category": "Guidance & Credibility",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Sleep-Training Methods Overview (Neutral)",
+    "sources": [],
+    "tests": [
+      "e2e/sleep-training-overview.spec.ts:1"
+    ]
+  },
+  "sleep-nap-logging": {
+    "doc": "docs/features/C01-sleep-nap-logging.md",
+    "title": "Sleep & Nap Logging",
+    "category": "Tracking & Logging",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Sleep & Nap Logging",
+    "sources": [],
+    "tests": [
+      "e2e/sleep-nap-logging.spec.ts:1"
+    ]
+  },
+  "feeding-log": {
+    "doc": "docs/features/C02-feeding-log.md",
+    "title": "Feeding Log",
+    "category": "Tracking & Logging",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Feeding Log",
+    "sources": [],
+    "tests": [
+      "e2e/feeding-log.spec.ts:1"
+    ]
+  },
+  "pumping-log": {
+    "doc": "docs/features/C03-pumping-log.md",
+    "title": "Pumping Log",
+    "category": "Tracking & Logging",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Pumping Log",
+    "sources": [],
+    "tests": [
+      "e2e/pumping-log.spec.ts:1"
+    ]
+  },
+  "diaper-log": {
+    "doc": "docs/features/C04-diaper-log.md",
+    "title": "Diaper Log",
+    "category": "Tracking & Logging",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Diaper Log",
+    "sources": [],
+    "tests": [
+      "e2e/diaper-log.spec.ts:1"
+    ]
+  },
+  "solids-meds-events": {
+    "doc": "docs/features/C05-solids-meds-events.md",
+    "title": "Solids, Medications & Custom Events",
+    "category": "Tracking & Logging",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Solids, Medications & Custom Events",
+    "sources": [],
+    "tests": [
+      "e2e/solids-meds-events.spec.ts:1"
+    ]
+  },
+  "growth-percentiles": {
+    "doc": "docs/features/C06-growth-percentiles.md",
+    "title": "Growth Measurements & Percentiles",
+    "category": "Tracking & Logging",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Growth Measurements & Percentiles",
+    "sources": [],
+    "tests": [
+      "e2e/growth-percentiles.spec.ts:1"
+    ]
+  },
+  "milestones-journal": {
+    "doc": "docs/features/C07-milestones-journal.md",
+    "title": "Milestones, Journal & Photos",
+    "category": "Tracking & Logging",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Milestones, Journal & Photos",
+    "sources": [],
+    "tests": [
+      "e2e/milestones-journal.spec.ts:1"
+    ]
+  },
+  "trends-daily-totals": {
+    "doc": "docs/features/D01-trends-daily-totals.md",
+    "title": "Trends & Daily Totals at a Glance",
+    "category": "Analytics & Insights",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Trends & Daily Totals at a Glance",
+    "sources": [],
+    "tests": [
+      "e2e/trends-daily-totals.spec.ts:1"
+    ]
+  },
+  "pediatrician-report-export": {
+    "doc": "docs/features/D02-pediatrician-report-export.md",
+    "title": "Pediatrician-Ready Report & Export",
+    "category": "Analytics & Insights",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Pediatrician-Ready Report & Export",
+    "sources": [],
+    "tests": [
+      "e2e/pediatrician-report-export.spec.ts:1"
+    ]
+  },
+  "insights-report-card": {
+    "doc": "docs/features/D03-insights-report-card.md",
+    "title": "Insights Report Card (Transparent, No AI)",
+    "category": "Analytics & Insights",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Insights Report Card (Transparent, No AI)",
+    "sources": [],
+    "tests": [
+      "e2e/insights-report-card.spec.ts:1"
+    ]
+  },
+  "shareable-plan-url": {
+    "doc": "docs/features/E01-shareable-plan-url.md",
+    "title": "Shareable Plan URL",
+    "category": "Sharing & Collaboration",
+    "priority": "P0",
+    "status": "Built",
+    "summary": "Shareable Plan URL",
+    "sources": [
+      "src/components/Summary.vue:14"
+    ],
+    "tests": [
+      "e2e/shareable-plan-url.spec.ts:1"
+    ]
+  },
+  "read-only-babysitter-mode": {
+    "doc": "docs/features/E02-read-only-babysitter-mode.md",
+    "title": "Read-Only Babysitter / Grandparent Mode",
+    "category": "Sharing & Collaboration",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Read-Only Babysitter / Grandparent Mode",
+    "sources": [],
+    "tests": [
+      "e2e/read-only-babysitter-mode.spec.ts:1"
+    ]
+  },
+  "caregiver-handoff-notes": {
+    "doc": "docs/features/E03-caregiver-handoff-notes.md",
+    "title": "Caregiver Handoff Notes & Summary",
+    "category": "Sharing & Collaboration",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Caregiver Handoff Notes & Summary",
+    "sources": [],
+    "tests": [
+      "e2e/caregiver-handoff-notes.spec.ts:1"
+    ]
+  },
+  "multi-caregiver-access": {
+    "doc": "docs/features/E04-multi-caregiver-access.md",
+    "title": "Multi-Caregiver Access (Local-First, Per-Person)",
+    "category": "Sharing & Collaboration",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Multi-Caregiver Access (Local-First, Per-Person)",
+    "sources": [],
+    "tests": [
+      "e2e/multi-caregiver-access.spec.ts:1"
+    ]
+  },
+  "reminders-nudges": {
+    "doc": "docs/features/F01-reminders-nudges.md",
+    "title": "Reminders & Pre-Nap Nudges",
+    "category": "Utility & Integrations",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Reminders & Pre-Nap Nudges",
+    "sources": [],
+    "tests": [
+      "e2e/reminders-nudges.spec.ts:1"
+    ]
+  },
+  "widgets-live-activities": {
+    "doc": "docs/features/F02-widgets-live-activities.md",
+    "title": "Home/Lock-Screen Widgets & Live Activities",
+    "category": "Utility & Integrations",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Home/Lock-Screen Widgets & Live Activities",
+    "sources": [],
+    "tests": [
+      "e2e/widgets-live-activities.spec.ts:1"
+    ]
+  },
+  "watch-app": {
+    "doc": "docs/features/F03-watch-app.md",
+    "title": "Apple Watch / Wear OS Companion",
+    "category": "Utility & Integrations",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Apple Watch / Wear OS Companion",
+    "sources": [],
+    "tests": [
+      "e2e/watch-app.spec.ts:1"
+    ]
+  },
+  "voice-siri-logging": {
+    "doc": "docs/features/F04-voice-siri-logging.md",
+    "title": "Voice & Siri Shortcuts Logging",
+    "category": "Utility & Integrations",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Voice & Siri Shortcuts Logging",
+    "sources": [],
+    "tests": [
+      "e2e/voice-siri-logging.spec.ts:1"
+    ]
+  },
+  "white-noise-sounds": {
+    "doc": "docs/features/F05-white-noise-sounds.md",
+    "title": "White-Noise & Sleep Sounds",
+    "category": "Utility & Integrations",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "White-Noise & Sleep Sounds",
+    "sources": [],
+    "tests": [
+      "e2e/white-noise-sounds.spec.ts:1"
+    ]
+  },
+  "calendar-export": {
+    "doc": "docs/features/F06-calendar-export.md",
+    "title": "Calendar Export (ICS)",
+    "category": "Utility & Integrations",
+    "priority": "P2",
+    "status": "Proposed",
+    "summary": "Calendar Export (ICS)",
+    "sources": [],
+    "tests": [
+      "e2e/calendar-export.spec.ts:1"
+    ]
+  },
+  "offline-mode": {
+    "doc": "docs/features/F07-offline-mode.md",
+    "title": "Offline Mode",
+    "category": "Utility & Integrations",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Offline Mode",
+    "sources": [],
+    "tests": [
+      "e2e/offline-mode.spec.ts:1"
+    ]
+  },
+  "accessibility-dark-room": {
+    "doc": "docs/features/F08-accessibility-dark-room.md",
+    "title": "Accessibility & Dark-Room UX",
+    "category": "Utility & Integrations",
+    "priority": "P0",
+    "status": "Proposed",
+    "summary": "Accessibility & Dark-Room UX",
+    "sources": [],
+    "tests": [
+      "e2e/accessibility-dark-room.spec.ts:1"
+    ]
+  },
+  "no-account-privacy-first": {
+    "doc": "docs/features/G01-no-account-privacy-first.md",
+    "title": "No-Account, Privacy-First Architecture",
+    "category": "Brand & Product",
+    "priority": "P0",
+    "status": "Proposed",
+    "summary": "No-Account, Privacy-First Architecture",
+    "sources": [],
+    "tests": [
+      "e2e/no-account-privacy-first.spec.ts:1"
+    ]
+  },
+  "tip-jar-monetization": {
+    "doc": "docs/features/G02-tip-jar-monetization.md",
+    "title": "Tip-Jar Monetization (No Subscription, No Auto-Renew)",
+    "category": "Brand & Product",
+    "priority": "P0",
+    "status": "Proposed",
+    "summary": "Tip-Jar Monetization (No Subscription, No Auto-Renew)",
+    "sources": [],
+    "tests": [
+      "e2e/tip-jar-monetization.spec.ts:1"
+    ]
+  },
+  "anti-anxiety-mechanics": {
+    "doc": "docs/features/G03-anti-anxiety-mechanics.md",
+    "title": "Anti-Anxiety Mechanics (Ranges, No Streaks)",
+    "category": "Brand & Product",
+    "priority": "P0",
+    "status": "Proposed",
+    "summary": "Anti-Anxiety Mechanics (Ranges, No Streaks)",
+    "sources": [],
+    "tests": [
+      "e2e/anti-anxiety-mechanics.spec.ts:1"
+    ]
+  },
+  "no-ai-no-data-training": {
+    "doc": "docs/features/G04-no-ai-no-data-training.md",
+    "title": "No-AI / No-Data-Training Stance",
+    "category": "Brand & Product",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "No-AI / No-Data-Training Stance",
+    "sources": [],
+    "tests": [
+      "e2e/no-ai-no-data-training.spec.ts:1"
+    ]
+  },
+  "ephemerality-data-deletion": {
+    "doc": "docs/features/G05-ephemerality-data-deletion.md",
+    "title": "Ephemerality & One-Click Data Deletion",
+    "category": "Brand & Product",
+    "priority": "P1",
+    "status": "Proposed",
+    "summary": "Ephemerality & One-Click Data Deletion",
+    "sources": [],
+    "tests": [
+      "e2e/ephemerality-data-deletion.spec.ts:1"
+    ]
+  }
+}

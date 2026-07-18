@@ -4,7 +4,10 @@ import { test, expect } from '@playwright/test';
 test.describe('Ephemerality & One-Click Data Deletion [@feature:ephemerality-data-deletion]', () => {
   test('one click clears URL plan + storage and confirms nothing remains', async ({ page }) => {
     await page.goto('/?bd=2026-01-01&s=8-3/3-8');
-    await page.evaluate(() => localStorage.setItem('test-leftover', 'x'));
+    await page.evaluate(() => {
+      localStorage.setItem('test-leftover', 'x');
+      sessionStorage.setItem('test-session-leftover', 'x');
+    });
 
     await page.getByRole('button', { name: 'Delete all my data' }).click();
 

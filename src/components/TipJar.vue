@@ -16,7 +16,7 @@ const TIP_URL = 'https://buymeacoffee.com/REPLACE-WITH-YOUR-PAGE'
                :href="TIP_URL"
                target="_blank"
                rel="noopener noreferrer"
-               class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
+               class="inline-flex items-center min-h-6 px-0.5 text-sky-400 hover:text-sky-300 underline underline-offset-2"
           >tip jar <span aria-hidden="true">↗</span></a>
           — a one-time thank-you if this helped.
           <span class="text-slate-400">No subscription, ever.</span>

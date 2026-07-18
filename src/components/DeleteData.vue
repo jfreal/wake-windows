@@ -35,9 +35,10 @@ function deleteAll() {
                role="status"
                class="rounded border border-emerald-700/50 bg-emerald-900/15 p-3 text-sm text-emerald-300 mb-3"
           >
-               All gone. The plan was removed from your link, this device's storage for this
-               site is empty, and the page restarted with defaults. Nothing was ever sent to
-               a server, so there is nothing left anywhere else.
+               All gone. The plan was removed from this browser's link and this device's
+               storage for this site is empty; the page restarted with defaults. Nothing was
+               ever stored on a server. If you shared your plan link with someone, that copy
+               lives wherever you sent it — this cleared everything on your side.
           </p>
 
           <div class="flex flex-col sm:flex-row sm:items-center gap-2">

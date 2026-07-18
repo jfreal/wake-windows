@@ -11,6 +11,9 @@ import SourcesEvidence from './SourcesEvidence.vue'
 const repo = new SleepRecommendationRepository();
 const sleepRecommendations = repo.recommendations;
 
+// @doc:shareable-plan-url
+// Plan state is read from (and written to) the URL query string, so a plan is
+// shareable by link with no account.
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
 
@@ -171,6 +174,7 @@ watch([scheduleSummary, () => schedule.birthdayDate], ([shorthand]) => {
         </div>
       </div>
 
+      <!-- @doc:24h-visual-day-breakdown -->
       <div class="flex mt-4 h-10" role="img"
         :aria-label="`Day: ${schedule.totalWakeTime}h awake, ${schedule.totalNightSleep}h night sleep, ${schedule.totalNap}h naps`">
 

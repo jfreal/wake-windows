@@ -1,3 +1,4 @@
+// @doc:wake-window-schedule-generator
 /** Format minutes-from-midnight as a 12-hour clock time, e.g. 570 -> "9:30 AM". */
 export function formatClock(minutes: number): string {
     const m = ((Math.round(minutes) % 1440) + 1440) % 1440;

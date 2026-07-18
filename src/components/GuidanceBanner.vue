@@ -50,7 +50,7 @@ const showSources = ref(false)
                <TierBadge :tier="guidance.tier" />
                <button
                     type="button"
-                    class="text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                    class="shrink-0 inline-flex items-center min-h-11 px-1 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
                     :aria-expanded="showSources"
                     @click="showSources = !showSources"
                >

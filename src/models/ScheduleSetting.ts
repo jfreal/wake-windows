@@ -1,3 +1,6 @@
+// @doc:wake-window-schedule-generator @doc:bedtime-calculator @doc:corrected-gestational-age
+// Holds the inputs (birthday, wake time, wake-window lengths, bedtime, gestational weeks)
+// that drive the generated schedule.
 class ScheduleSetting {
     _birthdayDate: string = "";
 

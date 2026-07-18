@@ -2,7 +2,7 @@
 import { getSources } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
 
-// @doc:safe-sleep-panel
+// @doc:safe-sleep-panel @doc:accessibility-dark-room
 // Safe-sleep guidance is Tier 1 and applies to every nap and night (spec §7).
 const essentials = [
      'Place baby fully on their back for every sleep, day and night, until age 1.',
@@ -15,7 +15,7 @@ const sources = getSources(['aap-safesleep-2022', 'nichd-safetosleep', 'lullaby-
 <template>
      <div class="rounded border border-emerald-700/50 bg-emerald-900/15 p-3">
           <div class="flex flex-wrap items-center gap-2">
-               <span class="text-emerald-300 text-sm font-semibold uppercase">Safe sleep</span>
+               <h2 class="text-emerald-300 text-sm font-semibold uppercase">Safe sleep</h2>
                <TierBadge :tier="1" />
           </div>
           <ul class="mt-2 space-y-1 text-sm text-slate-200 list-disc pl-5">
@@ -28,8 +28,8 @@ const sources = getSources(['aap-safesleep-2022', 'nichd-safetosleep', 'lullaby-
                     :href="src.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
-               >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
+                    class="inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2"
+               >{{ src.org }} <span aria-hidden="true" class="text-muted">&nbsp;↗</span></a>
           </div>
      </div>
 </template>

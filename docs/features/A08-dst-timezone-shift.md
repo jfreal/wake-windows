@@ -5,7 +5,7 @@ id: A08-dst-timezone-shift
 docKey: dst-timezone-shift
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [dst, travel, timezone, scheduling, transition]
 ---
 

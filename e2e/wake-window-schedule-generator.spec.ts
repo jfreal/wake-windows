@@ -6,9 +6,10 @@ test.describe('Wake-window schedule generator [@feature:wake-window-schedule-gen
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
     await expect(page.getByRole('img', { name: 'Wake Windows' })).toBeVisible();
     await expect(page.getByText('Nap Schedule', { exact: true })).toBeVisible();
-    // at least one nap row renders a clock-time range, e.g. "9:00 AM – 10:00 AM"
+    // at least one nap row renders a clock-time range, e.g. "8:45–9:15 AM"
+    // (formatClockRange repeats AM/PM only when the range crosses noon/midnight)
     await expect(
-      page.getByText(/\d{1,2}:\d{2}\s?(AM|PM)\s?[–-]\s?\d{1,2}:\d{2}\s?(AM|PM)/).first()
+      page.getByText(/\d{1,2}:\d{2}(\s?(AM|PM))?\s?[–-]\s?\d{1,2}:\d{2}\s?(AM|PM)/).first()
     ).toBeVisible();
     await expect(page.getByText('Total Sleep', { exact: true })).toBeVisible();
   });

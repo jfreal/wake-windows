@@ -16,13 +16,14 @@ describe('Citations data integrity', () => {
         expect(sources.length).toBeGreaterThan(0);
         expect(tiers['1']).toBeDefined();
         expect(tiers['2']).toBeDefined();
+        expect(tiers['3']).toBeDefined();
         expect(ageBandRecommendations.length).toBeGreaterThan(0);
         expect(meta.lastVerified).toBeTruthy();
     });
 
-    it('every source has a known tier (1 or 2)', () => {
+    it('every source has a known tier (1, 2, or 3)', () => {
         for (const s of sources) {
-            expect([1, 2]).toContain(s.tier);
+            expect([1, 2, 3]).toContain(s.tier);
         }
     });
 

@@ -59,7 +59,7 @@ function inRange(row: Row): boolean {
             <div class="flex items-baseline justify-between gap-3">
                 <h3 class="text-slate-300 text-sm font-semibold flex flex-wrap items-center gap-2">
                     <a v-if="view.url" :href="view.url" target="_blank" rel="noopener noreferrer"
-                        class="hover:text-sky-400 underline decoration-slate-500 underline-offset-2">{{ view.name }}
+                        class="inline-block py-1 hover:text-sky-400 underline decoration-slate-500 underline-offset-2">{{ view.name }}
                         <span aria-hidden="true" class="text-muted">↗</span></a>
                     <template v-else>{{ view.name }}</template>
                     <TierBadge :tier="view.tier" />

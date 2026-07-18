@@ -5,7 +5,7 @@ id: A09-sibling-twins-alignment
 docKey: sibling-twins-alignment
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [twins, siblings, multiples, overlap, scheduling, confirmed-gap]
 ---
 
@@ -22,15 +22,16 @@ The wishlist explicitly asks for "native twins support with which-baby/which-sid
 ## Competitor comparison
 Smart Sleep Coach is the tell — up to 4 profiles with "individual schedules" and "parallel timers," i.e., tracked side-by-side, not coordinated. TwinTracker, Baby Daybook, and Nara all track each baby *separately*. Nobody computes or optimizes the overlap.
 
-## Our approach (spec)
-- Add **two (or more) children** to one plan.
-- Generate each child's wake-window schedule, then **compute and highlight the overlapping nap window(s)** — the shared "quiet block."
-- Offer an **"optimize for overlap"** toggle: within each child's acceptable, labeled Tier-3 wake-window range, nudge nap times to *maximize* the overlap — **never pushing outside the ranges**, and framing overlap as best-effort, not a target.
-- Show a **dual-track 24h visual** (the existing breakdown, stacked) with the overlap band called out.
-- Shareable via URL like any plan.
+## Our approach (built)
+- A second child is **opt-in** ("+ Add sibling / twin"): the plan holds two full schedules (Baby A / Baby B), each with its own birthday, gestational age, wake windows, and bedtime. The new sibling is seeded from Baby A, so twins start identical; single-child remains the default UX.
+- Each child's schedule generates independently; the **overlapping nap window(s)** — the shared "quiet block" — come from interval intersection (`napOverlap.ts`), which handles asymmetric schedules (different nap counts and lengths) with no special cases.
+- A **stacked dual-track 24h view** (`SiblingAlignment.vue`) draws both children's day arcs on one clock-positioned timeline (awake / nap / night per child, with age labels) and highlights each quiet block as a band across both tracks, listing its time range and length below.
+- Overlap is framed as a **best-effort observation, never a target**. No overlap gets honest, guilt-free copy: "different rhythms — expected, not something to fix."
+- Both schedules ride the URL: the second child adds `bd2`/`s2` beside the existing `bd`/`s` params (`planUrl.ts`), so old single-child links keep working unchanged.
+- The **"optimize for overlap"** toggle (nudging naps only within each child's labeled Tier-3 range, never outside it) is not built yet — see Scope, below.
 
 ## Scope — MVP
-Two children, stacked 24h view with the overlap band highlighted.
+Two children, stacked 24h view with the overlap band highlighted. **Shipped.**
 
 ## Scope — later
 "Optimize for overlap" as a fast-follow; 3+ children; per-child feeding/which-side tracking.

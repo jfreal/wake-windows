@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { recommendationForMonths, getSources } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
 
-// @doc:evidence-tier-badges-citations @doc:sleepy-cues-reference
+// @doc:evidence-tier-badges-citations @doc:sleepy-cues-reference @doc:accessibility-dark-room
 const props = defineProps<{ months: number }>()
 
 const rec = computed(() => recommendationForMonths(props.months))
@@ -17,8 +17,9 @@ function toggle(i: number) {
 <template>
      <div v-if="rec">
           <div class="flex items-baseline justify-between gap-3">
-               <span class="text-slate-400 text-sm uppercase">Evidence-based guidance</span>
-               <span class="text-slate-500 text-xs whitespace-nowrap">{{ rec.ageLabel }}</span>
+               <h2 class="text-slate-400 text-sm uppercase font-normal">Evidence-based guidance</h2>
+               <!-- text-muted, not slate-500: real text must clear the 4.5:1 floor -->
+               <span class="text-muted text-xs whitespace-nowrap">{{ rec.ageLabel }}</span>
           </div>
 
           <ul class="mt-2 space-y-2">
@@ -38,7 +39,7 @@ function toggle(i: number) {
                          </div>
                          <button
                               type="button"
-                              class="shrink-0 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                              class="shrink-0 inline-flex items-center min-h-11 px-1 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
                               :aria-expanded="!!open[i]"
                               @click="toggle(i)"
                          >
@@ -61,7 +62,7 @@ function toggle(i: number) {
                                    :href="src.url"
                                    target="_blank"
                                    rel="noopener noreferrer"
-                                   class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                                   class="inline-block py-1.5 text-sky-400 hover:text-sky-300 underline underline-offset-2"
                               >{{ src.title }} <span aria-hidden="true" class="text-muted">↗</span></a>
                               <div class="text-slate-400">{{ src.org }} · {{ src.venue }}</div>
                               <p class="text-slate-400 mt-0.5">{{ src.credentials }}</p>

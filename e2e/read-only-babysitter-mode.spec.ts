@@ -1,12 +1,34 @@
 // @test:read-only-babysitter-mode
 import { test, expect } from '@playwright/test';
 
-// Feature: Read-Only Babysitter / Grandparent Mode (Sharing & Collaboration) — status: Proposed (not built yet).
-// Placeholder kept skipped so the E2E matrix covers every feature.
-// When this ships: tag the code with `// @doc:read-only-babysitter-mode`, then replace test.skip
-// with real assertions and run `npm run test:e2e`.
 test.describe('Read-Only Babysitter / Grandparent Mode [@feature:read-only-babysitter-mode]', () => {
-  test.skip('TODO: implement E2E once read-only-babysitter-mode is built', async ({ page }) => {
-    await page.goto('/');
+  test('renders the sitter view with next nap and bedtime as ranges and zero edit controls', async ({ page }) => {
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter');
+
+    await expect(page.getByText('Sitter view · read-only')).toBeVisible();
+    await expect(page.getByText('Next nap')).toBeVisible();
+    await expect(page.getByText('Next bedtime')).toBeVisible();
+    // Ranges, not a countdown: bedtime shows as ~6:45–7:15 PM for bed=7.
+    await expect(page.getByText('~6:45–7:15 PM').first()).toBeVisible();
+
+    // Truly read-only: no inputs, selects, buttons, or links anywhere.
+    await expect(page.locator('input, select, textarea, button, [contenteditable]')).toHaveCount(0);
+  });
+
+  test('keeps the view=sitter param (no URL rewriting in sitter mode)', async ({ page }) => {
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter');
+    await expect(page.getByText('Next nap')).toBeVisible();
+    expect(decodeURIComponent(page.url())).toContain('view=sitter');
+  });
+
+  test('normal view offers a Copy sitter link action that produces the read-only URL', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.getByRole('button', { name: 'Copy sitter link' }).click();
+    await expect(page.getByText('Copied!')).toBeVisible();
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(decodeURIComponent(copied)).toContain('bd=2026-03-01');
+    expect(decodeURIComponent(copied)).toContain('s=7-2/2/2/2-7');
+    expect(copied).toContain('view=sitter');
   });
 });

@@ -20,7 +20,7 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 
 - `npm run dev` — dev server
 - `npm run build` — `vue-tsc --noEmit && vite build`
-- `npm test` — Vitest (60 tests)
+- `npm test` — Vitest (142 tests)
 
 ## Architecture
 
@@ -38,16 +38,22 @@ src/
                               badges + tap-to-expand credentialed sources
     SafeSleep.vue             Prominent Tier 1 safe-sleep essentials
     SourcesEvidence.vue       Full citation library by tier + tier explainer
-    TierBadge.vue             Tier 1/2 badge (color + shape, a11y-safe)
+    TierBadge.vue             Tier 1/2/3 badge (color + shape, a11y-safe)
+    Troubleshooter.vue        B05 decision-tree troubleshooter UI: tree picker,
+                              question walker, cited Tier 3 answer leaves
   data/
     citations.json            Source library + per-age-band recommendations
                               (copied from ../../.research/citations.json)
+    troubleshooterTrees.ts    The three B05 trees as typed data (early rising,
+                              short naps, false start vs split night)
   models/
     ScheduleSetting.ts        Core model: sleep math, gestational age,
                               napTimes / wake / bedtime (all unit-tested)
     SleepRecommendations.ts   Bracket data + validation (now tier-tagged)
     Citations.ts              Typed access to citations.json: sources, tiers,
                               age-band lookup (unit-tested)
+    Troubleshooter.ts         B05 deterministic decision-tree engine: session
+                              walk/back, structural tree validation (unit-tested)
     time.ts                   formatClock(minutes) helper
     *.test.ts                 Vitest unit tests
 ```

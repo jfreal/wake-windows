@@ -242,9 +242,13 @@
     "title": "Regression / Progression Explainer",
     "category": "Guidance & Credibility",
     "priority": "P2",
-    "status": "Proposed",
-    "summary": "Regression / Progression Explainer",
-    "sources": [],
+    "status": "Built",
+    "summary": "Calm, cited explainer: 4-month change as permanent progression, 8–10 month window, and the honestly weakly-supported 12/18/24-month regressions",
+    "sources": [
+      "src/components/RegressionExplainer.vue:5",
+      "src/App.vue:55",
+      "src/models/Citations.test.ts:59"
+    ],
     "tests": [
       "e2e/regression-progression-explainer.spec.ts:1"
     ]

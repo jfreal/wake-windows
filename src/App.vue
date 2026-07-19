@@ -6,6 +6,7 @@ import SleepLog from './components/SleepLog.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
+import RegressionExplainer from './components/RegressionExplainer.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
 import { meta } from './models/Citations'
@@ -49,6 +50,13 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
 
     <div v-if="!sitterMode" class="mt-3">
       <AccessibilityStatement />
+    </div>
+
+    <!-- @doc:regression-progression-explainer — calm, cited explainer that reframes
+         the 4-month change as a permanent progression and flags the 12/18-month
+         "regressions" as weakly supported. State-free content, hidden in sitter view. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <RegressionExplainer />
     </div>
 
     <footer class="mt-8 border-t border-slate-800 pt-3 pb-6 text-muted text-xs space-y-3">

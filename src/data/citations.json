@@ -846,6 +846,48 @@
       "venue": "thepeacefulsleeper.com",
       "url": "https://thepeacefulsleeper.com/the-45-minute-nap-intruder/",
       "summary": "The one-cycle nap (~30–45 min) peaks around 4–5 months as daytime sleep reorganizes; recommends checking wake windows and allowing ~10–15 minutes of resettling practice before ending the nap. Most babies link cycles by ~6 months."
+    },
+    {
+      "id": "sleepfoundation-4mo-regression",
+      "tier": 2,
+      "type": "consumer",
+      "org": "Sleep Foundation (sleepfoundation.org)",
+      "authors": "Sleep Foundation editorial team (medically reviewed)",
+      "leadAuthor": "Sleep Foundation",
+      "credentials": "Consumer health publisher with medical review; distinct from the 2015 NSF consensus paper. Reframes the '4-month regression' as a permanent maturation of sleep architecture.",
+      "year": 2025,
+      "title": "4-Month Sleep Regression: Signs, Causes, and Coping Tips",
+      "venue": "sleepfoundation.org",
+      "url": "https://www.sleepfoundation.org/baby-sleep/4-month-sleep-regression",
+      "summary": "Describes the 4-month change as a lasting shift to adult-like cyclical sleep with more frequent light-sleep arousals — a developmental progression, not a temporary setback. Frames night wakings as normal and expected."
+    },
+    {
+      "id": "tcb-separation-anxiety",
+      "tier": 2,
+      "type": "consumer",
+      "org": "Taking Cara Babies",
+      "authors": "Taking Cara Babies team",
+      "leadAuthor": "Cara Dumaplin, RN, BSN",
+      "credentials": "Cara Dumaplin, RN, BSN — neonatal-intensive-care nurse and certified pediatric sleep consultant; founder of Taking Cara Babies. A commercial parenting brand; practice-based guidance, not trial-validated.",
+      "year": 2025,
+      "title": "Separation Anxiety and Sleep",
+      "venue": "takingcarababies.com",
+      "url": "https://takingcarababies.com/separation-anxiety",
+      "summary": "Around 8–10 months, emerging object permanence and separation anxiety, paired with new motor skills (crawling, pulling to stand), commonly disrupt sleep for a few weeks. Frames it as a developmental phase, not a problem to fix."
+    },
+    {
+      "id": "huckleberry-regression-myth",
+      "tier": 3,
+      "type": "consumer",
+      "org": "Huckleberry",
+      "authors": "Huckleberry pediatric team; medically reviewed",
+      "leadAuthor": "Huckleberry (reviewed by Gina Jansheski, MD, FAAP)",
+      "credentials": "Huckleberry's pediatric-expertise team, medically reviewed by Gina Jansheski, MD, FAAP (pediatrician). A commercial sleep-app brand; discusses which age-based 'regressions' have a real evidence base and which are convention.",
+      "year": 2026,
+      "title": "Sleep Regressions by Age: What They Are and What to Do",
+      "venue": "huckleberrycare.com",
+      "url": "https://huckleberrycare.com/blog/sleep-regressions",
+      "summary": "Notes that beyond the 4-month change, later 'regressions' at 8–10, 12, 18, and 24 months are commonly cited but weakly supported as universal events; wakings cluster around milestones, nap transitions, teething, illness, and language/motor bursts. Prefers 'progression'."
     }
   ],
   "recommendations": [

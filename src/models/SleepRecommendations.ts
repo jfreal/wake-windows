@@ -1,5 +1,18 @@
 import { ScheduleSetting } from "./ScheduleSetting";
 
+// @doc:personalized-from-local-history
+// Optional, opt-in adjustment layer over the age-default plan: nudge the wake
+// windows toward the baby's own recent median from the on-device sleep log. The
+// math lives in PersonalizedWindows.ts (kept separate so the stats are unit-
+// tested in isolation); it is re-exported here so personalization reads as part
+// of the generator surface. The age-based plan is COMPLETE without it — this
+// only refines an existing wws when the parent turns it on and there's data.
+export {
+     personalizeWakeWindows,
+     type PersonalizationResult,
+     type WindowAdjustment,
+} from "./PersonalizedWindows";
+
 // @doc:wake-window-schedule-generator
 // Age-bracketed wake-window / sleep-total ranges used to build the nap schedule.
 class SleepRecommendationRepository {

@@ -5,7 +5,7 @@ id: A10-personalized-from-local-history
 docKey: personalized-from-local-history
 category: Scheduling & Prediction
 priority: P2
-status: Proposed
+status: Built
 tags: [personalization, on-device, no-account, no-ai, privacy, stats]
 ---
 

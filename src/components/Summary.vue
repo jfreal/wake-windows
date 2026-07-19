@@ -18,6 +18,7 @@ import SitterView from './SitterView.vue'
 import Troubleshooter from './Troubleshooter.vue'
 import ChildInputs from './ChildInputs.vue'
 import HowCalculated from './HowCalculated.vue'
+import PersonalizedWindows from './PersonalizedWindows.vue'
 import SiblingAlignment from './SiblingAlignment.vue'
 import logoUrl from '../assets/logo.png'
 import sunUrl from '../assets/sun.png'
@@ -350,6 +351,13 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
         <div class="mt-3">
           <HowCalculated :schedule="schedule" :slop-minutes="windowSlop" />
         </div>
+      </div>
+
+      <!-- @doc:personalized-from-local-history — optional, opt-in refinement of
+           the wake windows from the baby's own logged history. Off by default;
+           the age plan above is complete without it. -->
+      <div class="mt-6">
+        <PersonalizedWindows :schedule="schedule" />
       </div>
 
       <!-- @doc:dst-timezone-shift -->

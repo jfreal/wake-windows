@@ -5,7 +5,7 @@ id: C01-sleep-nap-logging
 docKey: sleep-nap-logging
 category: Tracking & Logging
 priority: P1
-status: Proposed
+status: Built
 tags: [tracking, sleep, naps, timer, offline, editable]
 ---
 

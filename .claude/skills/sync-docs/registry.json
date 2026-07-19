@@ -77,11 +77,11 @@
   },
   "nap-transition-detector": {
     "doc": "docs/features/A06-nap-transition-detector.md",
-    "title": "Nap-Transition Detector & Guidance (4→3→2→1)",
+    "title": "Nap-Transition Detector & Guidance (4\u00e2\u2020\u20193\u00e2\u2020\u20192\u00e2\u2020\u20191)",
     "category": "Scheduling & Prediction",
     "priority": "P1",
     "status": "Proposed",
-    "summary": "Nap-Transition Detector & Guidance (4→3→2→1)",
+    "summary": "Nap-Transition Detector & Guidance (4\u00e2\u2020\u20193\u00e2\u2020\u20192\u00e2\u2020\u20191)",
     "sources": [],
     "tests": [
       "e2e/nap-transition-detector.spec.ts:1"
@@ -261,9 +261,15 @@
     "title": "Sleep & Nap Logging",
     "category": "Tracking & Logging",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Sleep & Nap Logging",
-    "sources": [],
+    "status": "Built",
+    "summary": "One-tap background-safe sleep/nap timer with pause, editable/backdatable entries, and live daily totals; local-only",
+    "sources": [
+      "src/models/sleepLog.ts:1",
+      "src/models/storage.ts:1",
+      "src/models/sleepLog.test.ts:1",
+      "src/components/SleepLog.vue:27",
+      "src/App.vue:30"
+    ],
     "tests": [
       "e2e/sleep-nap-logging.spec.ts:1"
     ]

@@ -5,7 +5,7 @@ id: E03-caregiver-handoff-notes
 docKey: caregiver-handoff-notes
 category: Sharing & Collaboration
 priority: P1
-status: Proposed
+status: Built
 tags: [sharing, handoff, notes, summary, caregiver, local-first]
 ---
 

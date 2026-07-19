@@ -432,9 +432,14 @@
     "title": "Caregiver Handoff Notes & Summary",
     "category": "Sharing & Collaboration",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Caregiver Handoff Notes & Summary",
-    "sources": [],
+    "status": "Built",
+    "summary": "Free-text handoff note + rule-based 'since you last had the baby' recap (last nap + next window) attached to a read-only handoff link; in-progress nap shows 'so far'; no AI",
+    "sources": [
+      "src/models/handoffSummary.ts:1",
+      "src/models/planUrl.ts:57",
+      "src/components/HandoffNotes.vue:12",
+      "src/App.vue:41"
+    ],
     "tests": [
       "e2e/caregiver-handoff-notes.spec.ts:1"
     ]

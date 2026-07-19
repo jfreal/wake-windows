@@ -356,9 +356,13 @@
     "title": "Trends & Daily Totals at a Glance",
     "category": "Analytics & Insights",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Trends & Daily Totals at a Glance",
-    "sources": [],
+    "status": "Built",
+    "summary": "Home-screen Today totals (sleep + nap count) + 7-day sleep sparkline vs age band",
+    "sources": [
+      "src/models/trends.ts:1",
+      "src/components/TrendsToday.vue:17",
+      "src/App.vue:31"
+    ],
     "tests": [
       "e2e/trends-daily-totals.spec.ts:1"
     ]

@@ -5,7 +5,7 @@ id: D01-trends-daily-totals
 docKey: trends-daily-totals
 category: Analytics & Insights
 priority: P1
-status: Proposed
+status: Built
 tags: [analytics, trends, daily-totals, home-screen, charts, local-only]
 ---
 
@@ -29,7 +29,9 @@ Trend charts are table-stakes; the leaders (Huckleberry, Napper) and trackers (B
 - Everything computed on-device; no account, no server call.
 
 ## Scope — MVP
-Today totals block (sleep h, nap count, feed count/oz) + a 7-day sleep-total sparkline. Tap-through to a fuller trends view.
+Today totals block (sleep h:m, nap count) + a 7-day sleep-total sparkline. Tap-through to a fuller per-day breakdown.
+
+**As built:** `TrendsToday.vue` reads the same on-device sleep log (`ww.sleepLog.v1`) as C01 and reuses `dailyTotals`/`startOfLocalDay`; the aggregation (nap count, in-progress "so far" flag, 7-day series, age-band lookup) lives in `src/models/trends.ts` with unit tests. The total is shown as context against the age-appropriate Tier 1 total-sleep band (AASM/NSF, from `citations.json`), never a grade — no color-coding, no red. The **feed count / oz tiles are wired behind a guard** and stay hidden until the feeding log (C02) exists to supply data — no fabricated numbers. Block stays to four numbers max.
 
 ## Scope — later
 14/30-day windows, feed volume trend, weekday vs. weekend view, per-caregiver contribution breakdown, export hook into D02.

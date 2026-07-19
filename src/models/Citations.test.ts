@@ -56,6 +56,33 @@ describe('Citations data integrity', () => {
     });
 });
 
+// @doc:regression-progression-explainer
+describe('regression / progression explainer sources', () => {
+    // B06 cites a mix of Tier-1 biology and consultant framing; these entries
+    // must resolve so RegressionExplainer.vue never renders an empty citation.
+    it('resolves every source id the explainer references', () => {
+        const ids = [
+            'henderson-2010',
+            'jenni-lebourgeois-2006',
+            'sleepfoundation-4mo-regression',
+            'scher-2015',
+            'tcb-separation-anxiety',
+            'seehagen-2015',
+            'huckleberry-regression-myth',
+            'galland-2012',
+            'littleones-night-waking',
+            'babysleepscience-wakings',
+        ];
+        expect(getSources(ids).length).toBe(ids.length);
+    });
+
+    it('tiers the 4-month biology as Tier 1 and the disputed later regressions as Tier 3', () => {
+        expect(getSource('henderson-2010')?.tier).toBe(1);
+        expect(getSource('sleepfoundation-4mo-regression')?.tier).toBe(2);
+        expect(getSource('huckleberry-regression-myth')?.tier).toBe(3);
+    });
+});
+
 describe('ageBandForMonths', () => {
     it('maps months to the expected band', () => {
         expect(ageBandForMonths(0)).toBe('0-3mo');

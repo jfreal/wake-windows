@@ -5,7 +5,7 @@ id: B06-regression-progression-explainer
 docKey: regression-progression-explainer
 category: Guidance & Credibility
 priority: P2
-status: Proposed
+status: Built
 tags: [regressions, progression, 4-month, separation-anxiety, anxiety-reduction, guidance]
 ---
 

@@ -4,6 +4,7 @@ import Summary from './components/Summary.vue'
 import TrendsToday from './components/TrendsToday.vue'
 import SleepLog from './components/SleepLog.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
+import CalendarExport from './components/CalendarExport.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import TipJar from './components/TipJar.vue'
@@ -39,6 +40,13 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
 
     <div v-if="!sitterMode" class="mt-6">
       <PrivacyPromise />
+    </div>
+
+    <!-- @doc:calendar-export — client-side .ics export of today's naps + bedtime.
+         State-reading only, but hidden in the read-only sitter view like the
+         other app panels. -->
+    <div v-if="!sitterMode" class="mt-6">
+      <CalendarExport />
     </div>
 
     <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;

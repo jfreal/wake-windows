@@ -5,7 +5,7 @@ id: F06-calendar-export
 docKey: calendar-export
 category: Utility & Integrations
 priority: P2
-status: Proposed
+status: Built
 tags: [calendar, ics, export, google-calendar, apple-calendar]
 ---
 

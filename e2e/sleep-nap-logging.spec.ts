@@ -1,12 +1,57 @@
 // @test:sleep-nap-logging
 import { test, expect } from '@playwright/test';
 
-// Feature: Sleep & Nap Logging (Tracking & Logging) — status: Proposed (not built yet).
-// Placeholder kept skipped so the E2E matrix covers every feature.
-// When this ships: tag the code with `// @doc:sleep-nap-logging`, then replace test.skip
-// with real assertions and run `npm run test:e2e`.
+// Feature: Sleep & Nap Logging (Tracking & Logging) — status: Built.
+// Local-only timer + editable/backdatable entries; hidden from the read-only
+// sitter view. Each test runs in a fresh browser context (empty localStorage).
 test.describe('Sleep & Nap Logging [@feature:sleep-nap-logging]', () => {
-  test.skip('TODO: implement E2E once sleep-nap-logging is built', async ({ page }) => {
+  test('is hidden in read-only sitter mode, shown otherwise', async ({ page }) => {
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter');
+    await expect(page.getByRole('heading', { name: 'Sleep & Nap Log' })).toHaveCount(0);
+
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await expect(page.getByRole('heading', { name: 'Sleep & Nap Log' })).toBeVisible();
+  });
+
+  test('starts and stops a sleep timer', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Start sleep timer' }).click();
+
+    // A running entry appears with a Stop control.
+    await expect(page.getByText('running')).toBeVisible();
+    const stop = page.getByRole('button', { name: 'Stop' });
+    await expect(stop).toBeVisible();
+
+    await stop.click();
+
+    // Once stopped there is no running badge, and the End time becomes editable.
+    await expect(page.getByText('running')).toHaveCount(0);
+    await expect(page.getByLabel('End')).toBeEnabled();
+  });
+
+  test('a backdated past sleep updates today\'s totals', async ({ page }) => {
+    await page.goto('/');
+    // "Add past sleep" drops in a completed one-hour block ending now (today),
+    // so today's nap total jumps to 1 h.
+    await page.getByRole('button', { name: 'Add past sleep' }).click();
+    // Pin it to a nap (the inferred label depends on the wall-clock hour) — a
+    // one-hour block ending now lands wholly in today, so naps read 1 h.
+    await page.getByRole('button', { name: 'Nap', exact: true }).click();
+    await expect(page.getByText('Naps today').locator('..')).toContainText('1 h');
+  });
+
+  test('an entry can be backdated across midnight without clamping to today', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Add past sleep' }).click();
+
+    // A sleep that ran from 11pm one day to 6am the next — dates on two days.
+    await page.getByLabel('Start').fill('2026-07-18T23:00');
+    await page.getByLabel('End').fill('2026-07-19T06:00');
+
+    // The start date is preserved exactly (no snap to "today"), and 11pm infers
+    // as night sleep.
+    await expect(page.getByLabel('Start')).toHaveValue('2026-07-18T23:00');
+    await expect(page.getByLabel('End')).toHaveValue('2026-07-19T06:00');
+    await expect(page.getByRole('button', { name: 'Night', exact: true })).toHaveAttribute('aria-pressed', 'true');
   });
 });

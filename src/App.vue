@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import OfflineIndicator from './components/OfflineIndicator.vue'
 import Summary from './components/Summary.vue'
+import SleepLog from './components/SleepLog.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
@@ -25,6 +26,10 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
     <OfflineIndicator v-if="!sitterMode" />
 
     <Summary />
+
+    <!-- @doc:sleep-nap-logging — logging mutates on-device data, so it is hidden
+         in the read-only sitter view, like the other state-changing panels. -->
+    <SleepLog v-if="!sitterMode" />
 
     <div v-if="!sitterMode" class="mt-6">
       <PrivacyPromise />

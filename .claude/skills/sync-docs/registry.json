@@ -592,9 +592,14 @@
     "title": "No-AI / No-Data-Training Stance",
     "category": "Brand & Product",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "No-AI / No-Data-Training Stance",
-    "sources": [],
+    "status": "Built",
+    "summary": "No-AI stance panel + per-plan 'How this was calculated' arithmetic walk",
+    "sources": [
+      "src/App.vue:33",
+      "src/components/HowCalculated.vue:7",
+      "src/components/NoAiStance.vue:2",
+      "src/components/Summary.vue:348"
+    ],
     "tests": [
       "e2e/no-ai-no-data-training.spec.ts:1"
     ]

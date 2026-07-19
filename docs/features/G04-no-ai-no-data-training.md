@@ -5,7 +5,7 @@ id: G04-no-ai-no-data-training
 docKey: no-ai-no-data-training
 category: Brand & Product
 priority: P1
-status: Proposed
+status: Built
 tags: [no-ai, transparency, privacy, arithmetic, show-your-work]
 ---
 

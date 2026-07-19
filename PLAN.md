@@ -45,6 +45,10 @@ src/
                               question walker, cited Tier 3 answer leaves
     DstShift.vue              A08 DST shift tool: spring/fall presets, day-by-day
                               ramp with mini 24h strips and ±15-min ranges
+    NoAiStance.vue            G04 stance panel: precise no-LLM / no-training
+                              claims + competitor AI data-flow citations
+    HowCalculated.vue         G04 "how this was calculated": the plan's
+                              arithmetic spelled out with the user's own numbers
   data/
     citations.json            Source library + per-age-band recommendations
                               (copied from ../../.research/citations.json)

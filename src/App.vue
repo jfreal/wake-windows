@@ -3,6 +3,7 @@ import OfflineIndicator from './components/OfflineIndicator.vue'
 import Summary from './components/Summary.vue'
 import TrendsToday from './components/TrendsToday.vue'
 import SleepLog from './components/SleepLog.vue'
+import HandoffNotes from './components/HandoffNotes.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import CalendarExport from './components/CalendarExport.vue'
 import NoAiStance from './components/NoAiStance.vue'
@@ -38,6 +39,12 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
     <!-- @doc:sleep-nap-logging — logging mutates on-device data, so it is hidden
          in the read-only sitter view, like the other state-changing panels. -->
     <SleepLog v-if="!sitterMode" />
+
+    <!-- @doc:caregiver-handoff-notes — the note editor + live recap show in the
+         normal view; the read-only "since you last had the baby" summary shows
+         in the sitter path (the component branches internally on view=sitter),
+         so it sits ungated here unlike the state-changing panels above. -->
+    <HandoffNotes />
 
     <div v-if="!sitterMode" class="mt-6">
       <PrivacyPromise />

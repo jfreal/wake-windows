@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { scheduleShorthand, applyPlanParams, buildPlanQuery, hasSiblingParams } from './planUrl';
+import { scheduleShorthand, applyPlanParams, buildPlanQuery, hasSiblingParams, withPlanExtras, parseHandoff } from './planUrl';
 import { ScheduleSetting } from './ScheduleSetting';
 
 function paramsOf(query: string): Record<string, string> {
@@ -132,5 +132,61 @@ describe('hasSiblingParams', () => {
         expect(hasSiblingParams({ bd2: '2026-03-01' })).toBe(true);
         expect(hasSiblingParams({ s2: '7-2/2-7' })).toBe(true);
         expect(hasSiblingParams({})).toBe(false);
+    });
+});
+
+// @doc:caregiver-handoff-notes
+describe('withPlanExtras + parseHandoff (handoff round-trip)', () => {
+    it('omits handoff params when there is no note or nap', () => {
+        expect(withPlanExtras('?bd=2026-03-01&s=7-2/2/2/2-7', { view: 'sitter' }))
+            .toBe('?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter');
+    });
+
+    it('encodes a free-text note (spaces/punctuation survive)', () => {
+        const q = withPlanExtras('?bd=2026-03-01&s=7-2/2/2/2-7', {
+            view: 'sitter',
+            note: 'Fed at 2pm, cranky; next nap ~4',
+        });
+        // Read it back the way the app does (URLSearchParams decodes once).
+        const parsed = parseHandoff(paramsOf(q));
+        expect(parsed?.note).toBe('Fed at 2pm, cranky; next nap ~4');
+    });
+
+    it('round-trips a completed-nap snapshot', () => {
+        const q = withPlanExtras('?bd=2026-03-01&s=7-2/2/2/2-7', {
+            note: 'all good',
+            napStart: 1_700_000_000_000,
+            napEnd: 1_700_002_700_000,
+        });
+        const parsed = parseHandoff(paramsOf(q));
+        expect(parsed).toEqual({
+            note: 'all good',
+            lastNap: { start: 1_700_000_000_000, end: 1_700_002_700_000 },
+        });
+    });
+
+    it('encodes an in-progress nap as hns with no hne (end: null)', () => {
+        const q = withPlanExtras('?bd=2026-03-01&s=7-2/2/2/2-7', {
+            napStart: 1_700_000_000_000,
+            napEnd: null, // still asleep
+        });
+        expect(q).toContain('hns=1700000000000');
+        expect(q).not.toContain('hne=');
+        const parsed = parseHandoff(paramsOf(q));
+        expect(parsed?.lastNap).toEqual({ start: 1_700_000_000_000, end: null });
+    });
+
+    it('returns null when a link carries no handoff at all', () => {
+        expect(parseHandoff(paramsOf('?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter'))).toBeNull();
+    });
+
+    it('degrades a malformed nap timestamp to no snapshot', () => {
+        expect(parseHandoff({ hns: 'oops' })).toBeNull();
+        expect(parseHandoff({ hn: 'note', hns: 'oops' })).toEqual({ note: 'note', lastNap: null });
+    });
+
+    it('degrades a malformed hne to in-progress rather than a bad end', () => {
+        expect(parseHandoff({ hns: '1700000000000', hne: 'x' }))
+            .toEqual({ note: '', lastNap: { start: 1_700_000_000_000, end: null } });
     });
 });

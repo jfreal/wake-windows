@@ -51,7 +51,10 @@ test.describe('Caregiver Handoff Notes & Summary [@feature:caregiver-handoff-not
     await expect(page.getByText(/Asleep since .* so far/)).toBeVisible();
     // The recap's next-window line lives in the handoff section; scope to it so
     // the SitterView "Next nap" card above doesn't collide.
+    // The line reads "Next nap ~3:25–3:55 PM" during the day, or "Next nap No
+    // more naps today" once the windows have passed — assert the label only, so
+    // the test doesn't depend on the CI runner's wall-clock (which is UTC).
     const recap = page.locator('section', { has: page.getByText('Since you last had the baby') });
-    await expect(recap.getByText(/Next nap ~\d/)).toBeVisible();
+    await expect(recap.getByText(/Next nap/)).toBeVisible();
   });
 });

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import OfflineIndicator from './components/OfflineIndicator.vue'
 import Summary from './components/Summary.vue'
+import TrendsToday from './components/TrendsToday.vue'
 import SleepLog from './components/SleepLog.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import NoAiStance from './components/NoAiStance.vue'
@@ -26,6 +27,11 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
     <OfflineIndicator v-if="!sitterMode" />
 
     <Summary />
+
+    <!-- @doc:trends-daily-totals — glanceable "Today" totals + 7-day sparkline,
+         built purely from on-device logs. Additive; hidden in the read-only
+         sitter view like the other state-reading panels. -->
+    <TrendsToday v-if="!sitterMode" />
 
     <!-- @doc:sleep-nap-logging — logging mutates on-device data, so it is hidden
          in the read-only sitter view, like the other state-changing panels. -->

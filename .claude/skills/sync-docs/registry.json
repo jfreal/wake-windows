@@ -148,9 +148,14 @@
     "title": "Personalized Windows from Local History (optional)",
     "category": "Scheduling & Prediction",
     "priority": "P2",
-    "status": "Proposed",
-    "summary": "Personalized Windows from Local History (optional)",
-    "sources": [],
+    "status": "Built",
+    "summary": "Optional, opt-in (OFF by default) on-device refinement of the plan's wake windows from the baby's own last-7-days sleep log: median wake-window per position, nudged toward the age default and capped at ±30 min (rounded to the 0.25h input step). Atypical days excluded statistically (MAD outlier on total awake time), too little data keeps the age default, plain-language 'what we changed' explainer with a Tier-3 badge, and one-tap reset. No account, no server, no AI (G01/G04).",
+    "sources": [
+      "src/models/PersonalizedWindows.ts:1",
+      "src/models/SleepRecommendations.ts:3",
+      "src/components/PersonalizedWindows.vue:17",
+      "src/components/Summary.vue:356"
+    ],
     "tests": [
       "e2e/personalized-from-local-history.spec.ts:1"
     ]

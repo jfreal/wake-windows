@@ -19,7 +19,9 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
 <template>
   <main class="max-w-3xl mx-auto px-4">
 
-    <OfflineIndicator />
+    <!-- @doc:read-only-babysitter-mode — the update prompt renders Refresh /
+         Not-now buttons, so it stays out of the read-only sitter view. -->
+    <OfflineIndicator v-if="!sitterMode" />
 
     <Summary />
 

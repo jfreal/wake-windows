@@ -5,7 +5,7 @@ import { type DstMode, dstModeFromParam, dstModeToParam } from '../models/DstShi
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
 import { formatClock, formatClockRange, formatDuration } from '../models/time';
 import { getSource } from '../models/Citations';
-import { applyPlanParams, buildPlanQuery, hasSiblingParams } from '../models/planUrl';
+import { applyPlanParams, buildPlanQuery, hasSiblingParams, withPlanExtras } from '../models/planUrl';
 import { effectiveGuidanceMode, windowSlopMinutes, isAtypicalReason } from '../models/GuidanceMode';
 import Recommendations from './Recommendations.vue'
 import DstShift from './DstShift.vue'
@@ -76,10 +76,6 @@ function removeSibling() {
   sibling.value = null;
 }
 
-const scheduleSummary = computed(() => {
-  return `${schedule.dwt}-${schedule.wws.join('/')}-${schedule.bed}`;
-});
-
 // @doc:dst-timezone-shift @doc:shareable-plan-url
 // The selected DST preset rides the same query string (`shift=spring|fall`),
 // so a shared link shows both caregivers the identical step plan.
@@ -124,16 +120,24 @@ const atParam = computed(() => schedule.atypical ? (schedule.atypicalReason || '
 // In sitter mode nothing is editable, so skip URL rewriting entirely — it
 // would also strip the `view=sitter` param from the shared link.
 if (!sitterMode) {
+  // Debounce the writes: a held number-input spinner or fast typing would
+  // otherwise fire history.replaceState per tick, and Safari throws after ~100
+  // calls / 30s, which would kill URL syncing for the rest of the session.
+  let urlWriteTimer: ReturnType<typeof setTimeout> | undefined;
   watch([planQuery, shiftParam, atParam], ([query, shift, at]) => {
-    const shiftQuery = shift ? `&shift=${shift}` : "";
-    const atQuery = at ? `&at=${at}` : "";
-    history.replaceState(null, "", `${query}${shiftQuery}${atQuery}`);
+    clearTimeout(urlWriteTimer);
+    urlWriteTimer = setTimeout(() => {
+      history.replaceState(null, "", withPlanExtras(query, { shift, at }));
+    }, 250);
   }, { immediate: true });
 }
 
 // @doc:read-only-babysitter-mode
+// Built from the same canonical query as the address bar (withPlanExtras), so
+// the sitter link carries the whole plan — sibling (bd2/s2), DST preset, and
+// atypical flag — and can't drift from what the parent sees.
 const sitterLink = computed(() =>
-  `${location.origin}${location.pathname}?bd=${schedule.birthdayDate}&s=${scheduleSummary.value}&view=sitter`);
+  `${location.origin}${location.pathname}${withPlanExtras(planQuery.value, { shift: shiftParam.value, at: atParam.value, view: 'sitter' })}`);
 
 const copyState = ref<'idle' | 'copied' | 'failed'>('idle');
 async function copySitterLink() {
@@ -148,7 +152,7 @@ async function copySitterLink() {
 }
 
 // @doc:anti-anxiety-mechanics
-// Nap starts render as ranges (ScheduleSetting.napWindows), never a single
+// Nap starts render as ranges (ScheduleSetting.napWindowsAt), never a single
 // to-the-minute target; the reassurance line cites normal day-to-day
 // variation. No streaks, scores, or grades anywhere in this app.
 const iglowstein = getSource('iglowstein-2003');
@@ -167,7 +171,7 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
 <template>
   <!-- @doc:read-only-babysitter-mode — sitter mode renders only the read-only
        view; none of the edit controls below exist in its DOM. -->
-  <SitterView v-if="sitterMode" :schedule="schedule" />
+  <SitterView v-if="sitterMode" :schedule="schedule" :sibling="sibling" />
 
   <template v-else>
   <h1><img class="h-20 mb-2" :src="logoUrl" alt="Wake Windows"></h1>

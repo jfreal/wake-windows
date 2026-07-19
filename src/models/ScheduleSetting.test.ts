@@ -284,7 +284,7 @@ describe('ScheduleSetting', () => {
             ss.dwt = 7;
             ss.bed = 7;
             ss.wws = [2, 2, 2, 2, 2]; // nap starts 9:00, 11:30, 2:00, 4:30; 30 min each
-            const windows = ss.napWindows;
+            const windows = ss.napWindowsAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES);
             expect(windows.length).toBe(4);
             expect(windows[0]).toEqual({ earliest: 525, latest: 555, lengthMinutes: 30 }); // 8:45–9:15
             expect(windows[3]).toEqual({ earliest: 975, latest: 1005, lengthMinutes: 30 }); // 4:15–4:45
@@ -295,7 +295,7 @@ describe('ScheduleSetting', () => {
             ss.dwt = 7;
             ss.bed = 7;
             ss.wws = [2.2, 2]; // nap start 552 (9:12) — not on a 5-minute mark
-            const [win] = ss.napWindows;
+            const [win] = ss.napWindowsAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES);
             expect(win.earliest).toBe(535); // 552 - 15 = 537 -> 8:55
             expect(win.latest).toBe(565);   // 552 + 15 = 567 -> 9:25
         });
@@ -303,7 +303,7 @@ describe('ScheduleSetting', () => {
         it('stays tied to the computed schedule (empty when there are no naps)', () => {
             const ss = new ScheduleSetting();
             ss.wws = [5];
-            expect(ss.napWindows).toEqual([]);
+            expect(ss.napWindowsAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES)).toEqual([]);
         });
     });
 
@@ -313,13 +313,13 @@ describe('ScheduleSetting', () => {
             const ss = new ScheduleSetting();
             ss.dwt = 7;
             ss.bed = 7; // 7:00 PM = 1140
-            expect(ss.bedtimeWindow).toEqual({ earliest: 1125, latest: 1155 }); // 6:45–7:15 PM
+            expect(ss.bedtimeWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES)).toEqual({ earliest: 1125, latest: 1155 }); // 6:45–7:15 PM
         });
 
         it('rounds range endpoints to 5-minute clock marks', () => {
             const ss = new ScheduleSetting();
-            ss.bed = 6.5; // 6:30 PM = 1110 — already on a mark; ±15 stays on marks
-            expect(ss.bedtimeWindow).toEqual({ earliest: 1095, latest: 1125 });
+            ss.bed = 6.55; // 6:33 PM = 1113 — off-mark, so rounding must kick in
+            expect(ss.bedtimeWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES)).toEqual({ earliest: 1100, latest: 1130 });
         });
     });
 
@@ -337,31 +337,31 @@ describe('ScheduleSetting', () => {
 
         it('returns the first window before any naps have started', () => {
             const ss = defaultDay();
-            expect(ss.nextNapWindow(8 * 60)).toEqual({ earliest: 525, latest: 555, lengthMinutes: 80 });
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,8 * 60)).toEqual({ earliest: 525, latest: 555, lengthMinutes: 80 });
         });
 
         it('keeps returning a window while now is inside it', () => {
             const ss = defaultDay();
-            expect(ss.nextNapWindow(540)?.earliest).toBe(525); // 9:00, mid-window
-            expect(ss.nextNapWindow(555)?.earliest).toBe(525); // exactly at latest still counts
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,540)?.earliest).toBe(525); // 9:00, mid-window
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,555)?.earliest).toBe(525); // exactly at latest still counts
         });
 
         it('moves to the following window once the latest start has passed', () => {
             const ss = defaultDay();
-            expect(ss.nextNapWindow(556)?.earliest).toBe(725);
-            expect(ss.nextNapWindow(800)?.earliest).toBe(925);
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,556)?.earliest).toBe(725);
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,800)?.earliest).toBe(925);
         });
 
         it('returns null once all naps are done for the day', () => {
             const ss = defaultDay();
-            expect(ss.nextNapWindow(956)).toBeNull();
-            expect(ss.nextNapWindow(23 * 60)).toBeNull();
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,956)).toBeNull();
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,23 * 60)).toBeNull();
         });
 
         it('returns null when the schedule has no naps', () => {
             const ss = new ScheduleSetting();
             ss.wws = [5];
-            expect(ss.nextNapWindow(9 * 60)).toBeNull();
+            expect(ss.nextNapWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES,9 * 60)).toBeNull();
         });
     });
 
@@ -383,15 +383,6 @@ describe('ScheduleSetting', () => {
             ss.wws = [2, 2, 2, 2, 2]; // first nap starts 9:00 (540)
             const [win] = ss.napWindowsAt(30);
             expect(win).toEqual({ earliest: 510, latest: 570, lengthMinutes: 30 }); // 8:30–9:30
-        });
-
-        it('matches the baseline getters at ±15', () => {
-            const ss = new ScheduleSetting();
-            ss.dwt = 7;
-            ss.bed = 7;
-            ss.wws = [2, 2, 2];
-            expect(ss.napWindowsAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES)).toEqual(ss.napWindows);
-            expect(ss.bedtimeWindowAt(ScheduleSetting.NAP_WINDOW_SLOP_MINUTES)).toEqual(ss.bedtimeWindow);
         });
 
         it('widens the bedtime range too', () => {

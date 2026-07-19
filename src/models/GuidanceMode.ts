@@ -15,6 +15,12 @@ export const CLOCK_FROM_MONTHS = 6
 /** Cues get less reliable from about this corrected age; clock clearly leads. */
 export const CUES_UNRELIABLE_FROM_MONTHS = 9
 
+// Note: this cues-vs-clock banding (5/6/9 mo) is deliberately distinct from the
+// recommendation age bands in Citations.ageBandForMonths (0-3/3-4/4-6/6-9/…).
+// They answer different questions — "how much to trust the clock" vs "which
+// published sleep-needs row applies" — and are shown together, so if you move a
+// boundary here, re-check that the guidance copy still reads sensibly beside the
+// EvidenceGuidance band it lands in. They are not meant to share a threshold.
 export function guidanceModeForMonths(months: number): GuidanceMode {
     if (months < CUES_UNTIL_MONTHS) return 'cues'
     if (months < CLOCK_FROM_MONTHS) return 'transition'

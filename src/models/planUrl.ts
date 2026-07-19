@@ -22,9 +22,17 @@ export function applyPlanParams(schedule: ScheduleSetting, bd?: string, s?: stri
     if (s) {
         const [dwt, wwString, bed] = s.split('-');
         if (wwString) {
-            schedule.wws = wwString.split('/').map(Number);
-            schedule.dwt = +dwt;
-            schedule.bed = +bed;
+            // Parse into temporaries and apply atomically: one nonnumeric part
+            // rejects the whole shorthand, so a mangled link can't leave the
+            // schedule half-updated or corrupted with NaN. An empty dwt/bed is
+            // still valid — Number('') is 0, the 12:00 select option.
+            const wws = wwString.split('/').map(Number);
+            const dwtNum = Number(dwt);
+            const bedNum = Number(bed);
+            if (Number.isNaN(dwtNum) || Number.isNaN(bedNum) || wws.some(Number.isNaN)) return;
+            schedule.wws = wws;
+            schedule.dwt = dwtNum;
+            schedule.bed = bedNum;
         }
     }
 }
@@ -41,4 +49,25 @@ export function buildPlanQuery(child: ScheduleSetting, sibling?: ScheduleSetting
 /** True when the query names a second child (either sibling param present). */
 export function hasSiblingParams(params: { bd2?: string; s2?: string }): boolean {
     return Boolean(params.bd2 || params.s2);
+}
+
+/** Extra shared params that ride alongside the plan (DST preset, atypical flag,
+ * sitter view mode). Blank/undefined values are omitted. */
+export interface PlanExtras {
+    shift?: string | null;
+    at?: string | null;
+    view?: string | null;
+}
+
+/**
+ * Append the shared extras onto a base plan query. Keeps the shift/at/view
+ * assembly in one place so the address-bar writer and the sitter link can't
+ * drift (e.g. one gaining a param the other forgets).
+ */
+export function withPlanExtras(baseQuery: string, extras: PlanExtras = {}): string {
+    let query = baseQuery;
+    if (extras.shift) query += `&shift=${extras.shift}`;
+    if (extras.at) query += `&at=${extras.at}`;
+    if (extras.view) query += `&view=${extras.view}`;
+    return query;
 }

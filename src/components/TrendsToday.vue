@@ -181,15 +181,18 @@ const showBreakdown = ref(false)
                <div class="flex items-baseline justify-between">
                     <div class="text-slate-400 text-xs uppercase">Sleep · last 7 days</div>
                     <button type="button"
-                         class="text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-9 px-1"
+                         class="inline-flex items-center text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-11 px-1"
                          :aria-expanded="showBreakdown"
                          v-on:click="showBreakdown = !showBreakdown">
                          {{ showBreakdown ? 'Hide breakdown' : 'View breakdown' }}
                     </button>
                </div>
 
+               <!-- Text alternative for screen readers; the chart itself is
+                    decorative (aria-hidden) so it doesn't add a second role=img. -->
+               <span class="sr-only">{{ sparkAlt }}</span>
                <svg :viewBox="`0 0 ${SPARK_W} ${SPARK_H}`" :width="SPARK_W" :height="SPARK_H"
-                    class="mt-2 max-w-full h-10" role="img" :aria-label="sparkAlt" preserveAspectRatio="xMinYMax meet">
+                    class="mt-2 max-w-full h-10" aria-hidden="true" preserveAspectRatio="xMinYMax meet">
                     <rect v-for="(b, i) in bars" :key="i" :x="b.x" :y="b.y" :width="b.w" :height="b.h" rx="1.5"
                          :class="b.isToday ? 'fill-sky-400' : 'fill-violet-400/60'">
                          <title>{{ b.label }}</title>

@@ -31,8 +31,8 @@ test.describe('Trends & Daily Totals at a Glance [@feature:trends-daily-totals]'
     const today = page.getByRole('region', { name: 'Today' });
     // Honest zero, plus a reassuring (not guilt-tripping) empty state.
     await expect(today).toContainText('Nothing to keep up with');
-    // The sparkline still renders (7-day text alternative present).
-    await expect(today.getByRole('img', { name: /Sleep over the last 7 days/ })).toBeVisible();
+    // The sparkline still renders, with a 7-day screen-reader text alternative.
+    await expect(today.getByText(/Sleep over the last 7 days/)).toHaveCount(1);
   });
 
   test('a logged past nap flows into today\'s totals and nap count', async ({ page }) => {

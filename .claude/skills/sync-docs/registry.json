@@ -49,9 +49,14 @@
     "title": "Cues-vs-Clock Mode by Age",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Cues-vs-Clock Mode by Age",
-    "sources": [],
+    "status": "Built",
+    "summary": "Corrected-age guidance mode: cues-first under ~5 mo, soft handoff 5-6 mo, clock-first from 6 mo, with cited rationale",
+    "sources": [
+      "src/models/GuidanceMode.ts:1",
+      "src/models/ScheduleSetting.ts:147",
+      "src/components/GuidanceBanner.vue:13",
+      "src/components/Summary.vue:156"
+    ],
     "tests": [
       "e2e/cues-vs-clock-mode.spec.ts:1"
     ]
@@ -87,9 +92,15 @@
     "title": "Atypical Day\" / Disruption Flag",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Atypical Day\" / Disruption Flag",
-    "sources": [],
+    "status": "Built",
+    "summary": "One-tap 'today is atypical' toggle with reasons: calm copy, wider windows, cues-first framing, flag rides the URL (at=<reason>)",
+    "sources": [
+      "src/models/GuidanceMode.ts:24",
+      "src/models/ScheduleSetting.ts:15",
+      "src/components/AtypicalDayFlag.vue:5",
+      "src/components/GuidanceBanner.vue:13",
+      "src/components/Summary.vue:44"
+    ],
     "tests": [
       "e2e/atypical-day-flag.spec.ts:1"
     ]
@@ -99,9 +110,14 @@
     "title": "Daylight Saving & Time-Zone Shift Tool",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Daylight Saving & Time-Zone Shift Tool",
-    "sources": [],
+    "status": "Built",
+    "summary": "DST presets -> gradual 15 min/day, 4-day shift plan in ranges, shareable via ?shift=",
+    "sources": [
+      "src/models/DstShift.ts:4",
+      "src/components/DstShift.vue:8",
+      "src/components/Summary.vue:83",
+      "src/components/Summary.vue:344"
+    ],
     "tests": [
       "e2e/dst-timezone-shift.spec.ts:1"
     ]
@@ -386,11 +402,11 @@
     "summary": "?view=sitter renders the shared plan read-only with next nap/bedtime ranges; Copy sitter link in normal view",
     "sources": [
       "src/App.vue:12",
-      "src/components/SitterView.vue:10",
-      "src/components/Summary.vue:31",
-      "src/components/Summary.vue:107",
-      "src/models/ScheduleSetting.ts:158",
-      "src/models/ScheduleSetting.ts:174"
+      "src/components/SitterView.vue:11",
+      "src/components/Summary.vue:35",
+      "src/components/Summary.vue:135",
+      "src/models/ScheduleSetting.ts:151",
+      "src/models/ScheduleSetting.ts:161"
     ],
     "tests": [
       "e2e/read-only-babysitter-mode.spec.ts:1"
@@ -497,9 +513,11 @@
     "title": "Offline Mode",
     "category": "Utility & Integrations",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Offline Mode",
-    "sources": [],
+    "status": "Built",
+    "summary": "Installable PWA: service worker precaches shell + bundled citations; plan renders/recomputes offline; honest offline banner + prompt-based update path",
+    "sources": [
+      "src/components/OfflineIndicator.vue:2"
+    ],
     "tests": [
       "e2e/offline-mode.spec.ts:1"
     ]

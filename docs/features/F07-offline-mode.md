@@ -5,7 +5,7 @@ id: F07-offline-mode
 docKey: offline-mode
 category: Utility & Integrations
 priority: P1
-status: Proposed
+status: Built
 tags: [offline, pwa, service-worker, local-first, no-account]
 ---
 
@@ -24,11 +24,12 @@ The core moments — a night feed, a hospital stay, a basement nap — are often
 The research flags offline as a **Confirmed gap** for schedulers and notes competitors are app-and-server bound. This is a place the brand's architecture wins by default — "the web app nobody has," per the master research's structural opening.
 
 ## Our approach (spec)
-Make the whole core usable with no network via a PWA:
-- **Service worker** precaches the app shell, fonts, and evidence/citation content so a plan renders and recomputes offline.
-- **Plan state from the URL + local storage** means no server round-trip to generate a schedule; edits and any local logging (C-series) persist on-device.
-- **Installable PWA** with an offline fallback page; a clear "offline — your plan still works" indicator instead of a spinner or error.
-- Citations and the safe-sleep panel are bundled, so credibility content survives offline too.
+The whole core is usable with no network via a PWA:
+- **Service worker** (vite-plugin-pwa / Workbox `generateSW`) precaches the entire build — app shell, JS, CSS, icons — so a plan renders and recomputes offline. No separate fallback page needed: every route is the app.
+- **Plan state from the URL** means no server round-trip to generate a schedule; edits recompute on-device (local logging persistence arrives with the C-series).
+- **Installable PWA** — manifest with regular + maskable icons generated from the logo; a clear "Offline — your plan still works" banner (`OfflineIndicator.vue`) instead of a spinner or error.
+- Citations and the safe-sleep panel are bundled into the JS (`citations.json` is imported by `models/Citations.ts`), so credibility content survives offline too.
+- **Update path:** `registerType: 'prompt'` plus an "Update available — Refresh" banner; Netlify serves `sw.js`/`manifest.webmanifest` with `max-age=0, must-revalidate`, so a new deploy never silently pins old logic or citations.
 
 ## Scope — MVP
 - Service worker precaching app shell + core content; installable manifest.

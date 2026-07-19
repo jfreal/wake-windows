@@ -5,7 +5,7 @@ id: A07-atypical-day-flag
 docKey: atypical-day-flag
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [disruption, illness, teething, regression, travel, accuracy]
 ---
 
@@ -29,7 +29,7 @@ No wake-window scheduler lets a parent mark a day as disrupted and adjusts its g
 - Ground it in the science: night wakings and rough patches are normal; the 4-month change is a permanent progression, later "regressions" are developmental windows, not failures. Never imply the baby is "broken."
 
 ## Scope — MVP
-The toggle + reasons, the reassuring copy, and exclusion of flagged days from personalization and transition detection.
+The toggle + reasons, the reassuring copy, visually widened windows with cues-first framing, and URL persistence (`at=<reason>` rides the shareable link). The exclusion hooks into personalization (A10) and transition detection (A06) land with those features — neither is built yet.
 
 ## Scope — later
 Auto-suggest a flag when logged data deviates sharply from baseline; a gentle "still atypical?" check-in after a few days.

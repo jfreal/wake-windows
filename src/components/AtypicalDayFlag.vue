@@ -19,10 +19,9 @@ function pickReason(id: string) {
 
 <template>
      <div class="mt-4">
-          <span id="atypical-label" class="block text-slate-400 text-sm mb-1">Rough day?</span>
+          <span class="block text-slate-400 text-sm mb-1">Rough day?</span>
           <button
                type="button"
-               aria-labelledby="atypical-label"
                :aria-pressed="schedule.atypical"
                class="w-full min-h-11 rounded text-sm p-2.5 text-left border transition-colors"
                :class="schedule.atypical

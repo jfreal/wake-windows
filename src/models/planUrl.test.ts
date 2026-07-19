@@ -33,6 +33,30 @@ describe('applyPlanParams', () => {
         expect(s.wws).toEqual([2, 2, 2, 2]);
     });
 
+    it('rejects a nonnumeric shorthand atomically (no NaN corruption)', () => {
+        const s = new ScheduleSetting();
+        applyPlanParams(s, undefined, 'abc-x/y-z');
+        expect(s.dwt).toBe(7);
+        expect(s.bed).toBe(7);
+        expect(s.wws).toEqual([2, 2, 2, 2]);
+    });
+
+    it('rejects a partially numeric shorthand without a half-applied schedule', () => {
+        const s = new ScheduleSetting();
+        applyPlanParams(s, undefined, '8-2/oops/2-6');
+        expect(s.dwt).toBe(7); // dwt untouched even though it parsed fine
+        expect(s.bed).toBe(7);
+        expect(s.wws).toEqual([2, 2, 2, 2]);
+    });
+
+    it('accepts empty dwt/bed as 0 (the 12:00 select option)', () => {
+        const s = new ScheduleSetting();
+        applyPlanParams(s, undefined, '-2/2-');
+        expect(s.dwt).toBe(0);
+        expect(s.bed).toBe(0);
+        expect(s.wws).toEqual([2, 2]);
+    });
+
     it('applies nothing when both params are absent', () => {
         const s = new ScheduleSetting();
         const before = s.birthdayDate;

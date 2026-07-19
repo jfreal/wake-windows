@@ -78,7 +78,7 @@ const earlyRising: TroubleshooterTree = {
                leafKind: 'advice',
                title: 'Likely overtired — try an earlier bedtime',
                body: [
-                    'It sounds backwards, but a too-late bedtime is one of the most consistently cited causes of early waking. An overtired baby falls asleep on stress hormones like cortisol, which fragment the light early-morning sleep between roughly 2:00 and 7:00 AM.',
+                    'It sounds backwards, but a too-late bedtime is one of the most consistently cited causes of early waking. One proposed mechanism: an overtired baby may fall asleep with elevated stress hormones like cortisol, which can fragment the light early-morning sleep between roughly 2:00 and 7:00 AM.',
                ],
                suggestion:
                     'Move bedtime earlier in ~15-minute steps toward the 7:00–8:00 PM range that suits most babies on a stable nap schedule, and protect the last nap so the final wake window doesn\'t run long. After a rough-nap day, an even earlier bedtime helps rather than hurts.',
@@ -128,12 +128,12 @@ const earlyRising: TroubleshooterTree = {
                id: 'comfort',
                kind: 'leaf',
                leafKind: 'advice',
-               title: 'Check warmth — and honor real hunger',
+               title: 'Check temperature both ways — and honor real hunger',
                body: [
-                    'The coldest part of the night is just before dawn, and practitioners note babies often wake early simply from being cold. Genuine morning hunger is also real — especially in younger babies — and feeding it is not a sleep failure.',
+                    'The coldest part of the night is just before dawn, and practitioners note babies often wake early simply from being cold. A too-warm room matters even more: overheating and overbundling raise sleep-related risk, so warmth is something to correct down as well as up. Genuine morning hunger is also real — especially in younger babies — and feeding it is not a sleep failure.',
                ],
                suggestion:
-                    "Try a slightly warmer sleep sack or one extra layer for the second half of the night (about one layer more than an adult would wear). If hunger drives the waking, a quiet, boring feed and back to bed is a fine answer at many ages — and if you ever suspect feeding or weight is the real issue, that's a pediatrician question, not a schedule one.",
+                    "Check the room and baby (back of the neck, not hands) and adjust in the right direction: if chilly, try a slightly warmer sleep sack or one extra layer for the second half of the night (about one layer more than an adult would wear); if warm or sweaty, remove a layer — never add one. If hunger drives the waking, a quiet, boring feed and back to bed is a fine answer at many ages — and if you ever suspect feeding or weight is the real issue, that's a pediatrician question, not a schedule one.",
                patienceNote: PATIENCE,
                tier: 3,
                sourceIds: ['huckleberry-early-risers', 'littleones-early-waking'],
@@ -248,7 +248,7 @@ const shortNaps: TroubleshooterTree = {
                leafKind: 'advice',
                title: 'Signs point to overtired going in',
                body: [
-                    'Waking upset mid-nap is the classic overtired tell: the wake window before that nap likely ran too long, and stress hormones broke the nap at the first cycle end.',
+                    'Waking upset mid-nap is the classic overtired tell: the wake window before that nap likely ran too long. One possibility practitioners cite is that elevated stress hormones can break the nap at the first cycle end.',
                ],
                suggestion:
                     "Shorten the wake window before the short nap by ~15 minutes and hold it there for several days. If naps run short all day, look hardest at the first window of the morning — it should be the day's shortest.",
@@ -367,7 +367,7 @@ const nightWaking: TroubleshooterTree = {
                leafKind: 'advice',
                title: 'False start from overtiredness',
                body: [
-                    'Crashing in under ~5 minutes and waking upset one cycle later usually means bedtime came too late or the last wake window ran too long: baby fell asleep on stress hormones and popped awake at the first cycle end.',
+                    'Crashing in under ~5 minutes and waking upset one cycle later usually means bedtime came too late or the last wake window ran too long: one possibility is that baby fell asleep with elevated stress hormones and popped awake at the first cycle end.',
                ],
                suggestion:
                     'Shorten the last wake window of the day, or move bedtime earlier in ~15-minute steps — a 7:00–8:00 PM bedtime suits most babies on a stable nap schedule. On short-nap days, go earlier still.',

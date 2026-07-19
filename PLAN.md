@@ -5,7 +5,8 @@ A Vue 3 + TypeScript + Vite app that helps parents of infants plan nap schedules
 from wake windows, baby age (with gestational-age adjustment), and bedtime. It
 computes nap/night/wake totals, draws a 24-hour sleep bar, renders an actual nap
 clock schedule, and compares the plan against published sleep recommendations by
-age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
+age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`, plus
+`&shift=spring|fall` when a DST transition plan is selected).
 
 ## Stack (current)
 
@@ -17,10 +18,11 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`).
 | Tailwind CSS | 4.3.x (via `@tailwindcss/vite`, CSS-first) |
 | Vitest | 4.0.x |
 | vue-tsc | 3.2.x |
+| vite-plugin-pwa | 1.3.x (Workbox `generateSW`) |
 
 - `npm run dev` — dev server
 - `npm run build` — `vue-tsc --noEmit && vite build`
-- `npm test` — Vitest (142 tests)
+- `npm test` — Vitest (143 tests)
 
 ## Architecture
 
@@ -41,6 +43,8 @@ src/
     TierBadge.vue             Tier 1/2/3 badge (color + shape, a11y-safe)
     Troubleshooter.vue        B05 decision-tree troubleshooter UI: tree picker,
                               question walker, cited Tier 3 answer leaves
+    DstShift.vue              A08 DST shift tool: spring/fall presets, day-by-day
+                              ramp with mini 24h strips and ±15-min ranges
   data/
     citations.json            Source library + per-age-band recommendations
                               (copied from ../../.research/citations.json)
@@ -54,9 +58,27 @@ src/
                               age-band lookup (unit-tested)
     Troubleshooter.ts         B05 deterministic decision-tree engine: session
                               walk/back, structural tree validation (unit-tested)
+    DstShift.ts               A08 shift math: 4-day ±15-min/day DST ramp,
+                              URL param mapping (unit-tested)
     time.ts                   formatClock(minutes) helper
     *.test.ts                 Vitest unit tests
+  components/
+    OfflineIndicator.vue      F07 offline banner ("your plan still works") +
+                              service-worker update prompt (refresh path)
 ```
+
+## Offline / PWA (F07)
+
+The app is an installable PWA. `vite-plugin-pwa` (Workbox `generateSW`,
+`registerType: 'prompt'`) precaches the entire build — shell, JS (citations.json
+is bundled into the JS via import, so evidence content works offline), CSS,
+icons. `OfflineIndicator.vue` shows an honest "Offline — your plan still works"
+banner on connectivity loss and an explicit "Update available — Refresh" prompt
+when a new deploy's service worker is waiting, so stale workers never silently
+pin old logic or citations. Icons live in `public/` (generated from
+`assets/logo.png`); `netlify.toml` serves `sw.js` and `manifest.webmanifest`
+with `max-age=0, must-revalidate` and hashed `/assets/*` as immutable. No user
+data lives in the SW cache — plan state stays in the URL.
 
 ## Evidence tiers (spec §6)
 
@@ -81,8 +103,9 @@ Options API, ~12 logic bugs, no tests). Completed:
   general-guidance source), mobile-responsive layout.
 
 ## Verified
-`vue-tsc` typecheck clean · `vite build` clean · 60/60 tests pass · all Vue/TS
-modules transform through the dev server with no Vite errors or template warnings.
+`vue-tsc` typecheck clean · `vite build` clean · full Vitest suite passes (count
+tracked in the Stack section above) · all Vue/TS modules transform through the
+dev server with no Vite errors or template warnings.
 
 ## Possible future work
 - Migrate the two named commercial sources' brackets beyond their current 3–7 mo range

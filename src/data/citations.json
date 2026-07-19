@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Infant Sleep & Nap Citation Tiers",
-    "description": "Tiered, credentialed citation data for an infant wake-windows app. Tier 1 = evidence-based (consensus guidelines + peer-reviewed norms). Tier 2 = practice-based heuristic (consultant/parenting frameworks not validated by trials).",
+    "description": "Tiered, credentialed citation data for an infant wake-windows app. Tier 1 = evidence-based (consensus guidelines + peer-reviewed norms). Tier 2 = practice-based heuristic (consultant/parenting frameworks not validated by trials). Tier 3 = practitioner convention (plausible mechanism, no direct study of the specific protocol).",
     "compiled": "2026-06-07",
     "disclaimer": "Informational only, not medical advice. Infant sleep needs vary widely; families should consult their pediatrician.",
     "lastVerified": "2026-06-07"

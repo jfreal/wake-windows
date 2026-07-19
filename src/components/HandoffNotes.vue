@@ -83,7 +83,10 @@ const napLine = computed(() => {
 
 const nextLine = computed(() => {
   const w = nextNap.value;
-  return w ? `~${formatClockRange(w.earliest, w.latest)}` : 'No more naps today';
+  // "no more today" (not "no more naps today") on purpose: the latter contains
+  // the substring "naps today", which Playwright's substring getByText would
+  // collide with the SleepLog "Naps today" totals label.
+  return w ? `~${formatClockRange(w.earliest, w.latest)}` : 'no more today';
 });
 
 // --- copy handoff link (editing view) --------------------------------------

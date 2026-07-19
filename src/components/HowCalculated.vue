@@ -43,8 +43,9 @@ const napLengthMinutes = computed(() =>
                     <span class="text-slate-200 tabular-nums">{{ formatDuration(napLengthMinutes) }}</span> each.
                </p>
                <p>
-                    Each start is shown as a range, ±{{ slopMinutes }} minutes around the computed time —
-                    honest slack, not false precision. Cues-led and atypical days widen it.
+                    Each start is shown as a range, ±{{ slopMinutes }} minutes around the computed
+                    time with endpoints rounded to 5-minute marks — honest slack, not false
+                    precision. Cues-led and atypical days widen it.
                </p>
                <p>
                     <TierBadge :tier="2" />

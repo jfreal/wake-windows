@@ -45,8 +45,9 @@ const competitors = [
                     anywhere in this app — and no model, ours or anyone else's, is trained on you or your
                     baby. Every number on this page is transparent arithmetic: your wake time plus
                     age-appropriate wake-window ranges, walked forward into nap and bedtime windows.
-                    Open <span class="text-slate-300">"How this was calculated"</span> under your nap
-                    schedule to see it done with your own numbers.
+                    Whenever a nap schedule is on screen, its
+                    <span class="text-slate-300">"How this was calculated"</span> panel walks that
+                    same math with your own numbers.
                </p>
 
                <p class="text-slate-400">

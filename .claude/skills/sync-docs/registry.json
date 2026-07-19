@@ -520,9 +520,13 @@
     "title": "Calendar Export (ICS)",
     "category": "Utility & Integrations",
     "priority": "P2",
-    "status": "Proposed",
-    "summary": "Calendar Export (ICS)",
-    "sources": [],
+    "status": "Built",
+    "summary": "Client-side ICS export of today's naps + bedtime as guidance-range VEVENTs with stable UIDs and TZID-anchored times",
+    "sources": [
+      "src/models/ics.ts:1",
+      "src/components/CalendarExport.vue:2",
+      "src/App.vue:45"
+    ],
     "tests": [
       "e2e/calendar-export.spec.ts:1"
     ]

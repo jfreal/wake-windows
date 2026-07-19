@@ -74,8 +74,10 @@ The app is an installable PWA. `vite-plugin-pwa` (Workbox `generateSW`,
 is bundled into the JS via import, so evidence content works offline), CSS,
 icons. `OfflineIndicator.vue` shows an honest "Offline — your plan still works"
 banner on connectivity loss and an explicit "Update available — Refresh" prompt
-when a new deploy's service worker is waiting, so stale workers never silently
-pin old logic or citations. Icons live in `public/` (generated from
+when a new deploy's service worker is waiting. Updates are announced, not
+forced: the prompt is dismissible, so a user who picks "Not now" keeps the old
+worker (and its logic/citations) until they refresh or the prompt reappears on
+a later visit. Icons live in `public/` (generated from
 `assets/logo.png`); `netlify.toml` serves `sw.js` and `manifest.webmanifest`
 with `max-age=0, must-revalidate` and hashed `/assets/*` as immutable. No user
 data lives in the SW cache — plan state stays in the URL.

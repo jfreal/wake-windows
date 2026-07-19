@@ -16,6 +16,7 @@ test.describe('Interactive Sleep Troubleshooter (Decision Tree) [@feature:intera
   test('walks early rising to a cited Tier 3 answer with a patience note', async ({ page }) => {
     await page.getByRole('button', { name: /Waking too early/ }).click();
     await page.getByRole('button', { name: 'No — baby is well' }).click();
+    await page.getByRole('button', { name: 'About 4 months or older' }).click();
     await page.getByRole('button', { name: 'Before about 6:00 AM' }).click();
     await page.getByRole('button', { name: /Bedtime runs late/ }).click();
 
@@ -36,9 +37,10 @@ test.describe('Interactive Sleep Troubleshooter (Decision Tree) [@feature:intera
   test('back returns to the previous question', async ({ page }) => {
     await page.getByRole('button', { name: /False start or split night/ }).click();
     await page.getByRole('button', { name: 'No — baby is well' }).click();
+    await page.getByRole('button', { name: 'About 4 months or older' }).click();
     await expect(page.getByText('When is the waking happening?')).toBeVisible();
 
     await page.getByRole('button', { name: '← Back' }).click();
-    await expect(page.getByRole('button', { name: 'No — baby is well' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'About 4 months or older' })).toBeVisible();
   });
 });

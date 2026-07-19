@@ -35,10 +35,36 @@ const earlyRising: TroubleshooterTree = {
                prompt: 'First, a quick check: is baby unwell (fever, illness, ear trouble), or do you have any concern about feeding or weight gain?',
                options: [
                     { label: 'Yes — something may be off medically', next: 'pediatrician' },
-                    { label: 'No — baby is well', next: 'wake-time' },
+                    { label: 'No — baby is well', next: 'age' },
                ],
           },
           pediatricianLeaf('pediatrician'),
+          // Age gate: schedule-shaped fixes (bedtime moves, nap caps, window
+          // stretches) assume a working circadian clock, which only organizes
+          // around 3–4 months — route younger babies to cues, not adjustments.
+          {
+               id: 'age',
+               kind: 'question',
+               prompt: 'How old is baby (adjusted age, if born early)?',
+               options: [
+                    { label: 'Under about 4 months', next: 'young-normal' },
+                    { label: 'About 4 months or older', next: 'wake-time' },
+               ],
+          },
+          {
+               id: 'young-normal',
+               kind: 'leaf',
+               leafKind: 'reassurance',
+               title: "Before ~4 months, early mornings aren't a schedule problem",
+               body: [
+                    "Regular day/night sleep cycles only begin to organize around 3–4 months, so before then wake-up times drift on their own and no bedtime or nap adjustment reliably moves them. Nothing is broken — the schedule machinery just isn't built yet.",
+               ],
+               suggestion:
+                    'Follow sleepy cues and feed on need; keep nights dark, quiet, and boring, and mornings bright. The schedule-based fixes in this tree start to work from about 4 months (adjusted age) — come back then if early waking persists.',
+               patienceNote: 'This one resolves on a developmental timeline measured in weeks and months — no 1–2 week experiment needed yet.',
+               tier: 3,
+               sourceIds: ['rivkees-2007', 'tcb-early-waking'],
+          },
           {
                id: 'wake-time',
                kind: 'question',
@@ -322,10 +348,36 @@ const nightWaking: TroubleshooterTree = {
                prompt: 'First, a quick check: is baby unwell (fever, illness, ear trouble), or do you have any concern about feeding or weight gain?',
                options: [
                     { label: 'Yes — something may be off medically', next: 'pediatrician' },
-                    { label: 'No — baby is well', next: 'when' },
+                    { label: 'No — baby is well', next: 'age' },
                ],
           },
           pediatricianLeaf('pediatrician'),
+          // Age gate: settling and night-shortening advice below assumes
+          // consolidated night sleep, which develops around 3–4 months —
+          // younger babies get cue-and-feed reassurance instead.
+          {
+               id: 'age',
+               kind: 'question',
+               prompt: 'How old is baby (adjusted age, if born early)?',
+               options: [
+                    { label: 'Under about 4 months', next: 'young-normal' },
+                    { label: 'About 4 months or older', next: 'when' },
+               ],
+          },
+          {
+               id: 'young-normal',
+               kind: 'leaf',
+               leafKind: 'reassurance',
+               title: 'Before ~4 months, night wakings are how sleep works',
+               body: [
+                    'Night sleep consolidates around 3–4 months; before then, waking 45 minutes after bedtime or hanging out awake at 2 AM usually reflects immature sleep cycles plus genuine hunger — not a schedule problem, and not a settling problem to train away.',
+               ],
+               suggestion:
+                    'Respond, feed when hungry, and keep night interactions dim, quiet, and brief. The schedule-shaped fixes in this tree become useful from about 4 months (adjusted age) — come back then if false starts or split nights persist.',
+               patienceNote: 'Consolidation runs on a developmental timeline measured in weeks and months — no 1–2 week experiment needed yet.',
+               tier: 3,
+               sourceIds: ['rivkees-2007', 'babysleepscience-wakings'],
+          },
           {
                id: 'when',
                kind: 'question',

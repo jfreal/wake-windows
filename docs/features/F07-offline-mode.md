@@ -29,7 +29,7 @@ The whole core is usable with no network via a PWA:
 - **Plan state from the URL** means no server round-trip to generate a schedule; edits recompute on-device (local logging persistence arrives with the C-series).
 - **Installable PWA** — manifest with regular + maskable icons generated from the logo; a clear "Offline — your plan still works" banner (`OfflineIndicator.vue`) instead of a spinner or error.
 - Citations and the safe-sleep panel are bundled into the JS (`citations.json` is imported by `models/Citations.ts`), so credibility content survives offline too.
-- **Update path:** `registerType: 'prompt'` plus an "Update available — Refresh" banner; Netlify serves `sw.js`/`manifest.webmanifest` with `max-age=0, must-revalidate`, so a new deploy never silently pins old logic or citations.
+- **Update path:** `registerType: 'prompt'` plus an "Update available — Refresh" banner; Netlify serves `sw.js`/`manifest.webmanifest` with `max-age=0, must-revalidate`, so every new deploy is detected and announced. The refresh itself is user-controlled: the prompt is dismissible, and declining keeps the old worker's logic/citations until a later refresh or visit re-surfaces the prompt.
 
 ## Scope — MVP
 - Service worker precaching app shell + core content; installable manifest.

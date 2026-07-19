@@ -23,6 +23,7 @@ The feature briefs flag this as "an easy win; missing from every scheduler." The
 Wake-window schedulers offer only manual nudges or articles (e.g., Smart Sleep Coach's DST blog post). **Hatch** automates it with a "Daylight Savings Assistant" that shifts 15 min/day — but that's hardware, not a scheduler. So this is a real gap *in our category*, not an industry first.
 
 ## Our approach (built)
+
 - A **"Shift my schedule"** section with the two **DST presets** (spring-forward / fall-back) as toggle buttons; travel mode stays later-scope.
 - Generates a **gradual transition plan** — wake, every nap, and bedtime shift **15 min/day over the 4 days before the change**, then a final "Change day onward — usual times, new clock" row. Each day renders as a mini 24h strip (awake span + nap segments) that visibly slides across days, plus labeled time windows.
 - Every displayed time is a **±15-minute range** (the app-standard slop, 5-minute-rounded endpoints), never an exact clock target; the section carries the **Tier-3 badge** (practitioner convention, defined in `citations.json`).

@@ -2,6 +2,7 @@
 import OfflineIndicator from './components/OfflineIndicator.vue'
 import Summary from './components/Summary.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
+import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
@@ -27,6 +28,12 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
 
     <div v-if="!sitterMode" class="mt-6">
       <PrivacyPromise />
+    </div>
+
+    <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;
+         the arithmetic walk it points to lives under the nap schedule. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <NoAiStance />
     </div>
 
     <div v-if="!sitterMode" class="mt-3">

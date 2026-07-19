@@ -17,6 +17,7 @@ import SourcesEvidence from './SourcesEvidence.vue'
 import SitterView from './SitterView.vue'
 import Troubleshooter from './Troubleshooter.vue'
 import ChildInputs from './ChildInputs.vue'
+import HowCalculated from './HowCalculated.vue'
 import SiblingAlignment from './SiblingAlignment.vue'
 import logoUrl from '../assets/logo.png'
 import sunUrl from '../assets/sun.png'
@@ -343,6 +344,12 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
             class="text-sky-400 hover:text-sky-300 underline underline-offset-2">(Iglowstein 2003 <span
               aria-hidden="true">↗</span>)</a>.
         </p>
+
+        <!-- @doc:no-ai-no-data-training — the plan's arithmetic spelled out
+             with the user's own numbers, reachable right from the schedule. -->
+        <div class="mt-3">
+          <HowCalculated :schedule="schedule" :slop-minutes="windowSlop" />
+        </div>
       </div>
 
       <!-- @doc:dst-timezone-shift -->

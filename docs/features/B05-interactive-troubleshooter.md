@@ -5,7 +5,7 @@ id: B05-interactive-troubleshooter
 docKey: interactive-troubleshooter
 category: Guidance & Credibility
 priority: P1
-status: Proposed
+status: Built
 tags: [troubleshooter, decision-tree, no-AI, cited, free, differentiator]
 ---
 

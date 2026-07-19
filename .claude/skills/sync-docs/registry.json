@@ -7,7 +7,8 @@
     "status": "Built",
     "summary": "Wake-Window Schedule Generator",
     "sources": [
-      "src/models/ScheduleSetting.ts:1",
+      "src/components/ChildInputs.vue:4",
+      "src/models/ScheduleSetting.ts:3",
       "src/models/SleepRecommendations.ts:3",
       "src/models/time.ts:1"
     ],
@@ -48,9 +49,14 @@
     "title": "Cues-vs-Clock Mode by Age",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Cues-vs-Clock Mode by Age",
-    "sources": [],
+    "status": "Built",
+    "summary": "Corrected-age guidance mode: cues-first under ~5 mo, soft handoff 5-6 mo, clock-first from 6 mo, with cited rationale",
+    "sources": [
+      "src/models/GuidanceMode.ts:1",
+      "src/models/ScheduleSetting.ts:147",
+      "src/components/GuidanceBanner.vue:13",
+      "src/components/Summary.vue:156"
+    ],
     "tests": [
       "e2e/cues-vs-clock-mode.spec.ts:1"
     ]
@@ -71,11 +77,11 @@
   },
   "nap-transition-detector": {
     "doc": "docs/features/A06-nap-transition-detector.md",
-    "title": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
+    "title": "Nap-Transition Detector & Guidance (4→3→2→1)",
     "category": "Scheduling & Prediction",
     "priority": "P1",
     "status": "Proposed",
-    "summary": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
+    "summary": "Nap-Transition Detector & Guidance (4→3→2→1)",
     "sources": [],
     "tests": [
       "e2e/nap-transition-detector.spec.ts:1"
@@ -86,9 +92,15 @@
     "title": "Atypical Day\" / Disruption Flag",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Atypical Day\" / Disruption Flag",
-    "sources": [],
+    "status": "Built",
+    "summary": "One-tap 'today is atypical' toggle with reasons: calm copy, wider windows, cues-first framing, flag rides the URL (at=<reason>)",
+    "sources": [
+      "src/models/GuidanceMode.ts:24",
+      "src/models/ScheduleSetting.ts:15",
+      "src/components/AtypicalDayFlag.vue:5",
+      "src/components/GuidanceBanner.vue:13",
+      "src/components/Summary.vue:44"
+    ],
     "tests": [
       "e2e/atypical-day-flag.spec.ts:1"
     ]
@@ -98,9 +110,14 @@
     "title": "Daylight Saving & Time-Zone Shift Tool",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Daylight Saving & Time-Zone Shift Tool",
-    "sources": [],
+    "status": "Built",
+    "summary": "DST presets -> gradual 15 min/day, 4-day shift plan in ranges, shareable via ?shift=",
+    "sources": [
+      "src/models/DstShift.ts:4",
+      "src/components/DstShift.vue:8",
+      "src/components/Summary.vue:83",
+      "src/components/Summary.vue:344"
+    ],
     "tests": [
       "e2e/dst-timezone-shift.spec.ts:1"
     ]
@@ -110,9 +127,18 @@
     "title": "Sibling / Twins Schedule Alignment",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Sibling / Twins Schedule Alignment",
-    "sources": [],
+    "status": "Built",
+    "summary": "Two children on one plan: stacked dual-track 24h view with the shared quiet block (nap overlap) highlighted; both schedules in the URL (bd2/s2)",
+    "sources": [
+      "src/components/ChildInputs.vue:4",
+      "src/components/SiblingAlignment.vue:7",
+      "src/components/Summary.vue:44",
+      "src/components/Summary.vue:110",
+      "src/components/Summary.vue:163",
+      "src/components/Summary.vue:235",
+      "src/models/napOverlap.ts:1",
+      "src/models/planUrl.ts:3"
+    ],
     "tests": [
       "e2e/sibling-twins-alignment.spec.ts:1"
     ]
@@ -193,9 +219,15 @@
     "title": "Interactive Sleep Troubleshooter (Decision Tree)",
     "category": "Guidance & Credibility",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Interactive Sleep Troubleshooter (Decision Tree)",
-    "sources": [],
+    "status": "Built",
+    "summary": "Free, cited, no-LLM decision trees for early rising, short naps, and false start vs split night",
+    "sources": [
+      "src/models/Troubleshooter.ts:1",
+      "src/data/troubleshooterTrees.ts:3",
+      "src/components/Troubleshooter.vue:17",
+      "src/components/Summary.vue:374",
+      "src/models/Troubleshooter.test.ts:16"
+    ],
     "tests": [
       "e2e/interactive-troubleshooter.spec.ts:1"
     ]
@@ -352,7 +384,10 @@
     "status": "Built",
     "summary": "Shareable Plan URL",
     "sources": [
-      "src/components/Summary.vue:14"
+      "src/components/Summary.vue:29",
+      "src/components/Summary.vue:75",
+      "src/components/Summary.vue:110",
+      "src/models/planUrl.ts:3"
     ],
     "tests": [
       "e2e/shareable-plan-url.spec.ts:1"
@@ -363,9 +398,16 @@
     "title": "Read-Only Babysitter / Grandparent Mode",
     "category": "Sharing & Collaboration",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Read-Only Babysitter / Grandparent Mode",
-    "sources": [],
+    "status": "Built",
+    "summary": "?view=sitter renders the shared plan read-only with next nap/bedtime ranges; Copy sitter link in normal view",
+    "sources": [
+      "src/App.vue:12",
+      "src/components/SitterView.vue:11",
+      "src/components/Summary.vue:35",
+      "src/components/Summary.vue:135",
+      "src/models/ScheduleSetting.ts:151",
+      "src/models/ScheduleSetting.ts:161"
+    ],
     "tests": [
       "e2e/read-only-babysitter-mode.spec.ts:1"
     ]
@@ -471,9 +513,11 @@
     "title": "Offline Mode",
     "category": "Utility & Integrations",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Offline Mode",
-    "sources": [],
+    "status": "Built",
+    "summary": "Installable PWA: service worker precaches shell + bundled citations; plan renders/recomputes offline; honest offline banner + prompt-based update path",
+    "sources": [
+      "src/components/OfflineIndicator.vue:2"
+    ],
     "tests": [
       "e2e/offline-mode.spec.ts:1"
     ]
@@ -483,9 +527,18 @@
     "title": "Accessibility & Dark-Room UX",
     "category": "Utility & Integrations",
     "priority": "P0",
-    "status": "Proposed",
-    "summary": "Accessibility & Dark-Room UX",
-    "sources": [],
+    "status": "Built",
+    "summary": "WCAG 2.2 AA: verified contrast, 44px targets, focus ring, reduced motion, SR labels, shape-coded badges, public statement",
+    "sources": [
+      "src/App.vue:10",
+      "src/style.css:10",
+      "src/components/AccessibilityStatement.vue:2",
+      "src/components/EvidenceGuidance.vue:6",
+      "src/components/SafeSleep.vue:5",
+      "src/components/Summary.vue:76",
+      "src/components/Summary.vue:245",
+      "src/components/TierBadge.vue:5"
+    ],
     "tests": [
       "e2e/accessibility-dark-room.spec.ts:1"
     ]
@@ -495,9 +548,11 @@
     "title": "No-Account, Privacy-First Architecture",
     "category": "Brand & Product",
     "priority": "P0",
-    "status": "Proposed",
+    "status": "Built",
     "summary": "No-Account, Privacy-First Architecture",
-    "sources": [],
+    "sources": [
+      "src/components/PrivacyPromise.vue:2"
+    ],
     "tests": [
       "e2e/no-account-privacy-first.spec.ts:1"
     ]
@@ -507,9 +562,11 @@
     "title": "Tip-Jar Monetization (No Subscription, No Auto-Renew)",
     "category": "Brand & Product",
     "priority": "P0",
-    "status": "Proposed",
+    "status": "Built",
     "summary": "Tip-Jar Monetization (No Subscription, No Auto-Renew)",
-    "sources": [],
+    "sources": [
+      "src/components/TipJar.vue:2"
+    ],
     "tests": [
       "e2e/tip-jar-monetization.spec.ts:1"
     ]
@@ -519,9 +576,13 @@
     "title": "Anti-Anxiety Mechanics (Ranges, No Streaks)",
     "category": "Brand & Product",
     "priority": "P0",
-    "status": "Proposed",
+    "status": "Built",
     "summary": "Anti-Anxiety Mechanics (Ranges, No Streaks)",
-    "sources": [],
+    "sources": [
+      "src/components/Summary.vue:123",
+      "src/models/ScheduleSetting.ts:131",
+      "src/models/time.ts:13"
+    ],
     "tests": [
       "e2e/anti-anxiety-mechanics.spec.ts:1"
     ]
@@ -543,9 +604,11 @@
     "title": "Ephemerality & One-Click Data Deletion",
     "category": "Brand & Product",
     "priority": "P1",
-    "status": "Proposed",
+    "status": "Built",
     "summary": "Ephemerality & One-Click Data Deletion",
-    "sources": [],
+    "sources": [
+      "src/components/DeleteData.vue:2"
+    ],
     "tests": [
       "e2e/ephemerality-data-deletion.spec.ts:1"
     ]

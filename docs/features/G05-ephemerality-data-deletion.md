@@ -5,7 +5,7 @@ id: G05-ephemerality-data-deletion
 docKey: ephemerality-data-deletion
 category: Brand & Product
 priority: P1
-status: Proposed
+status: Built
 tags: [ephemeral, data-deletion, no-lock-in, no-auto-renew, privacy]
 ---
 

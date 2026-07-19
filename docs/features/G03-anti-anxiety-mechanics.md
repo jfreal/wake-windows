@@ -5,7 +5,7 @@ id: G03-anti-anxiety-mechanics
 docKey: anti-anxiety-mechanics
 category: Brand & Product
 priority: P0
-status: Proposed
+status: Built
 tags: [ux, ranges, non-judgmental, no-streaks, copy, mechanics]
 ---
 

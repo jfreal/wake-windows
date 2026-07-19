@@ -5,7 +5,7 @@ id: A08-dst-timezone-shift
 docKey: dst-timezone-shift
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [dst, travel, timezone, scheduling, transition]
 ---
 
@@ -22,11 +22,15 @@ The feature briefs flag this as "an easy win; missing from every scheduler." The
 ## Competitor comparison
 Wake-window schedulers offer only manual nudges or articles (e.g., Smart Sleep Coach's DST blog post). **Hatch** automates it with a "Daylight Savings Assistant" that shifts 15 min/day — but that's hardware, not a scheduler. So this is a real gap *in our category*, not an industry first.
 
-## Our approach (spec)
-- A **"Shift my schedule"** action with two modes: **DST** (spring-forward / fall-back presets) and **Travel** (pick a new time zone).
-- Generate a **gradual transition plan** — auto-shift nap, bedtime, and wake times **~15 min/day over 3–5 days** (the standard consultant approach) — rendered day by day on the existing 24h visual.
-- Shareable via URL so both caregivers follow the identical step plan.
-- Keep everything in labeled ranges, not exact clock targets; carry the Tier-3 badge.
+## Our approach (built)
+
+- A **"Shift my schedule"** section with the two **DST presets** (spring-forward / fall-back) as toggle buttons; travel mode stays later-scope.
+- Generates a **gradual transition plan** — wake, every nap, and bedtime shift **15 min/day over the 4 days before the change**, then a final "Change day onward — usual times, new clock" row. Each day renders as a mini 24h strip (awake span + nap segments) that visibly slides across days, plus labeled time windows.
+- Every displayed time is a **±15-minute range** (the app-standard slop, 5-minute-rounded endpoints), never an exact clock target; the section carries the **Tier-3 badge** (practitioner convention, defined in `citations.json`).
+- The selected preset rides the shareable query string as **`shift=spring|fall`**, so both caregivers open the identical step plan; deselecting removes the param.
+- **Asymmetry handled explicitly:** spring-forward walks the day *earlier* (bedtime suddenly feels an hour too early); fall-back walks it *later* (baby runs an hour ahead of the new clock — early waking). Each mode gets its own explainer.
+- **Preferred-bedtime cap (A05):** fall-back ramp days intentionally run past the preferred bedtime and say so in a transparent note; the plan converges back onto the cap on the change day rather than drifting.
+- Shift math lives in `models/DstShift.ts` (`buildDstShiftPlan`), unit-tested in `models/DstShift.test.ts`.
 
 ## Scope — MVP
 DST spring + fall presets producing a 4-day, ~15-min/day step plan on the 24h visual.

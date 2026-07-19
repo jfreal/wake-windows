@@ -5,7 +5,7 @@ id: G01-no-account-privacy-first
 docKey: no-account-privacy-first
 category: Brand & Product
 priority: P0
-status: Proposed
+status: Built
 tags: [privacy, no-account, local-first, url-state, trust]
 ---
 

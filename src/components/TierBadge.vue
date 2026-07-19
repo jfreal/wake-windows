@@ -2,11 +2,11 @@
 import { computed } from 'vue'
 import { getTier } from '../models/Citations'
 
-// @doc:evidence-tier-badges-citations
+// @doc:evidence-tier-badges-citations @doc:accessibility-dark-room
 const props = defineProps<{ tier: number }>()
 const t = computed(() => getTier(props.tier))
 // Shape, not color alone, distinguishes the tiers for accessibility.
-const glyph = computed(() => (props.tier === 1 ? '●' : '◐'))
+const glyph = computed(() => (props.tier === 1 ? '●' : props.tier === 2 ? '◐' : '○'))
 </script>
 
 <template>

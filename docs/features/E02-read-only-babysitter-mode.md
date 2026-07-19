@@ -5,7 +5,7 @@ id: E02-read-only-babysitter-mode
 docKey: read-only-babysitter-mode
 category: Sharing & Collaboration
 priority: P1
-status: Proposed
+status: Built
 tags: [sharing, read-only, babysitter, grandparent, url-state, no-account]
 ---
 
@@ -30,6 +30,8 @@ Huckleberry and Nara give co-caregivers full-access shared logins only. Daycare 
 
 ## Scope — MVP
 Read-only URL that shows today's schedule + next nap/bed, with editing disabled. Copy-link and share action from the plan.
+
+**As built:** the sitter link is the full canonical plan URL plus `view=sitter` — sibling (`bd2`/`s2`), DST preset (`shift`), and atypical flag (`at`) all carry over. `SitterView.vue` renders next nap and next bedtime as ranges (`ScheduleSetting.nextNapWindowAt` / `bedtimeWindowAt`, widened by the same cues-vs-clock guidance mode as the parent view) plus the full day plan, for both children when the plan has a sibling; an atypical day shows the same reassurance note the parent sees. The sitter page contains zero interactive controls (no inputs, buttons, or links — the delete-data/tip-jar footer and PWA update prompt are hidden too). "Next" is computed once at page load, not as a live countdown. A "Copy sitter link" action in the normal plan view copies the URL to the clipboard, falling back to showing the link for manual copy. Times are labeled honestly: they are the plan's clock times, not converted between zones, and "next" follows the viewing device's clock.
 
 ## Scope — later
 Optional expiry on the link, pairing with a handoff note (E03), a simplified "big text, dark-room" sitter layout, toggle to reveal safe-sleep reminders.

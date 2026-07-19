@@ -7,18 +7,23 @@ import TierBadge from './TierBadge.vue'
 // Full citation library grouped by tier, with the "what do these tiers mean?"
 // explainer (spec §6).
 const byTier = computed(() =>
-     [1, 2].map((id) => ({
-          tier: getTier(id),
-          sources: sources
-               .filter((s) => s.tier === id)
-               .sort((a, b) => a.org.localeCompare(b.org)),
-     }))
+     [1, 2, 3]
+          .map((id) => ({
+               tier: getTier(id),
+               sources: sources
+                    .filter((s) => s.tier === id)
+                    .sort((a, b) => a.org.localeCompare(b.org)),
+          }))
+          // Tier 3 currently labels conventions (e.g. the DST shift ramp)
+          // rather than a source library; skip empty groups.
+          .filter((group) => group.sources.length > 0)
 )
 </script>
 
 <template>
      <details class="rounded border border-slate-800">
-          <summary class="cursor-pointer select-none px-3 py-2 text-slate-300 text-sm font-semibold">
+          <!-- py-3: 20px line + 24px padding = 44px tap target for the disclosure -->
+          <summary class="cursor-pointer select-none px-3 py-3 text-slate-300 text-sm font-semibold">
                Sources &amp; Evidence
                <span class="text-muted font-normal">— {{ sources.length }} citations, by tier</span>
           </summary>
@@ -27,7 +32,7 @@ const byTier = computed(() =>
                <!-- Tier explainer -->
                <div class="space-y-2">
                     <p class="text-slate-400 text-xs uppercase tracking-wide">What do these tiers mean?</p>
-                    <div v-for="t in [tiers['1'], tiers['2']]" :key="t.id" class="text-xs">
+                    <div v-for="t in [tiers['1'], tiers['2'], tiers['3']]" :key="t.id" class="text-xs">
                          <TierBadge :tier="t.id" />
                          <p class="text-slate-400 mt-1">{{ t.description }}</p>
                          <p class="text-muted mt-0.5"><span class="text-slate-400">Applies to:</span> {{ t.appliesTo }}</p>
@@ -55,7 +60,7 @@ const byTier = computed(() =>
                               :href="src.url"
                               target="_blank"
                               rel="noopener noreferrer"
-                              class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                              class="inline-block py-1.5 text-sky-400 hover:text-sky-300 underline underline-offset-2"
                          >{{ src.title }} <span aria-hidden="true" class="text-muted">↗</span></a>
                          <div class="text-slate-400">{{ src.org }} · {{ src.venue }}</div>
                          <p class="text-slate-400 mt-0.5">{{ src.credentials }}</p>

@@ -5,7 +5,7 @@ id: G02-tip-jar-monetization
 docKey: tip-jar-monetization
 category: Brand & Product
 priority: P0
-status: Proposed
+status: Built
 tags: [monetization, tip-jar, no-subscription, no-auto-renew, trust]
 ---
 

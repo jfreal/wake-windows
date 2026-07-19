@@ -5,7 +5,7 @@ id: A04-cues-vs-clock-mode
 docKey: cues-vs-clock-mode
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [circadian, cues, differentiator, anti-anxiety, confirmed-gap]
 ---
 

@@ -1,3 +1,5 @@
+import { roundToStep } from './time';
+
 // @doc:wake-window-schedule-generator @doc:bedtime-calculator @doc:corrected-gestational-age
 // Holds the inputs (birthday, wake time, wake-window lengths, bedtime, gestational weeks)
 // that drive the generated schedule.
@@ -9,6 +11,13 @@ class ScheduleSetting {
     bed: number;
     birthday: Date;
     weeks: number;
+
+    // @doc:atypical-day-flag
+    // One-tap "today is atypical" disruption state (illness, teething, travel, …).
+    // Shifts guidance cues-first and widens displayed windows; carried in the
+    // shared URL so a sent link reflects the day.
+    atypical: boolean = false;
+    atypicalReason: string = "";
 
     constructor() {
         this.wws = [2, 2, 2, 2]
@@ -117,6 +126,45 @@ class ScheduleSetting {
             }
         }
         return times;
+    }
+
+    // @doc:anti-anxiety-mechanics
+    /** Half-width of the displayed nap-start window. Wake-window timing is a
+     * Tier-2 heuristic, so a single to-the-minute target carries false
+     * precision; ±15 min keeps the range honest but still actionable. */
+    static readonly NAP_WINDOW_SLOP_MINUTES = 15;
+
+    // @doc:cues-vs-clock-mode @doc:atypical-day-flag
+    /** Nap starts as ranges rather than single target times: `slopMinutes`
+     * around each computed start, rounded to 5-minute marks so endpoints read
+     * like clock times ("9:15–9:45"), plus the nap length. Derived from
+     * napTimes, so ranges track the computed schedule. Clock mode passes the
+     * ±NAP_WINDOW_SLOP_MINUTES baseline; cues-led/atypical days widen it. */
+    public napWindowsAt(slopMinutes: number): { earliest: number; latest: number; lengthMinutes: number }[] {
+        return this.napTimes.map((nap) => ({
+            earliest: roundToStep(nap.start - slopMinutes),
+            latest: roundToStep(nap.start + slopMinutes),
+            lengthMinutes: Math.round(nap.end - nap.start),
+        }));
+    }
+
+    // @doc:cues-vs-clock-mode @doc:atypical-day-flag @doc:read-only-babysitter-mode
+    /** Bedtime window at a caller-chosen half-width (see napWindowsAt), so the
+     * sitter view and cues-led guidance never show a to-the-minute target. */
+    public bedtimeWindowAt(slopMinutes: number): { earliest: number; latest: number } {
+        return {
+            earliest: roundToStep(this.bedtimeMinutes - slopMinutes),
+            latest: roundToStep(this.bedtimeMinutes + slopMinutes),
+        };
+    }
+
+    // @doc:read-only-babysitter-mode @doc:cues-vs-clock-mode
+    /** The first nap window not yet past at `nowMinutes` (minutes from midnight),
+     * at a caller-chosen half-width. A window still counts as "next" until its
+     * latest start has passed — a nap mid-window is the one to put the baby down
+     * for. Null once all naps are done. */
+    public nextNapWindowAt(slopMinutes: number, nowMinutes: number): { earliest: number; latest: number; lengthMinutes: number } | null {
+        return this.napWindowsAt(slopMinutes).find((w) => nowMinutes <= w.latest) ?? null;
     }
 }
 

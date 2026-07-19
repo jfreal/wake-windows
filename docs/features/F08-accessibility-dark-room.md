@@ -5,7 +5,7 @@ id: F08-accessibility-dark-room
 docKey: accessibility-dark-room
 category: Utility & Integrations
 priority: P0
-status: Proposed
+status: Built
 tags: [accessibility, wcag, dark-room, one-hand, reduced-motion, screen-reader]
 ---
 
@@ -44,6 +44,7 @@ Bake WCAG 2.2 AA into every surface and say so publicly:
 
 ## Edge cases & gotchas
 - Contrast on the dark slate surface is easy to fail — verify every state (in-range emerald, out-of-range amber, muted meta), don't assume.
+- Dense citation-list links carry the WCAG 2.2 AA 24px minimum target, not the app's 44px control standard — a deliberate trade documented in the accessibility statement's known gaps.
 - Reduced-motion must cover the 24h-bar transitions, not just page fades.
 - Native controls give free accessibility but must keep visible focus in the dark theme.
 - Screen-reader users need the day arc's meaning in text, since color/shape are visual.

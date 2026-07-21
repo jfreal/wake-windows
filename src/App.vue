@@ -6,6 +6,7 @@ import SleepLog from './components/SleepLog.vue'
 import HandoffNotes from './components/HandoffNotes.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import CalendarExport from './components/CalendarExport.vue'
+import WhiteNoise from './components/WhiteNoise.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
@@ -57,6 +58,10 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
     <div v-if="!sitterMode" class="mt-6">
       <CalendarExport />
     </div>
+
+    <!-- @doc:white-noise-sounds — opt-in in-app sound machine, hidden until
+         enabled; state-changing/audio panel, so hidden in the read-only sitter view. -->
+    <WhiteNoise v-if="!sitterMode" />
 
     <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;
          the arithmetic walk it points to lives under the nap schedule. -->

@@ -131,7 +131,7 @@ const barTotal = computed(() => {
                          </p>
                          <div class="flex flex-col gap-1"
                               role="img"
-                              :aria-label="`Lengthening plan: windows growing about ${plan.stepMinutes} minutes each, from ${plan.current.map(formatDuration).join(', ')} to ${plan.suggested.map(formatDuration).join(', ')}.`">
+                              :aria-label="`Lengthening plan: windows growing about ${plan.stepMinutes} minutes each, from ${plan.current.map(w => formatDuration(w * 60)).join(', ')} to ${plan.suggested.map(w => formatDuration(w * 60)).join(', ')}.`">
                               <div v-for="(w, i) in plan.current" :key="i" class="flex items-center gap-2">
                                    <span class="text-muted text-[11px] w-14 shrink-0">Window {{ i + 1 }}</span>
                                    <div class="flex-1 flex h-4 rounded overflow-hidden bg-slate-800">

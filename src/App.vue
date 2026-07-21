@@ -9,6 +9,7 @@ import CalendarExport from './components/CalendarExport.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
+import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
 import { meta } from './models/Citations'
@@ -72,6 +73,12 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
          "regressions" as weakly supported. State-free content, hidden in sitter view. -->
     <div v-if="!sitterMode" class="mt-3">
       <RegressionExplainer />
+    </div>
+
+    <!-- Author / first-hand Experience signal (YMYL E-E-A-T); hidden in the
+         read-only sitter view like the other non-plan panels. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <AboutAuthor />
     </div>
 
     <footer class="mt-8 border-t border-slate-800 pt-3 pb-6 text-muted text-xs space-y-3">

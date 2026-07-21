@@ -176,7 +176,11 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
   <SitterView v-if="sitterMode" :schedule="schedule" :sibling="sibling" />
 
   <template v-else>
-  <h1><img class="h-20 mb-2" :src="logoUrl" alt="Wake Windows"></h1>
+  <h1>
+    <img class="h-20 mb-2" :src="logoUrl" alt="Wake Windows" width="70" height="80"
+      fetchpriority="high">
+    <span class="sr-only">Infant Nap Schedule &amp; Wake Windows Planner</span>
+  </h1>
 
 
   <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:items-start">

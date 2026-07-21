@@ -1,0 +1,29 @@
+# Wake Windows — Infant Nap Schedule Planner
+
+> A free, evidence-checked infant nap-schedule and wake-window planner. It generates a same-day nap plan from a baby's age, wake time, and wake windows, with an interactive sleep troubleshooter, safe-sleep guidance, and citations tiered by evidence strength. No account, no AI, local-first (data stays on the device).
+
+## Methodology
+
+Guidance is labelled by evidence tier, and the distinction is deliberate:
+
+- **Tier 1 — Evidence-based:** expert consensus statements and peer-reviewed normative data (total sleep per 24h, nap-count trajectories, circadian-development timelines, safe-sleep practices).
+- **Tier 2 — Practice-based heuristic:** sleep-consultant and parenting frameworks not validated by trials. The term "wake window" does not appear in the pediatric sleep-medicine literature; it is a useful starting estimate, not a rule.
+- **Tier 3 — Practitioner convention:** plausible mechanism, no direct study of the specific protocol (e.g. the ~15 min/day daylight-saving ramp).
+
+Guidance last reviewed: 2026-06-07.
+
+## Key sources
+
+- American Academy of Sleep Medicine — consensus on recommended sleep amounts: https://jcsm.aasm.org/doi/full/10.5664/jcsm.5866
+- National Sleep Foundation — sleep duration recommendations: https://www.sleephealthjournal.org/article/S2352-7218(15)00015-7/fulltext
+- WHO — physical activity, sedentary behaviour and sleep for children under 5: https://www.who.int/publications/i/item/9789241550536
+- AAP (HealthyChildren.org) — healthy sleep habits by age: https://www.healthychildren.org/English/healthy-living/sleep/Pages/healthy-sleep-habits-how-many-hours-does-your-child-need.aspx
+- AAP — 2022 safe-sleep recommendations (SIDS): https://publications.aap.org/pediatrics/article/150/1/e2022057990/188304/
+- NICHD "Safe to Sleep" (US NIH): https://safetosleep.nichd.nih.gov/reduce-risk/reduce
+- The Lullaby Trust (UK) — safer sleep overview: https://www.lullabytrust.org.uk/baby-safety/safer-sleep-information/safer-sleep-overview/
+
+## Stance
+
+- Informational only, not medical advice. Infant sleep needs vary widely; families should consult their pediatrician.
+- No LLM, no black box, nothing trained on user data. No account, no data sold, local-first storage with one-click delete.
+- Full citation list (60 sources, by tier) is available in the "Sources & Evidence" section of the app.

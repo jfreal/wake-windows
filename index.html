@@ -44,11 +44,15 @@
       { "@type": "Organization", "@id": "https://wakewindows.guru/#organization",
         "name": "Wake Windows", "url": "https://wakewindows.guru/",
         "logo": { "@type": "ImageObject", "url": "https://wakewindows.guru/pwa-512x512.png" } },
+      { "@type": "Person", "@id": "https://wakewindows.guru/#author",
+        "name": "John",
+        "description": "Parent of twins who built Wake Windows after reading every infant-sleep book they could find." },
       { "@type": "WebPage", "@id": "https://wakewindows.guru/#webpage",
         "url": "https://wakewindows.guru/", "name": "Wake Windows — Infant Nap Schedule Planner",
         "description": "Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance.",
         "inLanguage": "en", "isPartOf": { "@id": "https://wakewindows.guru/#website" },
         "about": { "@id": "https://wakewindows.guru/#app" },
+        "author": { "@id": "https://wakewindows.guru/#author" },
         "dateModified": "2026-06-07", "isAccessibleForFree": true },
       { "@type": "WebApplication", "@id": "https://wakewindows.guru/#app",
         "name": "Wake Windows", "url": "https://wakewindows.guru/",
@@ -64,6 +68,7 @@
           "Safe-sleep guidance panel", "Offline-capable, installable app (PWA)",
           "No account required, local-first data storage" ],
         "publisher": { "@id": "https://wakewindows.guru/#organization" },
+        "creator": { "@id": "https://wakewindows.guru/#author" },
         "dateModified": "2026-06-07", "inLanguage": "en" }
     ]
   }
@@ -95,6 +100,13 @@
         <li>Local-first sleep &amp; nap log and a read-only sitter/grandparent share link.</li>
         <li>No account, no AI, no data sold — everything stays on your device, one-click delete.</li>
       </ul>
+
+      <h2>Why I built this</h2>
+      <p>Built by John, a parent of twins, after reading every infant-sleep book they
+        could find — because the only tools available needed a login or a subscription
+        when all a tired parent needs is something to say what to do next. It's
+        parent-built and evidence-compiled (every recommendation carries an evidence
+        tier and a citation), not a substitute for your pediatrician.</p>
 
       <h2>Safe sleep</h2>
       <p>Place baby fully on their back for every sleep, day and night, until age 1.

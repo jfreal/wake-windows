@@ -168,7 +168,8 @@ const barTotal = computed(() => {
                     Watching for the <strong class="text-slate-300">{{ result.label }}</strong> transition
                     from your logs. Nothing to change yet — one rough day isn't a transition.
                </p>
-               <button type="button" class="mt-1 text-sky-400 hover:text-sky-300 underline underline-offset-2 text-xs"
+               <button type="button"
+                    class="mt-1 inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2 text-xs"
                     :aria-expanded="reportOpen" @click="reportOpen = !reportOpen">
                     {{ reportOpen ? 'Hide' : 'Not sure? Tell us what you\'re seeing' }}
                </button>
@@ -180,8 +181,8 @@ const barTotal = computed(() => {
           <fieldset v-if="reportOpen || showPrompt" class="mt-2 border border-slate-800 rounded p-3">
                <legend class="text-slate-400 text-xs px-1">Over the past week, are you seeing…</legend>
                <label v-for="t in signalToggles" :key="t.key"
-                    class="flex items-center gap-2 text-sm text-slate-300 py-1 min-h-9 cursor-pointer">
-                    <input type="checkbox" class="h-4 w-4 accent-amber-400" v-model="manual[t.key]" />
+                    class="flex items-center gap-2 text-sm text-slate-300 py-1 min-h-11 cursor-pointer">
+                    <input type="checkbox" class="h-5 w-5 accent-amber-400" v-model="manual[t.key]" />
                     {{ t.label }}
                </label>
                <p class="text-muted text-[11px] mt-1">

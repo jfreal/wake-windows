@@ -6,6 +6,7 @@ import SleepLog from './components/SleepLog.vue'
 import HandoffNotes from './components/HandoffNotes.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import CalendarExport from './components/CalendarExport.vue'
+import RemindersNudges from './components/RemindersNudges.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
@@ -56,6 +57,12 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
          other app panels. -->
     <div v-if="!sitterMode" class="mt-6">
       <CalendarExport />
+    </div>
+
+    <!-- @doc:reminders-nudges — opt-in pre-nap wind-down nudge; state-changing +
+         permission-gated, so hidden in the read-only sitter view. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <RemindersNudges />
     </div>
 
     <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;

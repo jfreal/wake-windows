@@ -465,9 +465,14 @@
     "title": "Reminders & Pre-Nap Nudges",
     "category": "Utility & Integrations",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Reminders & Pre-Nap Nudges",
-    "sources": [],
+    "status": "Built",
+    "summary": "Opt-in pre-nap wind-down nudge a selectable lead (15/30/45 min, default 30) before the wake-window range end; Web Notifications scheduled in the service worker with an in-page countdown fallback; range-based copy, daily cap + quiet hours by construction",
+    "sources": [
+      "src/models/reminders.ts:1",
+      "src/components/RemindersNudges.vue:2",
+      "src/sw.ts:1",
+      "src/App.vue:62"
+    ],
     "tests": [
       "e2e/reminders-nudges.spec.ts:1"
     ]
@@ -544,7 +549,8 @@
     "status": "Built",
     "summary": "Installable PWA: service worker precaches shell + bundled citations; plan renders/recomputes offline; honest offline banner + prompt-based update path",
     "sources": [
-      "src/components/OfflineIndicator.vue:2"
+      "src/components/OfflineIndicator.vue:2",
+      "src/sw.ts:1"
     ],
     "tests": [
       "e2e/offline-mode.spec.ts:1"

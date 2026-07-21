@@ -14,7 +14,9 @@ test.describe('Tip-Jar Monetization (No Subscription, No Auto-Renew) [@feature:t
 
   test('nothing is paywalled — plan, schedule, and evidence render without payment', async ({ page }) => {
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
-    await expect(page.getByRole('heading', { name: 'Nap Schedule' })).toBeVisible();
+    // exact: the descriptive H1 ("Infant Nap Schedule & Wake Windows Planner")
+    // also contains "Nap Schedule"; scope to the section heading.
+    await expect(page.getByRole('heading', { name: 'Nap Schedule', exact: true })).toBeVisible();
     await expect(page.getByText('Safe sleep', { exact: false }).first()).toBeVisible();
     await expect(page.getByText(/upgrade|premium|unlock|pro plan/i)).toHaveCount(0);
   });

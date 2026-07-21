@@ -4,7 +4,9 @@ import { test, expect } from '@playwright/test';
 test.describe('No-Account, Privacy-First [@feature:no-account-privacy-first]', () => {
   test('full plan renders from a bare URL with no account UI anywhere', async ({ page }) => {
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
-    await expect(page.getByRole('heading', { name: 'Nap Schedule' })).toBeVisible();
+    // exact: the descriptive H1 ("Infant Nap Schedule & Wake Windows Planner")
+    // also contains "Nap Schedule"; scope to the section heading.
+    await expect(page.getByRole('heading', { name: 'Nap Schedule', exact: true })).toBeVisible();
     // No auth controls anywhere — the privacy copy *mentions* "no sign-up,
     // no password", so assert on inputs/buttons/links, not raw page text.
     await expect(page.locator('input[type="password"], input[type="email"]')).toHaveCount(0);

@@ -9,10 +9,120 @@
   <meta name="theme-color" content="#0f172a" />
   <meta name="description" content="Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance." />
   <title>Wake Windows — Infant Nap Schedule Planner</title>
+
+  <link rel="canonical" href="https://wakewindows.guru/" />
+
+  <!-- Open Graph / Twitter — controls link previews when the plan or sitter
+       link is shared. og:image is currently the PWA icon; swap for a dedicated
+       1200x630 card when one exists. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Wake Windows" />
+  <meta property="og:title" content="Wake Windows — Infant Nap Schedule Planner" />
+  <meta property="og:description" content="Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance." />
+  <meta property="og:url" content="https://wakewindows.guru/" />
+  <meta property="og:image" content="https://wakewindows.guru/pwa-512x512.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Wake Windows — Infant Nap Schedule Planner" />
+  <meta name="twitter:description" content="Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance." />
+  <meta name="twitter:image" content="https://wakewindows.guru/pwa-512x512.png" />
+
+  <!-- Structured data. Static in <head> because this is a client-rendered SPA:
+       non-JS crawlers and most LLM scrapers only see the initial HTML. No
+       author/reviewer node until a named, credentialed person is on the page
+       (adding a fabricated one would hurt YMYL trust). No MedicalWebPage type
+       for the same reason — HealthApplication carries the health signal at
+       lower scrutiny. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "@id": "https://wakewindows.guru/#website",
+        "url": "https://wakewindows.guru/", "name": "Wake Windows",
+        "alternateName": "Wake Windows — Infant Nap Schedule Planner",
+        "description": "Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance.",
+        "inLanguage": "en", "publisher": { "@id": "https://wakewindows.guru/#organization" } },
+      { "@type": "Organization", "@id": "https://wakewindows.guru/#organization",
+        "name": "Wake Windows", "url": "https://wakewindows.guru/",
+        "logo": { "@type": "ImageObject", "url": "https://wakewindows.guru/pwa-512x512.png" } },
+      { "@type": "WebPage", "@id": "https://wakewindows.guru/#webpage",
+        "url": "https://wakewindows.guru/", "name": "Wake Windows — Infant Nap Schedule Planner",
+        "description": "Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance.",
+        "inLanguage": "en", "isPartOf": { "@id": "https://wakewindows.guru/#website" },
+        "about": { "@id": "https://wakewindows.guru/#app" },
+        "dateModified": "2026-06-07", "isAccessibleForFree": true },
+      { "@type": "WebApplication", "@id": "https://wakewindows.guru/#app",
+        "name": "Wake Windows", "url": "https://wakewindows.guru/",
+        "description": "A free, evidence-checked infant nap schedule and wake-window planner: generates a same-day nap plan from your baby's age, wake time, and last sleep, with an interactive sleep troubleshooter, safe-sleep guidance, and citations tiered by evidence strength.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any (web browser, installable as PWA)",
+        "browserRequirements": "Requires JavaScript", "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Wake-window and nap schedule generator", "Bedtime calculator",
+          "Interactive sleep troubleshooter (early waking, short naps, false starts/split nights)",
+          "Sleep and nap logging", "Daylight-saving/timezone shift planner",
+          "Safe-sleep guidance panel", "Offline-capable, installable app (PWA)",
+          "No account required, local-first data storage" ],
+        "publisher": { "@id": "https://wakewindows.guru/#organization" },
+        "dateModified": "2026-06-07", "inLanguage": "en" }
+    ]
+  }
+  </script>
 </head>
 
 <body class="bg-slate-900 h-full">
   <div id="app"></div>
+
+  <!-- Crawler/no-JS fallback. The app is client-rendered, so without this a
+       non-JS crawler (GPTBot, ClaudeBot, PerplexityBot, Bingbot's non-JS path)
+       sees an empty shell. This static block gives them the tool's purpose,
+       core guidance, and authoritative citations to index. Keep in sync with
+       the app's headline content; full SSG/prerender would supersede it. -->
+  <noscript>
+    <main style="max-width:48rem;margin:0 auto;padding:1.5rem;color:#e2e8f0;font-family:system-ui,sans-serif;line-height:1.6">
+      <h1>Wake Windows — Infant Nap Schedule Planner</h1>
+      <p>Wake Windows is a free, evidence-checked infant nap-schedule and wake-window
+        planner. Enter your baby's age, wake time, and wake windows and it builds a
+        same-day nap plan with loose guidance windows — anywhere in a window counts,
+        these are ranges, not deadlines. Under about 6 months (corrected age) an
+        infant's circadian clock is still maturing, so sleepy cues beat clock times.</p>
+
+      <h2>What it does</h2>
+      <ul>
+        <li>Generates a nap and bedtime schedule from wake windows and age.</li>
+        <li>Interactive sleep troubleshooter for early waking, short naps, and false starts / split nights.</li>
+        <li>Daylight-saving / timezone shift planner (ease the day over ~15 min/day).</li>
+        <li>Local-first sleep &amp; nap log and a read-only sitter/grandparent share link.</li>
+        <li>No account, no AI, no data sold — everything stays on your device, one-click delete.</li>
+      </ul>
+
+      <h2>Safe sleep</h2>
+      <p>Place baby fully on their back for every sleep, day and night, until age 1.
+        Use a firm, flat, non-inclined surface; no soft bedding, pillows, or bumpers.
+        Room-share without bed-sharing, ideally for the first 6 months.</p>
+
+      <h2>Evidence tiers</h2>
+      <p>Guidance is labelled Tier 1 (evidence-based consensus and peer-reviewed norms),
+        Tier 2 (practice-based heuristic — "wake windows" are a useful estimate, not a
+        validated rule), or Tier 3 (practitioner convention). Guidance last reviewed 2026-06-07.</p>
+
+      <h2>Key sources</h2>
+      <ul>
+        <li><a href="https://jcsm.aasm.org/doi/full/10.5664/jcsm.5866">American Academy of Sleep Medicine — recommended sleep amounts (consensus)</a></li>
+        <li><a href="https://www.sleephealthjournal.org/article/S2352-7218(15)00015-7/fulltext">National Sleep Foundation — sleep duration recommendations</a></li>
+        <li><a href="https://www.who.int/publications/i/item/9789241550536">WHO — sleep guidance for children under 5</a></li>
+        <li><a href="https://www.healthychildren.org/English/healthy-living/sleep/Pages/healthy-sleep-habits-how-many-hours-does-your-child-need.aspx">American Academy of Pediatrics — healthy sleep habits by age</a></li>
+        <li><a href="https://publications.aap.org/pediatrics/article/150/1/e2022057990/188304/">AAP — 2022 safe-sleep recommendations (SIDS)</a></li>
+        <li><a href="https://safetosleep.nichd.nih.gov/reduce-risk/reduce">NICHD "Safe to Sleep" (US NIH)</a></li>
+        <li><a href="https://www.lullabytrust.org.uk/baby-safety/safer-sleep-information/safer-sleep-overview/">The Lullaby Trust (UK) — safer sleep overview</a></li>
+      </ul>
+
+      <p><small>Informational only, not medical advice. Infant sleep needs vary widely;
+        families should consult their pediatrician. This tool requires JavaScript for the
+        interactive planner.</small></p>
+    </main>
+  </noscript>
+
   <script type="module" src="/src/main.ts"></script>
 </body>
 

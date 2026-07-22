@@ -16,7 +16,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { applyPlanParams } from '../models/planUrl'
 import { effectiveGuidanceMode, windowSlopMinutes, isAtypicalReason } from '../models/GuidanceMode'
-import { formatClock, formatClockRange } from '../models/time'
+import { formatClock, formatClockRange, formatDuration } from '../models/time'
 import { storageKey, loadJSON, saveJSON } from '../models/storage'
 import {
   type ReminderPrefs,
@@ -25,6 +25,7 @@ import {
   LEAD_MINUTE_OPTIONS,
   normalizePrefs,
   normalizeLeadMinutes,
+  normalizeFires,
   nudgeTimeMs,
   msUntilNudge,
   decideNudge,
@@ -57,8 +58,10 @@ watch([enabled, leadMinutes], ([e, lead]) => {
   saveJSON(PREFS_KEY, { enabled: e, leadMinutes: lead } satisfies ReminderPrefs)
 })
 
-// Past fire timestamps, pruned to today so the daily cap self-resets at midnight.
-const firedAtMs = ref<number[]>(pruneFiresToToday(loadJSON<number[]>(FIRES_KEY, []), Date.now()))
+// Past fire timestamps, re-validated (a corrupt/legacy blob can't be trusted to
+// be an array — storage.ts leaves shape-checking to the caller) then pruned to
+// today so the daily cap self-resets at midnight.
+const firedAtMs = ref<number[]>(pruneFiresToToday(normalizeFires(loadJSON<unknown>(FIRES_KEY, [])), Date.now()))
 
 // --- environment / capability detection ---
 const notificationsSupported = typeof window !== 'undefined' && 'Notification' in window
@@ -101,9 +104,12 @@ const nextWindow = computed(() => schedule.nextNapWindowAt(slop.value, nowMinute
 const hasPlan = computed(() => schedule.napTimes.length > 0)
 
 function msAtLocalMinutes(baseMs: number, minutes: number): number {
+  // Build from local wall-clock parts (the Date constructor normalizes minutes
+  // into the hour and resolves the correct DST offset for the resulting local
+  // time) rather than adding ms to midnight, which would drift by an hour across
+  // a DST transition.
   const d = new Date(baseMs)
-  d.setHours(0, 0, 0, 0)
-  return d.getTime() + minutes * 60_000
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, minutes, 0, 0).getTime()
 }
 // Absolute end of the current wake-window range = the nap window's latest edge,
 // recomputed from the live plan each tick (never a frozen timestamp), so a
@@ -135,12 +141,8 @@ const countdownMs = computed(() =>
   windowEndMs.value === null ? null : msUntilNudge(now.value, windowEndMs.value, leadMinutes.value))
 const countdownLabel = computed(() => {
   if (countdownMs.value === null || countdownMs.value <= 0) return ''
-  const totalMin = Math.ceil(countdownMs.value / 60_000)
-  const h = Math.floor(totalMin / 60)
-  const m = totalMin % 60
-  if (h <= 0) return `${m} min`
-  if (m === 0) return `${h} h`
-  return `${h} h ${m} min`
+  // Reuse the shared duration formatter ("1 h 20 min" / "45 min").
+  return formatDuration(Math.ceil(countdownMs.value / 60_000))
 })
 
 // True when notifications can actually be delivered in the background (SW +
@@ -166,6 +168,12 @@ function scheduleViaSW() {
     body: `Next nap window: ${rangeLabel.value}. A calm time to start settling.`,
     tag: NUDGE_TAG,
   })
+  // A background nudge fires even with the tab closed, so recordFire only runs in
+  // the foreground would never count it — record it here, at arm time. This
+  // makes the daily cap hold by construction (capReachedToday now blocks arming a
+  // second window today) and, since a pending TimestampTrigger can't be recalled
+  // once armed, keeps us from ever stacking triggers for the same day.
+  recordFire(nudgeAtMs.value)
 }
 function cancelViaSW() {
   postToSW({ type: 'CANCEL_NUDGE', tag: NUDGE_TAG })
@@ -200,6 +208,9 @@ watch(
   () => decision.value?.fire === true,
   (isDue) => {
     if (!isDue || !enabled.value || capReachedToday.value) return
+    // immediate:true so a nudge already due when the tab opens (mid-window) still
+    // fires — a plain (non-immediate) watch only reacts to a false→true edge and
+    // would silently drop it, leaving the user with no nudge and an empty countdown.
     showFired.value = true
     if (permission.value === 'granted' && notificationsSupported && !triggersSupported) {
       try {
@@ -213,6 +224,7 @@ watch(
     }
     recordFire(now.value)
   },
+  { immediate: true },
 )
 
 function toggle(on: boolean) {

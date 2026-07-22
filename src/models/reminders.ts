@@ -53,6 +53,15 @@ export function normalizePrefs(value: unknown): ReminderPrefs {
     };
 }
 
+/** Re-validate a persisted fire-history blob (loadJSON returns `unknown`
+ *  shapes). A corrupt or legacy value that isn't an array of finite numbers is
+ *  coerced to `[]`, so `.filter`/date math downstream can never throw. */
+export function normalizeFires(value: unknown): number[] {
+    return Array.isArray(value)
+        ? value.filter((n): n is number => typeof n === 'number' && Number.isFinite(n))
+        : [];
+}
+
 const MS_PER_MINUTE = 60_000;
 
 /** Fire time for a nudge: `leadMinutes` before the end of the wake-window range. */

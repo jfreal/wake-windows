@@ -78,6 +78,13 @@ interface CancelNudgeMessage {
 }
 type SwMessage = { type: 'SKIP_WAITING' } | ScheduleNudgeMessage | CancelNudgeMessage;
 
+// Closes any ALREADY-SHOWN notification with this tag. Note the platform limit:
+// getNotifications does not return a pending TimestampTrigger that hasn't fired
+// yet, so a nudge already armed for a future time cannot be recalled here — the
+// Triggers API has no unschedule primitive. The page guards against this by
+// arming at most one background nudge per day (it records the fire at arm time,
+// so the daily cap blocks a second), which is why we never stack triggers and
+// only need to clear a displayed one.
 async function cancelScheduled(tag: string): Promise<void> {
     try {
         const existing = await sw.registration.getNotifications({ tag });

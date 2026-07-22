@@ -6,6 +6,7 @@ import {
     LEAD_MINUTE_OPTIONS,
     normalizeLeadMinutes,
     normalizePrefs,
+    normalizeFires,
     nudgeTimeMs,
     msUntilNudge,
     minutesOfDayLocal,
@@ -50,6 +51,18 @@ describe('prefs defaults + normalization', () => {
         });
         expect(normalizePrefs(null)).toEqual({ enabled: false, leadMinutes: 30 });
         expect(normalizePrefs(undefined)).toEqual({ enabled: false, leadMinutes: 30 });
+    });
+
+    it('coerces a corrupt fire-history blob to a clean number array (never throws)', () => {
+        expect(normalizeFires([1, 2, 3])).toEqual([1, 2, 3]);
+        // Non-arrays that would blow up a later .filter() collapse to [].
+        expect(normalizeFires(5)).toEqual([]);
+        expect(normalizeFires({})).toEqual([]);
+        expect(normalizeFires('nope')).toEqual([]);
+        expect(normalizeFires(null)).toEqual([]);
+        expect(normalizeFires(undefined)).toEqual([]);
+        // Junk entries inside an array are dropped.
+        expect(normalizeFires([1, 'x', null, NaN, Infinity, 2])).toEqual([1, 2]);
     });
 });
 

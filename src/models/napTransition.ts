@@ -64,7 +64,7 @@ export interface TransitionRule {
 export const TRANSITION_RULES: readonly TransitionRule[] = [
     { type: '4-to-3', label: '4 naps → 3 naps', minMonths: 4, maxMonths: 7, fromNaps: 4, toNaps: 3, lookbackDays: 7, minTriggerDays: 3 },
     { type: '3-to-2', label: '3 naps → 2 naps', minMonths: 7, maxMonths: 10, fromNaps: 3, toNaps: 2, lookbackDays: 7, minTriggerDays: 3 },
-    { type: '2-to-1', label: '2 naps → 1 nap', minMonths: 13, maxMonths: 19, fromNaps: 2, toNaps: 1, lookbackDays: 7, minTriggerDays: 4 },
+    { type: '2-to-1', label: '2 naps → 1 nap', minMonths: 14, maxMonths: 19, fromNaps: 2, toNaps: 1, lookbackDays: 7, minTriggerDays: 4 },
 ];
 
 /** The transition whose age window contains `months`, or null (no transition due). */

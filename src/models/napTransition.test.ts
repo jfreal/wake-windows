@@ -18,6 +18,7 @@ import {
     TRANSITION_RULES,
     SHORT_NAP_MAX_MS,
     STEP_MINUTES,
+    NAP_TRANSITION_DISMISS_KEY,
     type DaySignals,
     type TransitionRule,
 } from './napTransition';
@@ -91,6 +92,7 @@ describe('ruleForMonths / age windows', () => {
         expect(ruleForMonths(9)?.type).toBe('3-to-2');
         expect(ruleForMonths(10)).toBeNull(); // gap: reliable 2-nap age
         expect(ruleForMonths(12)).toBeNull();
+        expect(ruleForMonths(13)).toBeNull(); // 2→1 band is 14–18mo; 13 is not in it yet
         expect(ruleForMonths(14)?.type).toBe('2-to-1');
         expect(ruleForMonths(18)?.type).toBe('2-to-1');
         expect(ruleForMonths(19)).toBeNull();
@@ -311,7 +313,7 @@ describe('dismiss persistence', () => {
     it('rejects a corrupt stored blob', () => {
         saveDismissed(['3-to-2']);
         // simulate junk
-        localStorage.setItem('ww.napTransitionDismissed.v1', '"not-an-array"');
+        localStorage.setItem(NAP_TRANSITION_DISMISS_KEY, '"not-an-array"');
         expect(loadDismissed()).toEqual([]);
     });
 });

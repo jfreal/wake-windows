@@ -5,7 +5,7 @@ id: F05-white-noise-sounds
 docKey: white-noise-sounds
 category: Utility & Integrations
 priority: P2
-status: Proposed
+status: Built
 tags: [white-noise, sounds, audio, optional, scope-question]
 ---
 
@@ -30,7 +30,7 @@ Keep it optional, lightweight, and never in the way:
 - Fully local assets so it works offline (F07) and needs no account.
 
 ## Scope — MVP
-Recommend **defer**. If built: 3–5 looping noise tracks, play/stop, optional sleep timer, hidden until enabled.
+**Built** (the "if built" MVP). Shipped: an opt-in panel hidden behind an "Add white noise" toggle (off by default), 5 looping tracks — white, pink, brown noise plus filter-shaped fan and rain — all **synthesised in-browser via the Web Audio API** (no bundled/licensed audio, nothing to inflate the PWA cache), play/stop, a volume slider, and a 15/30/45/60-min sleep timer. Sound only ever starts from an explicit track tap (user gesture; no autoplay), and the panel carries an honest note that a locked phone may pause playback. Fully local, works offline (F07), no account. Hidden in the read-only sitter view. Reusable noise-buffer/timer/volume math lives in `src/models/whiteNoise.ts` (unit-tested); `WhiteNoise.vue` only wires it into Web Audio nodes and the UI.
 
 ## Scope — later
 - Small curated library (rain, ocean, fan); volume fade-out.

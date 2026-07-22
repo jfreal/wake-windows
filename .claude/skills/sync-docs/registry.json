@@ -522,9 +522,13 @@
     "title": "White-Noise & Sleep Sounds",
     "category": "Utility & Integrations",
     "priority": "P2",
-    "status": "Proposed",
-    "summary": "White-Noise & Sleep Sounds",
-    "sources": [],
+    "status": "Built",
+    "summary": "Opt-in, hidden-by-default in-app sound machine: 5 looping tracks (white/pink/brown noise + filter-shaped fan/rain) synthesised in-browser via the Web Audio API (no bundled/licensed audio), play/stop, volume, and a 15/30/45/60-min sleep timer. Sound only starts from an explicit user tap (no autoplay); honest locked-screen note; fully local/offline; hidden in the sitter view",
+    "sources": [
+      "src/models/whiteNoise.ts:1",
+      "src/components/WhiteNoise.vue:2",
+      "src/App.vue:62"
+    ],
     "tests": [
       "e2e/white-noise-sounds.spec.ts:1"
     ]

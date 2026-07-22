@@ -6,10 +6,12 @@ import SleepLog from './components/SleepLog.vue'
 import HandoffNotes from './components/HandoffNotes.vue'
 import PrivacyPromise from './components/PrivacyPromise.vue'
 import CalendarExport from './components/CalendarExport.vue'
+import RemindersNudges from './components/RemindersNudges.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
 import NapTransition from './components/NapTransition.vue'
+import SleepTrainingOverview from './components/SleepTrainingOverview.vue'
 import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
@@ -63,6 +65,12 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
       <CalendarExport />
     </div>
 
+    <!-- @doc:reminders-nudges — opt-in pre-nap wind-down nudge; state-changing +
+         permission-gated, so hidden in the read-only sitter view. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <RemindersNudges />
+    </div>
+
     <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;
          the arithmetic walk it points to lives under the nap schedule. -->
     <div v-if="!sitterMode" class="mt-3">
@@ -78,6 +86,13 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
          "regressions" as weakly supported. State-free content, hidden in sitter view. -->
     <div v-if="!sitterMode" class="mt-3">
       <RegressionExplainer />
+    </div>
+
+    <!-- @doc:sleep-training-overview — neutral, cited menu of sleep-training methods
+         with the efficacy/safety evidence and the cortisol-myth correction. State-free
+         content, hidden in the read-only sitter view like the other guidance panels. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <SleepTrainingOverview />
     </div>
 
     <!-- Author / first-hand Experience signal (YMYL E-E-A-T); hidden in the

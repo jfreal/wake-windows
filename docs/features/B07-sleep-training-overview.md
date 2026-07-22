@@ -5,7 +5,7 @@ id: B07-sleep-training-overview
 docKey: sleep-training-overview
 category: Guidance & Credibility
 priority: P2
-status: Proposed
+status: Built
 tags: [sleep-training, neutral, inclusive, efficacy, safety, tier-1, non-judgmental]
 ---
 

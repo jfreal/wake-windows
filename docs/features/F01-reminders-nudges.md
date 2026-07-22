@@ -5,7 +5,7 @@ id: F01-reminders-nudges
 docKey: reminders-nudges
 category: Utility & Integrations
 priority: P1
-status: Proposed
+status: Built
 tags: [notifications, reminders, nudges, pwa, web-push]
 ---
 

@@ -83,6 +83,30 @@ describe('regression / progression explainer sources', () => {
     });
 });
 
+// @doc:sleep-training-overview
+describe('sleep-training overview sources', () => {
+    // B07 cites Tier-1 efficacy/safety evidence plus the weak (Tier-3) Middlemiss
+    // cortisol study; these must resolve so SleepTrainingOverview.vue never renders
+    // an empty citation.
+    it('resolves every source id the overview references', () => {
+        const ids = [
+            'mindell-2006-aasm',
+            'mindell-2009-routine-rct',
+            'price-2012-followup',
+            'middlemiss-2012',
+            'paruthi-2016',
+        ];
+        expect(getSources(ids).length).toBe(ids.length);
+    });
+
+    it('tiers the efficacy/safety evidence as Tier 1 and the weak cortisol study as Tier 3', () => {
+        expect(getSource('mindell-2006-aasm')?.tier).toBe(1);
+        expect(getSource('mindell-2009-routine-rct')?.tier).toBe(1);
+        expect(getSource('price-2012-followup')?.tier).toBe(1);
+        expect(getSource('middlemiss-2012')?.tier).toBe(3);
+    });
+});
+
 describe('ageBandForMonths', () => {
     it('maps months to the expected band', () => {
         expect(ageBandForMonths(0)).toBe('0-3mo');

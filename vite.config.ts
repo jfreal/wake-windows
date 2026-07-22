@@ -15,7 +15,16 @@ export default defineConfig({
     // import (models/Citations.ts), so evidence content is covered by the JS
     // glob. registerType 'prompt' pairs with OfflineIndicator.vue: new deploys
     // are announced instead of silently pinning a stale service worker.
+    //
+    // F01 Reminders — the pre-nap nudge schedules notifications from inside the
+    // SW (a backgrounded tab throttles setTimeout), so we host a custom worker
+    // (src/sw.ts) via injectManifest instead of generateSW. That file still does
+    // the F07 precache + SPA navigation fallback + prompt update handshake, so
+    // offline behavior is unchanged; it just adds the nudge message handlers.
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'prompt',
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
@@ -37,9 +46,10 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
+      injectManifest: {
+        // Same precache surface generateSW used; cleanupOutdatedCaches is now
+        // called from sw.ts instead of being a build flag.
         globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
-        cleanupOutdatedCaches: true,
       },
     }),
   ],

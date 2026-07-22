@@ -2,7 +2,7 @@
 
 **What this is:** the master map of every feature in scope, grounded in competitor coverage and real user feedback (app-store reviews, Reddit, forums). Each feature has its own doc in `/features` you can implement independently.
 
-**Scope decision:** *Everything, including local-only tracking* — tracking/logging features are spec'd to run **on-device / no account**, staying true to the brand. You decide later what to actually build; this documents the full territory so nothing is skipped.
+**Scope decision (updated 2026-07-21):** *This is a focused **napping & sleep tool**, not a general baby tracker.* The wake-window schedule and nap/sleep logging are the product. General tracking logs — feeding (C02), pumping (C03), diaper (C04), solids/meds (C05), growth/percentiles (C06), milestones (C07), and the log-dependent reports D02/D03 — are **out of scope**. Remaining work is limited to nap/sleep-adjacent features (schedule intelligence, guidance content, sharing/handoff, sleep-focused platform integrations). Everything still runs **on-device / no account**. The specs below document the full explored territory for reference, but the C-series and D02/D03 are parked.
 
 **Companion research:** `../research/00–05` (science, competitors, differentiators, feedback). Every science claim is tiered (T1 strong / T2 observational / T3 heuristic) and cited there.
 

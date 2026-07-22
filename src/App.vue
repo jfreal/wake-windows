@@ -10,6 +10,7 @@ import RemindersNudges from './components/RemindersNudges.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
+import SleepTrainingOverview from './components/SleepTrainingOverview.vue'
 import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
@@ -80,6 +81,13 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
          "regressions" as weakly supported. State-free content, hidden in sitter view. -->
     <div v-if="!sitterMode" class="mt-3">
       <RegressionExplainer />
+    </div>
+
+    <!-- @doc:sleep-training-overview — neutral, cited menu of sleep-training methods
+         with the efficacy/safety evidence and the cortisol-myth correction. State-free
+         content, hidden in the read-only sitter view like the other guidance panels. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <SleepTrainingOverview />
     </div>
 
     <!-- Author / first-hand Experience signal (YMYL E-E-A-T); hidden in the

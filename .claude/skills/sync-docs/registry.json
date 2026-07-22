@@ -258,9 +258,13 @@
     "title": "Sleep-Training Methods Overview (Neutral)",
     "category": "Guidance & Credibility",
     "priority": "P2",
-    "status": "Proposed",
-    "summary": "Sleep-Training Methods Overview (Neutral)",
-    "sources": [],
+    "status": "Built",
+    "summary": "Neutral, cited menu of sleep-training methods (no ranking) with Tier-1 efficacy + long-term-safety evidence, the Middlemiss cortisol-myth correction in context, and a prominent under-4-month readiness caveat",
+    "sources": [
+      "src/components/SleepTrainingOverview.vue:5",
+      "src/App.vue:79",
+      "src/models/Citations.test.ts:86"
+    ],
     "tests": [
       "e2e/sleep-training-overview.spec.ts:1"
     ]

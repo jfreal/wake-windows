@@ -11,6 +11,7 @@ import RemindersNudges from './components/RemindersNudges.vue'
 import NoAiStance from './components/NoAiStance.vue'
 import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
+import NapTransition from './components/NapTransition.vue'
 import SleepTrainingOverview from './components/SleepTrainingOverview.vue'
 import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
@@ -43,6 +44,10 @@ const sitterMode = new URLSearchParams(window.location.search).get('view') === '
     <!-- @doc:sleep-nap-logging — logging mutates on-device data, so it is hidden
          in the read-only sitter view, like the other state-changing panels. -->
     <SleepLog v-if="!sitterMode" />
+
+    <!-- @doc:nap-transition-detector — gentle, dismissible 4→3→2→1 readiness prompt
+         + Tier-3 lengthening plan; reads local log/self-report, hidden in sitter view. -->
+    <NapTransition v-if="!sitterMode" />
 
     <!-- @doc:caregiver-handoff-notes — the note editor + live recap show in the
          normal view; the read-only "since you last had the baby" summary shows

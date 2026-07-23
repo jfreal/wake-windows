@@ -5,7 +5,7 @@ id: A06-nap-transition-detector
 docKey: nap-transition-detector
 category: Scheduling & Prediction
 priority: P1
-status: Proposed
+status: Built
 tags: [naps, transitions, scheduling, tier-3, heuristic]
 ---
 

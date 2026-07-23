@@ -77,12 +77,16 @@
   },
   "nap-transition-detector": {
     "doc": "docs/features/A06-nap-transition-detector.md",
-    "title": "Nap-Transition Detector & Guidance (4\u00e2\u2020\u20193\u00e2\u2020\u20192\u00e2\u2020\u20191)",
+    "title": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
     "category": "Scheduling & Prediction",
     "priority": "P1",
-    "status": "Proposed",
-    "summary": "Nap-Transition Detector & Guidance (4\u00e2\u2020\u20193\u00e2\u2020\u20192\u00e2\u2020\u20191)",
-    "sources": [],
+    "status": "Built",
+    "summary": "Detects an age-appropriate nap transition (4\u21923\u21922\u21921) from a signal cluster in the local log or self-report, and offers a gentle Tier-3 lengthening plan.",
+    "sources": [
+      "src/models/napTransition.ts:1",
+      "src/components/NapTransition.vue:19",
+      "src/App.vue:49"
+    ],
     "tests": [
       "e2e/nap-transition-detector.spec.ts:1"
     ]
@@ -262,7 +266,7 @@
     "summary": "Neutral, cited menu of sleep-training methods (no ranking) with Tier-1 efficacy + long-term-safety evidence, the Middlemiss cortisol-myth correction in context, and a prominent under-4-month readiness caveat",
     "sources": [
       "src/components/SleepTrainingOverview.vue:5",
-      "src/App.vue:79",
+      "src/App.vue:95",
       "src/models/Citations.test.ts:86"
     ],
     "tests": [
@@ -475,7 +479,7 @@
       "src/models/reminders.ts:1",
       "src/components/RemindersNudges.vue:2",
       "src/sw.ts:1",
-      "src/App.vue:62"
+      "src/App.vue:71"
     ],
     "tests": [
       "e2e/reminders-nudges.spec.ts:1"

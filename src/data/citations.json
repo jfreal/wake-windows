@@ -890,6 +890,20 @@
       "summary": "Notes that beyond the 4-month change, later 'regressions' at 8–10, 12, 18, and 24 months are commonly cited but weakly supported as universal events; wakings cluster around milestones, nap transitions, teething, illness, and language/motor bursts. Prefers 'progression'."
     },
     {
+      "id": "huckleberry-nap-transitions",
+      "tier": 3,
+      "type": "consumer",
+      "org": "Huckleberry",
+      "authors": "Huckleberry pediatric team; medically reviewed by Salem A",
+      "leadAuthor": "Huckleberry (reviewed by Alan Salem, MD, FAAP)",
+      "credentials": "Huckleberry's pediatric-expertise team, medically reviewed by Alan Salem, MD, FAAP (board-certified pediatrician). A commercial sleep-app brand; the readiness-sign checklist and the gradual-lengthening technique are consultant convention, not trial-validated.",
+      "year": 2026,
+      "title": "Nap transitions: When they occur and how to handle them",
+      "venue": "huckleberrycare.com",
+      "url": "https://huckleberrycare.com/blog/nap-transitions-when-they-occur-and-how-to-handle-them",
+      "summary": "The practitioner nap-transition table: 4→3 naps ~4–6 mo, 3→2 ~7–9 mo (handling 2.5–3.5 h wake windows), 2→1 ~14–18 mo. Reads readiness from a cluster of signs (fighting/short/skipped naps, early waking, split nights) rather than one bad day, and fixes it by lengthening wake windows ~15 min at a time rather than dropping a nap abruptly."
+    },
+    {
       "id": "mindell-2006-aasm",
       "tier": 1,
       "type": "evidence-review",

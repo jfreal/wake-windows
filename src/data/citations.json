@@ -11,7 +11,7 @@
       "id": 1,
       "label": "Evidence-based",
       "shortLabel": "Tier 1",
-      "color": "#22a05e",
+      "color": "#27b06a",
       "description": "Backed by expert consensus statements and/or peer-reviewed normative data. Reliable population ranges — though still ranges with wide normal variation, not targets every baby must hit.",
       "appliesTo": "Total sleep per 24h, broad nap-count trajectories, sleep-consolidation and circadian-development timelines, safe-sleep practices."
     },
@@ -19,7 +19,7 @@
       "id": 2,
       "label": "Practice-based heuristic",
       "shortLabel": "Tier 2",
-      "color": "#b8860b",
+      "color": "#c9940c",
       "description": "Sleep-consultant and parenting frameworks. NOT validated by any randomized trial, cohort study, or systematic review — the term 'wake window' does not appear in the pediatric sleep-medicine literature. Useful as a flexible starting estimate, not a prescription. The underlying biology (sleep pressure + circadian rhythm) is real; the specific durations are convention.",
       "appliesTo": "Specific wake-window durations by age; specific sample nap schedules."
     },
@@ -27,7 +27,7 @@
       "id": 3,
       "label": "Practitioner convention",
       "shortLabel": "Tier 3",
-      "color": "#d06848",
+      "color": "#94a3b8",
       "description": "A widespread sleep-consultant convention with a plausible mechanism but no direct study of the specific protocol — e.g. the ~15 min/day gradual schedule shift used for daylight-saving changes, or the standard cause-and-fix patterns for early rising, short naps, false starts, and split nights. A reasonable, gentle default; not a validated prescription, and never a diagnosis.",
       "appliesTo": "Daylight-saving and time-zone shift plans; troubleshooter answers (likely causes and range-based fixes for early rising, short naps, and night wakings)."
     }

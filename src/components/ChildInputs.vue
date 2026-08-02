@@ -37,21 +37,21 @@ function removeWW(index: number) {
 </script>
 
 <template>
+  <!-- `.field` / `.btn` carry the shared 44px control sizing (style.css), so the
+       one-handed-in-the-dark target size can't drift control by control. -->
   <label :for="`${idPrefix}bd`" class="block text-slate-400 text-sm mb-1">Birthday</label>
   <div class="mb-4">
-    <input :id="`${idPrefix}bd`" type="date"
-      class="peer bg-slate-800 text-slate-200 text-sm rounded block p-2.5 min-h-11 w-full"
+    <input :id="`${idPrefix}bd`" type="date" class="field peer"
       v-model="schedule.birthdayDate" required />
     <span class="hidden peer-invalid:block text-amber-100 text-sm mt-1">Please enter a birthdate.</span>
   </div>
 
   <label :for="`${idPrefix}weeks`" class="block text-slate-400 text-sm mb-1">Weeks in Womb</label>
-  <input :id="`${idPrefix}weeks`" type="number"
-    class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 min-h-11 w-full mb-4" placeholder="Weeks" min="20"
+  <input :id="`${idPrefix}weeks`" type="number" class="field mb-4" placeholder="Weeks" min="20"
     max="44" step="1" v-model="schedule.weeks" />
 
   <label :for="`${idPrefix}dwt`" class="block text-slate-400 text-sm mb-1">Desired Wake Time</label>
-  <select :id="`${idPrefix}dwt`" class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 min-h-11 w-full mb-4 text-right"
+  <select :id="`${idPrefix}dwt`" class="field mb-4 text-right"
     v-model.number="schedule.dwt">
     <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
   </select>
@@ -59,20 +59,18 @@ function removeWW(index: number) {
   <span :id="`${idPrefix}ww-label`" class="block text-slate-400 text-sm mb-1">Wake Windows</span>
   <div role="group" :aria-labelledby="`${idPrefix}ww-label`" class="mb-4">
     <div v-for="(find, index) in schedule.wws" class="flex items-center gap-2 mb-1">
-      <input type="number" class="bg-slate-800 text-slate-200 text-sm rounded p-2.5 min-h-11 w-full" placeholder="Hours"
+      <input type="number" class="field" placeholder="Hours"
         v-model.number="schedule.wws[index]" min="0" max="6" step="0.25" :aria-label="`Wake window ${index + 1} (hours)`" />
-      <button type="button"
-        class="shrink-0 inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-lg rounded min-h-11 min-w-11 disabled:opacity-40 disabled:cursor-not-allowed"
+      <button type="button" class="btn btn-quiet btn-icon shrink-0 text-slate-300"
         :disabled="schedule.wws.length <= 1" :aria-label="`Remove wake window ${index + 1}`"
         v-on:click="removeWW(index)">−</button>
     </div>
-    <button type="button"
-      class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-lg rounded min-h-11 min-w-11"
+    <button type="button" class="btn btn-quiet btn-icon text-slate-300"
       aria-label="Add wake window" v-on:click="addWW">+</button>
   </div>
 
   <label :for="`${idPrefix}bed`" class="block text-slate-400 text-sm mb-1">Bedtime</label>
-  <select :id="`${idPrefix}bed`" class="bg-slate-800 text-slate-200 text-sm rounded block p-2.5 min-h-11 w-full text-right"
+  <select :id="`${idPrefix}bed`" class="field text-right"
     v-model.number="schedule.bed">
     <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
   </select>

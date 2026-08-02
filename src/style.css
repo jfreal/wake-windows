@@ -1,10 +1,20 @@
 @import "tailwindcss";
 
-/* Project tokens layered onto Tailwind v4's theme. `--color-muted` is the
-   accessible muted-text shade: 5.04:1 on the slate-900 body (slate-500 fails
-   AA at 3.75:1), while staying visibly quieter than slate-400 labels. */
+/* Project tokens layered onto Tailwind v4's theme.
+
+   `--color-muted` is the accessible muted-text shade on the slate-900 body:
+   5.04:1 (slate-500 fails AA at 3.75:1), while staying visibly quieter than the
+   slate-400 labels.
+
+   `--color-muted-raised` is the same role one surface up. The body-tuned
+   `muted` only measures 4.13:1 against a slate-800 fill and 4.50:1 against
+   slate-800/60, so quiet text sitting ON a panel needs its own shade: this one
+   is 4.78:1 on slate-800 and 5.83:1 on the body. Rule of thumb — `text-muted`
+   on the body, `text-muted-raised` on any slate-800 surface, and slate-300 on a
+   slate-700 fill (neither muted shade clears 4.5:1 there). */
 @theme {
   --color-muted: #7c899e;
+  --color-muted-raised: #8894a9;
 }
 
 /* @doc:accessibility-dark-room */
@@ -33,10 +43,82 @@
   outline-offset: 2px;
 }
 
-/* Placeholders must clear 4.5:1 too — slate-400 on the slate-800 field. */
+/* Placeholders must clear 4.5:1 too — slate-400 on the slate-800 field.
+   Do not override this per-field: slate-500 measures 3.07:1 on slate-800. */
 ::placeholder {
   color: var(--color-slate-400, #94a3b8);
   opacity: 1;
+}
+
+/* The button vocabulary, in one place.
+
+   Every control a half-awake thumb has to hit is 44px tall, and that is baked
+   into `.btn` rather than repeated as `min-h-11` at each call site — it had
+   already drifted back to 36px in the sleep log and 26px on the atypical-day
+   chips, which is exactly how a stated standard quietly stops being true.
+
+   Two weights only:
+     .btn-quiet    the default. Input-driven app, URL-persisted, nothing to submit.
+     .btn-primary  the one action that starts something (start a timer, take an
+                   update). sky-700 fill, darkening to sky-800 on hover — white
+                   on sky-600 measures 4.1:1 and fails AA, so it never lightens.
+
+   Toggles (`aria-pressed`) build on `.btn` / `.btn-chip` and supply their own
+   on/off colours, because a pressed state is not a third weight. */
+@layer components {
+  /* gap-1, not a plain space: a flex container discards whitespace-only text
+     nodes between children, so `{{ label }} <span>(hint)</span>` renders as
+     "Spring forward(clocks jump ahead 1h)" without it. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-1 rounded text-sm min-h-11 px-4;
+  }
+
+  .btn:disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+
+  .btn-quiet {
+    @apply bg-slate-800 hover:bg-slate-700 text-slate-200;
+  }
+
+  .btn-primary {
+    @apply bg-sky-700 hover:bg-sky-800 text-white;
+  }
+
+  /* Square control (＋ / −). 44×44 so it stays a thumb target with no label. */
+  .btn-icon {
+    @apply px-0 min-w-11 text-lg;
+  }
+
+  /* Pill toggle (atypical-day reasons). Still 44px tall; the pill is the shape,
+     not an excuse for a smaller target. */
+  .btn-chip {
+    @apply inline-flex items-center rounded-full border px-3 min-h-11 text-xs;
+  }
+
+  /* Text-weight button that reads as a link (Back, Sources, View breakdown).
+     Padded to a 44px target without drawing a box around it. */
+  .btn-inline {
+    @apply inline-flex items-center min-h-11 px-1 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2;
+  }
+
+  /* External citation link with its trailing "↗". The gap is the whole point:
+     these are inline-flex for the tap target, and a flex container drops the
+     whitespace-only node before the arrow — which is why some of these had
+     grown a hand-written &nbsp; and others just read "tip jar↗". */
+  .link-ext {
+    @apply inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 underline underline-offset-2;
+  }
+
+  /* Native input / select / textarea. Same 44px rule as the buttons, and the
+     same fill, so a control looks like a control wherever it appears. */
+  .field {
+    @apply block w-full bg-slate-800 text-slate-200 text-sm rounded p-2.5 min-h-11;
+  }
+
+  .field:disabled {
+    @apply opacity-50;
+  }
 }
 
 /* Quiet, intentional state motion. Ease-out; state only, never decoration. */

@@ -35,11 +35,12 @@ const { needRefresh, updateServiceWorker } = useRegisterSW({ immediate: true })
   <div v-else-if="needRefresh" role="status"
     class="sticky top-0 z-50 -mx-4 mb-2 bg-slate-800 border-b border-slate-700 px-4 py-2 text-sm text-slate-200 flex items-center gap-3 flex-wrap">
     <span>Update available — refresh to get the latest guidance and fixes.</span>
-    <!-- hover darkens (sky-800): white on sky-600 measures 4.1:1 and fails AA.
-         44px targets; slate-400, not muted, clears 4.5:1 on the slate-800 banner. -->
-    <button class="bg-sky-700 hover:bg-sky-800 text-white rounded px-3 py-1 min-h-11"
+    <!-- Taking the update is the primary action here; declining stays quiet.
+         `.btn-primary` darkens on hover (white on sky-600 measures 4.1:1 and
+         fails AA). slate-400, not muted, clears 4.5:1 on the slate-800 banner. -->
+    <button class="btn btn-primary px-3"
       @click="updateServiceWorker()">Refresh</button>
-    <button class="text-slate-400 hover:text-slate-200 underline px-2 py-1 min-h-11"
+    <button class="btn px-3 text-slate-400 hover:text-slate-200 underline"
       @click="needRefresh = false">Not now</button>
   </div>
 </template>

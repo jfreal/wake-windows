@@ -63,7 +63,7 @@ const competitors = [
                </p>
 
                <div class="border-t border-slate-800 pt-2 space-y-1.5">
-                    <p class="text-slate-400 uppercase tracking-wide">Where the category went instead</p>
+                    <p class="text-slate-400 uppercase">Where the category went instead</p>
                     <p v-for="c in competitors" :key="c.name" class="text-muted">
                          <span class="text-slate-300 font-medium">{{ c.name }}</span> — {{ c.detail }}
                          (<a

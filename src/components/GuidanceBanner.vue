@@ -27,15 +27,19 @@ const showSources = ref(false)
 
 <template>
      <div>
-          <div v-if="atypical" class="rounded bg-violet-400/10 border border-violet-400/30 p-3 mb-2" role="status">
-               <p class="text-violet-200 text-sm">
+          <!-- Neutral, not coloured: an atypical day is neither good news nor a
+               warning, and the semantic palette is spoken for (emerald in-range,
+               amber out-of-range, sky interactive). Matches the same message in
+               the sitter view, which already sits on a plain slate-800 fill. -->
+          <div v-if="atypical" class="rounded bg-slate-800 border border-slate-700 p-3 mb-2" role="status">
+               <p class="text-slate-200 text-sm">
                     {{ ATYPICAL_MESSAGE }}
-                    <span v-if="reasonLabel" class="text-violet-300/80 whitespace-nowrap">({{ reasonLabel }})</span>
+                    <span v-if="reasonLabel" class="text-slate-300 whitespace-nowrap">({{ reasonLabel }})</span>
                </p>
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
-               <span class="inline-flex items-center rounded border border-sky-400/60 text-sky-300 px-1.5 py-0.5 text-[11px] font-medium leading-none whitespace-nowrap uppercase tracking-wide">
+               <span class="inline-flex items-center rounded border border-sky-400/60 text-sky-300 px-1.5 py-0.5 text-[11px] font-medium leading-none whitespace-nowrap uppercase">
                     {{ guidance.label }}
                </span>
                <span class="text-slate-300 text-sm font-medium">{{ guidance.headline }}</span>
@@ -50,7 +54,7 @@ const showSources = ref(false)
                <TierBadge :tier="guidance.tier" />
                <button
                     type="button"
-                    class="shrink-0 inline-flex items-center min-h-11 px-1 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                    class="btn-inline shrink-0"
                     :aria-expanded="showSources"
                     @click="showSources = !showSources"
                >
@@ -62,7 +66,7 @@ const showSources = ref(false)
                <div v-for="src in getSources(guidance.sourceIds)" :key="src.id" class="text-xs">
                     <div class="flex flex-wrap items-center gap-2">
                          <TierBadge :tier="src.tier" />
-                         <span class="text-muted uppercase tracking-wide">{{ src.type }}</span>
+                         <span class="text-muted uppercase">{{ src.type }}</span>
                          <span class="text-muted">{{ src.year }}</span>
                     </div>
                     <a

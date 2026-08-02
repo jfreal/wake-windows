@@ -5,7 +5,34 @@ test.describe('24-hour visual day breakdown [@feature:24h-visual-day-breakdown]'
   test('renders the awake / night-sleep / nap day bar and stats', async ({ page }) => {
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
     await expect(page.getByRole('img', { name: /awake.*night sleep.*naps/ })).toBeVisible();
-    await expect(page.getByText('Sleep Stats')).toBeVisible();
-    await expect(page.getByText('Total Wake')).toBeVisible();
+    // Scope to the heading: "Sleep Stats" is also named in the accessibility
+    // statement's prose (it is where the bar's figures live when a band is too
+    // narrow to draw them), so a bare substring match is ambiguous.
+    await expect(page.getByRole('heading', { name: 'Sleep Stats', exact: true })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Total Wake' })).toBeVisible();
+  });
+
+  // The bar is a data visualization, so a band must never be the only place a
+  // number exists: a narrow band drops its icon, then its figure, and the
+  // Sleep Stats table plus the aria-label carry all three regardless.
+  test('every figure in the bar also exists as text, however narrow the bands are', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    // Long wake windows squeeze the nap band down to a sliver.
+    await page.goto('/?bd=2026-03-01&s=7-2.75/2.75/2.75/2.75-7');
+
+    const bar = page.getByRole('img', { name: /awake.*night sleep.*naps/ });
+    await expect(bar).toHaveAttribute('aria-label', /11 hours awake.*12 hours night sleep.*1 hours of naps/);
+
+    // Nothing in the bar is clipped: any figure still shown fits its band.
+    const clipped = await bar.evaluate((el) => [...el.children].filter((d) => {
+      const sp = d.querySelector('span');
+      if (!sp || getComputedStyle(sp).display === 'none') return false;
+      return sp.getBoundingClientRect().right > d.getBoundingClientRect().right + 0.5;
+    }).length);
+    expect(clipped).toBe(0);
+
+    // And the figures are readable as text either way.
+    await expect(page.getByRole('cell', { name: 'Total Wake' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sleep Stats', exact: true })).toBeVisible();
   });
 });

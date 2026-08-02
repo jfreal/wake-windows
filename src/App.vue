@@ -17,14 +17,15 @@ import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
 import { meta } from './models/Citations'
+import { sitterMode } from './stores/plan'
 
 // @doc:accessibility-dark-room
 
 // @doc:read-only-babysitter-mode
 // A shared sitter link renders only the plan: no delete-data control, tip jar,
 // or app panels — the sitter sees today's schedule and the disclaimer, nothing
-// that changes state or asks anything of them.
-const sitterMode = new URLSearchParams(window.location.search).get('view') === 'sitter';
+// that changes state or asks anything of them. `sitterMode` is read once in
+// stores/plan.ts so every panel branches on the same value.
 </script>
 
 <template>

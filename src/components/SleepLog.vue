@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
 import {
      type SleepEntry,
      type SleepKind,
-     loadLog,
-     saveLog,
      createEntry,
      pauseEntry,
      resumeEntry,
@@ -23,6 +21,7 @@ import {
      floorToMinute,
 } from '../models/sleepLog'
 import { formatDuration } from '../models/time'
+import { entries, now } from '../stores/sleepLog'
 
 // @doc:sleep-nap-logging
 // Thin shell over models/sleepLog.ts. All correctness (background-safe elapsed,
@@ -30,19 +29,14 @@ import { formatDuration } from '../models/time'
 // unit tests; this component only renders it and wires user input. Local-only:
 // entries live in localStorage (ww.sleepLog.v1), wiped by "Delete all my data".
 
-// The running clock is COMPUTED from stored timestamps; `now` is a display-only
-// tick so the elapsed readout advances. Timestamps are the source of truth, so
-// backgrounding or restarting the device never loses time.
-const now = ref(Date.now())
-let ticker: ReturnType<typeof setInterval> | undefined
-onMounted(() => {
-     ticker = setInterval(() => { now.value = Date.now() }, 1000)
-})
-onUnmounted(() => { if (ticker) clearInterval(ticker) })
-
-// Persisted log. Reactive array; every mutation is flushed to localStorage.
-const entries = reactive<SleepEntry[]>(loadLog())
-watch(entries, (list) => saveLog(list), { deep: true })
+// The running clock is COMPUTED from stored timestamps; the shared `now` is a
+// display-only tick so the elapsed readout advances. Timestamps are the source
+// of truth, so backgrounding or restarting the device never loses time.
+//
+// Both the log and the clock come from stores/sleepLog.ts, which owns the
+// single adaptive ticker (1s while something is running, 60s idle, stopped
+// while hidden) and the debounced write-back. The "Today" panel above reads the
+// same array, so it sees edits made here with no re-parse of localStorage.
 
 /** Replace an entry in place by id (state transitions return new objects). */
 function replace(entry: SleepEntry, next: SleepEntry) {
@@ -133,11 +127,10 @@ function durationLabel(entry: SleepEntry): string {
                </div>
           </div>
 
-          <button type="button"
-               class="inline-flex items-center bg-sky-700 hover:bg-sky-600 text-white text-sm rounded px-4 min-h-11"
+          <!-- The one primary action on this panel; everything else stays quiet. -->
+          <button type="button" class="btn btn-primary"
                v-on:click="startTimer">Start sleep timer</button>
-          <button type="button"
-               class="ml-2 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+          <button type="button" class="btn btn-quiet ml-2"
                v-on:click="addPastEntry">Add past sleep</button>
 
           <!-- Two open timers: allowed (twins / caregiver overlap), but flagged. -->
@@ -157,14 +150,17 @@ function durationLabel(entry: SleepEntry): string {
                     <div class="flex items-center justify-between gap-2 flex-wrap">
                          <div class="flex items-center gap-2">
                               <!-- Nap / night label, inferred but overridable. -->
+                              <!-- Nap/night keep the day-arc colours on purpose: here
+                                   they label which kind of sleep this was, the same
+                                   meaning the violet and cyan bands carry above. -->
                               <div role="group" aria-label="Sleep type" class="inline-flex rounded overflow-hidden border border-slate-700">
                                    <button type="button"
-                                        class="text-xs px-2.5 min-h-9"
+                                        class="btn text-xs px-3"
                                         :class="entry.kind === 'nap' ? 'bg-violet-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
                                         :aria-pressed="entry.kind === 'nap'"
                                         v-on:click="toggleKind(entry, 'nap')">Nap</button>
                                    <button type="button"
-                                        class="text-xs px-2.5 min-h-9"
+                                        class="btn text-xs px-3"
                                         :class="entry.kind === 'night' ? 'bg-cyan-700 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
                                         :aria-pressed="entry.kind === 'night'"
                                         v-on:click="toggleKind(entry, 'night')">Night</button>
@@ -180,17 +176,23 @@ function durationLabel(entry: SleepEntry): string {
                          <div class="flex items-center gap-2">
                               <template v-if="isRunning(entry)">
                                    <button v-if="!isPaused(entry)" type="button"
-                                        class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-3 min-h-9"
+                                        class="btn btn-quiet px-3"
                                         v-on:click="pause(entry)">Pause</button>
                                    <button v-else type="button"
-                                        class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-3 min-h-9"
+                                        class="btn btn-quiet px-3"
                                         v-on:click="resume(entry)">Resume</button>
+                                   <!-- Raised slate, not red. Stopping a timer is not
+                                        destructive, and red is not in this palette —
+                                        out-of-range and warnings are amber so a tired
+                                        parent is informed, never alarmed. -->
                                    <button type="button"
-                                        class="inline-flex items-center bg-rose-800 hover:bg-rose-700 text-white text-sm rounded px-3 min-h-9"
+                                        class="btn bg-slate-700 hover:bg-slate-600 text-slate-100 px-3"
                                         v-on:click="stop(entry)">Stop</button>
                               </template>
+                              <!-- Quieter ink than its neighbours: deleting should never
+                                   be the easiest thing to hit by accident. -->
                               <button type="button"
-                                   class="inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-400 text-sm rounded min-h-9 px-3"
+                                   class="btn btn-quiet px-3 text-slate-400"
                                    :aria-label="`Delete this sleep entry`"
                                    v-on:click="remove(entry)">Delete</button>
                          </div>
@@ -209,14 +211,14 @@ function durationLabel(entry: SleepEntry): string {
                          <label class="flex-1 text-xs text-slate-400">
                               Start
                               <input type="datetime-local"
-                                   class="bg-slate-800 text-slate-200 text-sm rounded block p-2 min-h-11 w-full mt-0.5"
+                                   class="field mt-0.5"
                                    :value="toLocalInput(entry.start)"
                                    v-on:change="onEditStart(entry, $event)" />
                          </label>
                          <label class="flex-1 text-xs text-slate-400">
                               End
                               <input type="datetime-local"
-                                   class="bg-slate-800 text-slate-200 text-sm rounded block p-2 min-h-11 w-full mt-0.5 disabled:opacity-50"
+                                   class="field mt-0.5"
                                    :value="entry.end !== null ? toLocalInput(entry.end) : ''"
                                    :disabled="isRunning(entry)"
                                    :placeholder="isRunning(entry) ? 'still running' : ''"

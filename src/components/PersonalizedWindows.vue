@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
-import { type SleepEntry, loadLog } from '../models/sleepLog'
+import { entries } from '../stores/sleepLog'
 import {
      personalizeWakeWindows,
      describeAdjustment,
@@ -22,8 +22,8 @@ import TierBadge from './TierBadge.vue'
 // the windows the parent had before.
 const props = defineProps<{ schedule: ScheduleSetting }>()
 
-// The log lives in localStorage (SleepLog.vue writes it); read it once on mount.
-const log = ref<SleepEntry[]>([])
+// The log comes from the shared store, so a nap logged below is reflected here
+// without a reload (it used to be read once on mount and then never again).
 const enabled = ref(false)
 // The age-default windows captured when personalization was switched on, so a
 // reload re-nudges from the default (never compounding) and reset is exact.
@@ -36,10 +36,9 @@ function applyToSchedule(windows: number[]) {
 }
 
 const result = computed<PersonalizationResult>(() =>
-     personalizeWakeWindows(baseWws.value, log.value, { now: Date.now(), lookbackDays: DEFAULT_LOOKBACK_DAYS }))
+     personalizeWakeWindows(baseWws.value, entries, { now: Date.now(), lookbackDays: DEFAULT_LOOKBACK_DAYS }))
 
 onMounted(() => {
-     log.value = loadLog()
      const pref = loadPersonalizePref()
      if (pref.enabled && pref.base) {
           baseWws.value = [...pref.base]
@@ -79,12 +78,14 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
                on your device. No account, no AI. Off unless you turn it on, and one tap back to the age default.
           </p>
 
+          <!-- On-state is the sky accent, not violet: violet is the nap colour in
+               the 24-hour bar, where it means a literal block of the day. -->
           <button
                type="button"
                :aria-pressed="enabled"
-               class="w-full min-h-11 rounded text-sm p-2.5 text-left border transition-colors"
+               class="btn w-full justify-start px-2.5 text-left border transition-colors"
                :class="enabled
-                    ? 'bg-violet-400/10 border-violet-400/50 text-violet-200'
+                    ? 'bg-sky-400/10 border-sky-400/50 text-sky-200'
                     : 'bg-slate-800 border-transparent hover:bg-slate-700 text-slate-300'"
                @click="enabled ? reset() : enable()"
           >
@@ -93,7 +94,7 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
 
           <div v-if="enabled" class="mt-3">
                <!-- Enough usable days AND at least one window meaningfully different -->
-               <div v-if="result.personalized" class="rounded border border-violet-400/30 bg-violet-400/5 p-3">
+               <div v-if="result.personalized" class="rounded border border-sky-400/30 bg-sky-400/5 p-3">
                     <div class="flex items-center gap-2 mb-2">
                          <span class="text-slate-300 text-sm font-medium">What we changed</span>
                          <TierBadge :tier="3" />
@@ -115,7 +116,7 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
                     </p>
                     <button
                          type="button"
-                         class="mt-2 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+                         class="btn btn-quiet mt-2"
                          @click="reset"
                     >Reset to age default</button>
                </div>
@@ -128,7 +129,7 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
                     </p>
                     <button
                          type="button"
-                         class="mt-2 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+                         class="btn btn-quiet mt-2"
                          @click="reset"
                     >Turn off</button>
                </div>
@@ -142,7 +143,7 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
                     </p>
                     <button
                          type="button"
-                         class="mt-2 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+                         class="btn btn-quiet mt-2"
                          @click="reset"
                     >Turn off</button>
                </div>

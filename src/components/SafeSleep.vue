@@ -28,8 +28,8 @@ const sources = getSources(['aap-safesleep-2022', 'nichd-safetosleep', 'lullaby-
                     :href="src.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2"
-               >{{ src.org }} <span aria-hidden="true" class="text-muted">&nbsp;↗</span></a>
+                    class="link-ext min-h-11"
+               >{{ src.org }} <span aria-hidden="true" class="text-muted-raised">↗</span></a>
           </div>
      </div>
 </template>

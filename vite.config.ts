@@ -60,6 +60,10 @@ export default defineConfig({
   },
   test: {
     // e2e/ holds Playwright specs (npm run test:e2e); Vitest must not load them.
-    exclude: [...configDefaults.exclude, 'e2e/**'],
+    // .claude/worktrees/ holds full checkouts of parallel feature branches,
+    // each with its own e2e/ — without this, `npm test` collects those too and
+    // reports 44 failed files that are really just Playwright specs loaded by
+    // the wrong runner, drowning the actual result.
+    exclude: [...configDefaults.exclude, 'e2e/**', '.claude/**'],
   },
 })

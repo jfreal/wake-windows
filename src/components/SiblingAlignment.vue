@@ -87,7 +87,9 @@ const hourMarks = [
           class="absolute top-0 bottom-0 bg-emerald-200/15 border-x-2 border-emerald-300/80 pointer-events-none"
           :style="{ left: pct(o.start), width: pct(o.end - o.start) }"></div>
       </div>
-      <div class="relative h-4 text-[10px] text-slate-500 tabular-nums">
+      <!-- text-muted, not slate-500: these are real labels a parent reads, and
+           slate-500 measures 3.75:1 on the body — under the 4.5:1 floor. -->
+      <div class="relative h-5 text-xs text-muted tabular-nums">
         <span v-for="mark in hourMarks" :key="mark.at" class="absolute" :style="{ left: pct(mark.at) }">{{ mark.label
           }}</span>
       </div>

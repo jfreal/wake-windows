@@ -46,6 +46,38 @@ test.describe('Calendar Export (ICS) [@feature:calendar-export]', () => {
     expect(ics).toContain('Tier-3 guidance range');
   });
 
+  // Regression: the panel used to rebuild its own ScheduleSetting from the URL
+  // at setup and never re-read it, so it exported the plan as it stood at page
+  // load. Change bedtime, export, and the file was byte-identical — silently
+  // wrong times on a real calendar, with nothing on screen to say so. It now
+  // reads the shared reactive plan (src/stores/plan.ts).
+  test('exports the CURRENT plan after an edit, not the one the page loaded with', async ({ page }) => {
+    await page.goto(PLAN);
+
+    const button = page.getByRole('button', { name: 'Add to calendar (.ics)' });
+
+    const readIcs = async () => {
+      const [download] = await Promise.all([page.waitForEvent('download'), button.click()]);
+      const stream = await download.createReadStream();
+      const chunks: Buffer[] = [];
+      for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+      return Buffer.concat(chunks).toString('utf-8');
+    };
+
+    const starts = (ics: string) => (ics.match(/DTSTART[^\r\n]*/g) ?? []);
+
+    const before = starts(await readIcs());
+    expect(before.length).toBe(4);
+
+    // Move bedtime 7:00 PM -> 9:00 PM. Every nap and the bedtime event shift.
+    await page.locator('#bed').selectOption('9');
+    await expect(page).toHaveURL(/s=7-2\/2\/2\/2-9/);
+
+    const after = starts(await readIcs());
+    expect(after.length).toBe(4);
+    expect(after).not.toEqual(before);
+  });
+
   test('the export panel is absent from the read-only sitter view', async ({ page }) => {
     await page.goto(`${PLAN}&view=sitter`);
     await expect(page.getByRole('button', { name: 'Add to calendar (.ics)' })).toHaveCount(0);

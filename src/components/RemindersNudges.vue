@@ -13,9 +13,8 @@
 // the schedulable logic (lead offset, quiet-hours, daily-cap) lives in the pure
 // ../models/reminders module; this component stays thin.
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { ScheduleSetting } from '../models/ScheduleSetting'
-import { applyPlanParams } from '../models/planUrl'
-import { effectiveGuidanceMode, windowSlopMinutes, isAtypicalReason } from '../models/GuidanceMode'
+import { schedule } from '../stores/plan'
+import { effectiveGuidanceMode, windowSlopMinutes } from '../models/GuidanceMode'
 import { formatClock, formatClockRange, formatDuration } from '../models/time'
 import { storageKey, loadJSON, saveJSON } from '../models/storage'
 import {
@@ -38,15 +37,11 @@ const NUDGE_TAG = 'ww-prenap-nudge'
 const PREFS_KEY = storageKey('reminderPrefs')
 const FIRES_KEY = storageKey('reminderFires')
 
-// Read the same URL plan state the rest of the app uses, so the nudge tracks
-// exactly the schedule on screen — no account, no re-entry (mirrors CalendarExport).
-const params = Object.fromEntries(new URLSearchParams(window.location.search).entries())
-const schedule = new ScheduleSetting()
-applyPlanParams(schedule, params.bd, params.s)
-if (params.at) {
-  schedule.atypical = true
-  schedule.atypicalReason = isAtypicalReason(params.at) ? params.at : 'other'
-}
+// The shared reactive plan (src/stores/plan.ts), so the nudge tracks exactly the
+// schedule on screen. This used to rebuild a private ScheduleSetting from the
+// URL at setup and never re-read it — meaning a parent who lengthened a wake
+// window got nudged at the OLD time, which for a notification is worse than a
+// stale readout: it interrupts them at a moment the plan no longer says.
 const slop = computed(() =>
   windowSlopMinutes(effectiveGuidanceMode(schedule.monthsSinceBirth, schedule.atypical)))
 
@@ -298,7 +293,7 @@ function toggle(on: boolean) {
         <!-- permission prompt when notifications are supported but not yet granted -->
         <div v-if="notificationsSupported && permission === 'default' && !iosNeedsInstall">
           <button type="button"
-            class="inline-flex items-center bg-sky-700 hover:bg-sky-800 text-white text-sm rounded px-4 min-h-11"
+            class="btn btn-primary"
             @click="requestPermission">Allow notifications</button>
           <p class="text-muted text-xs mt-1">
             Optional — without it, the reminder shows as an on-page countdown while this tab is open.

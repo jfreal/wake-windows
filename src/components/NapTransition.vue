@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted } from 'vue'
-import { ScheduleSetting } from '../models/ScheduleSetting'
-import { applyPlanParams } from '../models/planUrl'
-import { type SleepEntry, loadLog } from '../models/sleepLog'
+import { schedule } from '../stores/plan'
+import { entries } from '../stores/sleepLog'
 import { getSource } from '../models/Citations'
 import { formatDuration } from '../models/time'
 import {
@@ -23,15 +22,12 @@ import TierBadge from './TierBadge.vue'
 // be a transition" and shows the standard Tier-3 gradual plan (lengthen wake
 // windows ~15 min at a time). Every surface carries the Tier-3 badge + citation.
 //
-// This mounts standalone in App.vue, so it reads the plan (age + current wake
-// windows) from the same shareable URL query the rest of the app uses, and the
-// log from localStorage on mount.
+// This mounts standalone in App.vue, but it reads the shared reactive plan and
+// sleep log (src/stores/) rather than rebuilding its own from the URL and a
+// one-shot loadLog(). Detection keys off the baby's age and recent naps, so a
+// private copy meant the readiness signal was frozen at page load: a nap logged
+// in the panel below, or an age correction, never reached it until a refresh.
 
-const params = Object.fromEntries(new URLSearchParams(window.location.search).entries())
-const schedule = reactive(new ScheduleSetting())
-applyPlanParams(schedule, params.bd, params.s)
-
-const log = ref<SleepEntry[]>([])
 const dismissed = ref<TransitionType[]>([])
 
 // Self-reported signals ("over the past week, are you seeing…"). Local UI state;
@@ -45,12 +41,11 @@ const manual = reactive<ManualSignals>({
 const reportOpen = ref(false)
 
 onMounted(() => {
-     log.value = loadLog()
      dismissed.value = loadDismissed()
 })
 
 const result = computed(() =>
-     detectNapTransition(log.value, schedule.monthsSinceBirth, { now: Date.now(), manual }))
+     detectNapTransition(entries, schedule.monthsSinceBirth, { now: Date.now(), manual }))
 
 // The prompt shows only when a transition is age-appropriate, its signals
 // cluster, AND the parent hasn't dismissed it. Everything else stays quiet.
@@ -150,7 +145,7 @@ const barTotal = computed(() => {
 
                <div class="mt-3 flex flex-wrap items-center gap-3">
                     <button type="button"
-                         class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+                         class="btn btn-quiet"
                          @click="dismiss">Not now</button>
                     <a v-if="citation" :href="citation.url" target="_blank" rel="noopener noreferrer"
                          class="text-sky-400 hover:text-sky-300 underline underline-offset-2 text-xs">
@@ -169,7 +164,7 @@ const barTotal = computed(() => {
                     from your logs. Nothing to change yet — one rough day isn't a transition.
                </p>
                <button type="button"
-                    class="mt-1 inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2 text-xs"
+                    class="btn-inline mt-1"
                     :aria-expanded="reportOpen" @click="reportOpen = !reportOpen">
                     {{ reportOpen ? 'Hide' : 'Not sure? Tell us what you\'re seeing' }}
                </button>

@@ -152,8 +152,8 @@ const claims: Claim[] = [efficacy, safety, cortisol, readiness]
                               target="_blank"
                               rel="noopener noreferrer"
                               :title="src.title"
-                              class="inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2"
-                         >{{ src.org }} <span aria-hidden="true" class="text-muted">&nbsp;↗</span></a>
+                              class="link-ext min-h-11"
+                         >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
                     </div>
                </div>
           </div>

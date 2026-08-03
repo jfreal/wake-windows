@@ -20,12 +20,15 @@ function pickReason(id: string) {
 <template>
      <div class="mt-4">
           <span class="block text-slate-400 text-sm mb-1">Rough day?</span>
+          <!-- On-state is the sky accent, not violet: violet is the nap colour in
+               the 24-hour bar, where it means a literal block of the day. One
+               colour, one meaning — if it is sky, it is something you pressed. -->
           <button
                type="button"
                :aria-pressed="schedule.atypical"
-               class="w-full min-h-11 rounded text-sm p-2.5 text-left border transition-colors"
+               class="btn w-full justify-start px-2.5 text-left border transition-colors"
                :class="schedule.atypical
-                    ? 'bg-violet-400/10 border-violet-400/50 text-violet-200'
+                    ? 'bg-sky-400/10 border-sky-400/50 text-sky-200'
                     : 'bg-slate-800 border-transparent hover:bg-slate-700 text-slate-300'"
                @click="toggle"
           >
@@ -38,9 +41,9 @@ function pickReason(id: string) {
                     :key="reason.id"
                     type="button"
                     :aria-pressed="schedule.atypicalReason === reason.id"
-                    class="rounded-full border px-2.5 py-1 text-xs transition-colors"
+                    class="btn-chip transition-colors"
                     :class="schedule.atypicalReason === reason.id
-                         ? 'border-violet-400/60 text-violet-200 bg-violet-400/10'
+                         ? 'border-sky-400/60 text-sky-200 bg-sky-400/10'
                          : 'border-slate-700 text-slate-400 hover:text-slate-300 hover:border-slate-500'"
                     @click="pickReason(reason.id)"
                >

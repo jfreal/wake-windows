@@ -16,10 +16,15 @@ if (cameFromDelete) {
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { stopPersisting } from '../stores/sleepLog'
 
 const justDeleted = ref(cameFromDelete)
 
 function deleteAll() {
+     // Shut the sleep-log store's write-back down FIRST. It debounces saves, so
+     // a write queued moments ago — or its flush-on-hidden, which a reload can
+     // trigger — would land after the clear and write the log straight back out.
+     stopPersisting()
      // Storage can throw in some privacy modes; deletion must still proceed.
      try { localStorage.clear() } catch { /* nothing stored anyway */ }
      try { sessionStorage.clear() } catch { /* nothing stored anyway */ }
@@ -44,7 +49,7 @@ function deleteAll() {
           <div class="flex flex-col sm:flex-row sm:items-center gap-2">
                <button
                     type="button"
-                    class="shrink-0 inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm rounded min-h-11 px-4"
+                    class="btn btn-quiet shrink-0 text-slate-300"
                     v-on:click="deleteAll"
                >Delete all my data</button>
                <p class="text-muted text-xs">

@@ -39,7 +39,7 @@ function toggle(i: number) {
                          </div>
                          <button
                               type="button"
-                              class="shrink-0 inline-flex items-center min-h-11 px-1 text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2"
+                              class="btn-inline shrink-0"
                               :aria-expanded="!!open[i]"
                               @click="toggle(i)"
                          >
@@ -55,7 +55,7 @@ function toggle(i: number) {
                          >
                               <div class="flex flex-wrap items-center gap-2">
                                    <TierBadge :tier="src.tier" />
-                                   <span class="text-muted uppercase tracking-wide">{{ src.type }}</span>
+                                   <span class="text-muted uppercase">{{ src.type }}</span>
                                    <span class="text-muted">{{ src.year }}</span>
                               </div>
                               <a

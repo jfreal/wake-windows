@@ -5,21 +5,15 @@
 // download that Google, Apple, and Outlook all import. All the calendar logic
 // lives in ../models/ics.ts; this component only reads the plan and triggers the
 // download.
-import { computed, ref } from 'vue'
-import { ScheduleSetting } from '../models/ScheduleSetting'
-import { applyPlanParams } from '../models/planUrl'
-import { effectiveGuidanceMode, windowSlopMinutes, isAtypicalReason } from '../models/GuidanceMode'
+import { computed, ref, watch } from 'vue'
+import { effectiveGuidanceMode, windowSlopMinutes } from '../models/GuidanceMode'
 import { buildIcs, type IcsPlan } from '../models/ics'
+import { schedule } from '../stores/plan'
 
-// Read the plan from the same URL state the rest of the app uses, so the export
-// matches exactly what the parent sees on screen — no account, no re-entry.
-const params = Object.fromEntries(new URLSearchParams(window.location.search).entries())
-const schedule = new ScheduleSetting()
-applyPlanParams(schedule, params.bd, params.s)
-if (params.at) {
-  schedule.atypical = true
-  schedule.atypicalReason = isAtypicalReason(params.at) ? params.at : 'other'
-}
+// The live plan from stores/plan.ts, not a copy — this panel used to rebuild
+// its own ScheduleSetting from the URL at setup and never re-read it, so a
+// parent who adjusted bedtime and then exported got the plan as it stood at
+// page load, with nothing to indicate it.
 
 // Same slop the schedule display uses: cues-led / atypical days widen the
 // guidance windows, and the exported ranges track that.
@@ -46,6 +40,18 @@ function buildPlan(): IcsPlan {
 
 const done = ref(false)
 
+// Clear the "file ready" note as soon as the plan moves: the downloaded .ics is
+// a snapshot, so leaving the confirmation up next to changed times would imply
+// the calendar already knows about them.
+//
+// `slop.value` is watched rather than the age fields it derives from. The
+// exported windows are widened by guidance mode, so a corrected birthdate or
+// gestational-age fix can change the times without touching dwt/bed/wws —
+// watching the derived value covers that, and any future input to it.
+watch(() => [schedule.dwt, schedule.bed, schedule.wws.join('/'), slop.value], () => {
+  done.value = false
+})
+
 function addToCalendar() {
   const plan = buildPlan()
   const ics = buildIcs(plan)
@@ -71,8 +77,7 @@ function addToCalendar() {
       guidance range, not a fixed appointment — anywhere in the window counts. No account, nothing leaves
       your device until you open the file.
     </p>
-    <button type="button"
-      class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11 disabled:opacity-50"
+    <button type="button" class="btn btn-quiet"
       :disabled="!hasPlan"
       v-on:click="addToCalendar">Add to calendar (.ics)</button>
     <span v-if="done" role="status" class="ml-2 text-emerald-400 text-sm">Calendar file ready.</span>

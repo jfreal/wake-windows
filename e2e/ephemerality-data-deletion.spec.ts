@@ -21,6 +21,31 @@ test.describe('Ephemerality & One-Click Data Deletion [@feature:ephemerality-dat
     expect(storageLeft).toBe(0);
   });
 
+  // The sleep log is written back on a short debounce, so there is a window
+  // where a save is queued but not yet flushed. Deleting inside that window
+  // must not let the queued write land after the clear and resurrect exactly
+  // the data we just promised was gone — DeleteData shuts the store's
+  // persistence down before clearing, rather than racing it.
+  test('deleting immediately after logging a sleep leaves nothing behind', async ({ page }) => {
+    await page.goto('/?bd=2026-01-01&s=8-3/3-8');
+
+    await page.getByRole('button', { name: 'Start sleep timer' }).click();
+    // The entry is real and on screen...
+    await expect(page.getByRole('button', { name: 'Stop' })).toBeVisible();
+    // ...and the write for it is still in flight. Delete now, not later.
+    await page.getByRole('button', { name: 'Delete all my data' }).click();
+
+    await expect(page.getByRole('status')).toContainText('All gone');
+
+    // Give any stray debounced/flush-on-hidden write time to fire if it can.
+    await page.waitForTimeout(1000);
+    const leftover = await page.evaluate(() => ({
+      count: localStorage.length,
+      keys: Object.keys(localStorage),
+    }));
+    expect(leftover).toEqual({ count: 0, keys: [] });
+  });
+
   test('temporary-by-design copy is visible before deleting', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText(/temporary by design/i)).toBeVisible();

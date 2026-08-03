@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { reactive, computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
-import { type DstMode, dstModeFromParam, dstModeToParam } from '../models/DstShift'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations';
 import { formatClock, formatClockRange, formatDuration } from '../models/time';
 import { getSource } from '../models/Citations';
-import { applyPlanParams, buildPlanQuery, hasSiblingParams, withPlanExtras } from '../models/planUrl';
-import { effectiveGuidanceMode, windowSlopMinutes, isAtypicalReason } from '../models/GuidanceMode';
+import { effectiveGuidanceMode, windowSlopMinutes } from '../models/GuidanceMode';
+import {
+  addSibling,
+  planLink,
+  removeSibling,
+  schedule,
+  shiftMode,
+  sibling,
+  sitterMode,
+} from '../stores/plan';
 import Recommendations from './Recommendations.vue'
 import DstShift from './DstShift.vue'
 import EvidenceGuidance from './EvidenceGuidance.vue'
@@ -28,67 +35,26 @@ import napUrl from '../assets/sleeping-baby2.png'
 const repo = new SleepRecommendationRepository();
 const sleepRecommendations = repo.recommendations;
 
-// @doc:shareable-plan-url
-// Plan state is read from (and written to) the URL query string, so a plan is
-// shareable by link with no account.
-const urlSearchParams = new URLSearchParams(window.location.search);
-const params = Object.fromEntries(urlSearchParams.entries());
-
-// @doc:read-only-babysitter-mode
-// `?view=sitter` renders the shared plan read-only: next nap and bedtime up
-// front plus today's schedule, with every edit control removed. Same URL-state
-// foundation as the shareable plan link — no account, works in any browser.
-const sitterMode = params.view === 'sitter';
-
-const schedule = reactive(new ScheduleSetting());
-applyPlanParams(schedule, params.bd, params.s);
-
-// @doc:atypical-day-flag @doc:shareable-plan-url
-// `?at=<reason>` marks today atypical; an unknown reason still flags the day,
-// just filed under "other". Rides the same query string as the plan.
-if (params.at) {
-  schedule.atypical = true;
-  schedule.atypicalReason = isAtypicalReason(params.at) ? params.at : 'other';
-}
-
-// @doc:sibling-twins-alignment
-// A second child (sibling/twin) is opt-in and rides the same query string as
-// bd2/s2; old single-child links parse unchanged. Both schedules are full
-// ScheduleSetting instances, so different ages/nap counts fall out for free.
-const sibling = ref<ScheduleSetting | null>(null);
-if (hasSiblingParams(params)) {
-  const second = reactive(new ScheduleSetting());
-  applyPlanParams(second, params.bd2, params.s2);
-  sibling.value = second;
-}
-
-// Seed the new sibling from Baby A — for twins (the primary case) the
-// birthday, gestational age, and schedule start out identical.
-function addSibling() {
-  const second = reactive(new ScheduleSetting());
-  second.birthdayDate = schedule.birthdayDate;
-  second.weeks = schedule.weeks;
-  second.dwt = schedule.dwt;
-  second.bed = schedule.bed;
-  second.wws = [...schedule.wws];
-  sibling.value = second;
-}
-
-function removeSibling() {
-  sibling.value = null;
-}
-
-// @doc:dst-timezone-shift @doc:shareable-plan-url
-// The selected DST preset rides the same query string (`shift=spring|fall`),
-// so a shared link shows both caregivers the identical step plan.
-const shiftMode = ref<DstMode | null>(dstModeFromParam(params.shift));
-const shiftParam = computed(() => dstModeToParam(shiftMode.value));
+// @doc:shareable-plan-url @doc:sibling-twins-alignment @doc:read-only-babysitter-mode
+// Plan state, the sibling, the DST preset and the address-bar sync all live in
+// stores/plan.ts — one reactive plan that every panel reads, so the calendar
+// export and handoff recap can't drift from what is on screen here.
 
 // @doc:accessibility-dark-room
 // Text alternative for the 24h bar: the day arc in words, hours spelled out
 // so screen readers don't announce a bare "h".
 const barLabel = computed(() =>
   `Day at a glance: ${schedule.totalWakeTime} hours awake, ${schedule.totalNightSleep} hours night sleep, ${schedule.totalNap} hours of naps.`);
+
+// @doc:24h-visual-day-breakdown
+// Segment width as a share of the day. Clamped at zero because an impossible
+// plan (wake windows longer than the waking day) makes totalNap negative, and a
+// negative width is an invalid declaration — the browser drops it and the
+// segment sizes to its content, drawing nap time that doesn't exist. The
+// warning row below says what went wrong; the bar just shows nothing.
+function barPct(hours: number): string {
+  return `${Math.max(0, hours / 24) * 100}%`;
+}
 
 function warningsFor(s: ScheduleSetting): string[] {
   const warnings: string[] = [];
@@ -111,35 +77,10 @@ const scheduleWarnings = computed(() => warningsFor(schedule));
 const siblingWarnings = computed(() =>
   sibling.value ? warningsFor(sibling.value).map(w => `Baby B: ${w}`) : []);
 
-// @doc:shareable-plan-url @doc:sibling-twins-alignment
-// One or both children serialize through buildPlanQuery (bd/s, plus bd2/s2
-// when a sibling is on the plan); the DST preset rides along unchanged.
-const planQuery = computed(() => buildPlanQuery(schedule, sibling.value));
-
-// @doc:atypical-day-flag — today's flag rides the plan URL too (`at=<reason>`).
-const atParam = computed(() => schedule.atypical ? (schedule.atypicalReason || 'other') : '');
-
-// In sitter mode nothing is editable, so skip URL rewriting entirely — it
-// would also strip the `view=sitter` param from the shared link.
-if (!sitterMode) {
-  // Debounce the writes: a held number-input spinner or fast typing would
-  // otherwise fire history.replaceState per tick, and Safari throws after ~100
-  // calls / 30s, which would kill URL syncing for the rest of the session.
-  let urlWriteTimer: ReturnType<typeof setTimeout> | undefined;
-  watch([planQuery, shiftParam, atParam], ([query, shift, at]) => {
-    clearTimeout(urlWriteTimer);
-    urlWriteTimer = setTimeout(() => {
-      history.replaceState(null, "", withPlanExtras(query, { shift, at }));
-    }, 250);
-  }, { immediate: true });
-}
-
 // @doc:read-only-babysitter-mode
-// Built from the same canonical query as the address bar (withPlanExtras), so
-// the sitter link carries the whole plan — sibling (bd2/s2), DST preset, and
-// atypical flag — and can't drift from what the parent sees.
-const sitterLink = computed(() =>
-  `${location.origin}${location.pathname}${withPlanExtras(planQuery.value, { shift: shiftParam.value, at: atParam.value, view: 'sitter' })}`);
+// Built from the same canonical query as the address bar, so the sitter link
+// carries the whole plan — sibling (bd2/s2), DST preset, and atypical flag.
+const sitterLink = computed(() => planLink({ view: 'sitter' }));
 
 const copyState = ref<'idle' | 'copied' | 'failed'>('idle');
 async function copySitterLink() {
@@ -183,9 +124,17 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
   </h1>
 
 
-  <div class="grid grid-cols-1 gap-6 md:grid-cols-[30%_70%] w-full md:items-start">
+  <!-- 3fr/7fr, not 30%/70%: percentage tracks are measured against the whole
+       container, so 30% + 70% + a 24px gap comes to 24px MORE than there is
+       room for. That overflow is invisible at most sizes because the page is
+       capped at max-w-3xl and the slack lives in the margins — but at exactly
+       768px the viewport IS the cap, and iPad portrait got a horizontal
+       scrollbar. fr units divide what is left after the gap, so they can't.
+       min-w-0 on both columns for the matching reason: a grid item defaults to
+       min-width:auto and will refuse to shrink below a native date input. -->
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-[3fr_7fr] w-full md:items-start">
 
-    <div class="pr-2">
+    <div class="pr-2 min-w-0">
 
       <h2 v-if="sibling" class="text-slate-400 text-sm uppercase font-normal mb-2">Baby A</h2>
       <ChildInputs :schedule="schedule" id-prefix="" />
@@ -193,8 +142,7 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
       <!-- @doc:sibling-twins-alignment — second child is opt-in; single-child
            stays the default UX. -->
       <div v-if="!sibling" class="mt-6">
-        <button type="button"
-          class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+        <button type="button" class="btn btn-quiet"
           v-on:click="addSibling">+ Add sibling / twin</button>
         <p class="text-muted text-xs mt-1">
           Plan two children together and see when their naps line up.
@@ -204,8 +152,7 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
       <div v-if="sibling" class="mt-6 border-t border-slate-800 pt-4">
         <div class="flex items-center justify-between mb-2">
           <h2 class="text-slate-400 text-sm uppercase font-normal">Baby B</h2>
-          <button type="button"
-            class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded px-3 min-h-9"
+          <button type="button" class="btn btn-quiet text-slate-300"
             v-on:click="removeSibling">Remove</button>
         </div>
         <ChildInputs :schedule="sibling" id-prefix="b-" />
@@ -215,7 +162,7 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
       <AtypicalDayFlag :schedule="schedule" />
 
     </div>
-    <div>
+    <div class="min-w-0">
 
       <div class="flex flex-col sm:flex-row">
         <div class="basis-1/2">
@@ -239,28 +186,53 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
           :atypical-reason="schedule.atypicalReason" />
       </div>
 
-      <!-- @doc:24h-visual-day-breakdown @doc:accessibility-dark-room -->
+      <!-- @doc:24h-visual-day-breakdown @doc:accessibility-dark-room
+           Each band is its own @container, so what it can show depends on how
+           wide THAT band is rather than on the viewport: a 4h nap band is ~100px
+           on a laptop and ~57px on a phone, and the figure used to be clipped at
+           every phone width. It degrades in steps instead of falling off a cliff:
+           under 80px the figure steps down to text-sm and the row centres, under
+           72px the decorative icon is dropped, and only under 28px — where
+           nothing legible fits at all — does the figure go too. The two
+           thresholds differ because once the figure is small, an icon still fits
+           (32 + 4 + a ~32px "3.5h" = 68). Note the query measures the CONTENT
+           box, so these numbers sit inside the px-1.5 padding.
+           A band is never allowed to be the only place a number exists: the
+           Sleep Stats table directly below carries all three, and so does the
+           aria-label.
+           The width transition animates a layout property on purpose — width IS
+           the data here, and scaling would distort the icon and the digits.
+           Three boxes, one row, 300ms, input-driven: a bounded exception. -->
       <div class="flex mt-4 h-10" role="img" :aria-label="barLabel">
 
         <div
-          class="bg-orange-500 rounded-l-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
-          :style="{ width: `${(schedule.totalWakeTime / 24) * 100}%` }">
-          <img :src="sunUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
-          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalWakeTime }}h</span>
+          class="@container bg-orange-500 rounded-l-lg flex items-center justify-between @max-[80px]:justify-center gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
+          :style="{ width: barPct(schedule.totalWakeTime) }">
+          <img :src="sunUrl" class="h-8 w-8 shrink-0 @max-[72px]:hidden" alt="" aria-hidden="true" width="32"
+            height="32" />
+          <span
+            class="text-xl @max-[80px]:text-sm @max-[28px]:hidden text-slate-950 font-semibold tabular-nums">{{
+              schedule.totalWakeTime }}h</span>
         </div>
 
         <div
-          class="bg-cyan-500 flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
-          :style="{ width: `${(schedule.totalNightSleep / 24) * 100}%` }">
-          <img :src="moonUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
-          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNightSleep }}h</span>
+          class="@container bg-cyan-500 flex items-center justify-between @max-[80px]:justify-center gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
+          :style="{ width: barPct(schedule.totalNightSleep) }">
+          <img :src="moonUrl" class="h-8 w-8 shrink-0 @max-[72px]:hidden" alt="" aria-hidden="true" width="32"
+            height="32" />
+          <span
+            class="text-xl @max-[80px]:text-sm @max-[28px]:hidden text-slate-950 font-semibold tabular-nums">{{
+              schedule.totalNightSleep }}h</span>
         </div>
 
         <div
-          class="bg-violet-500 rounded-r-lg flex items-center justify-between gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
-          :style="{ width: `${(schedule.totalNap / 24) * 100}%` }">
-          <img :src="napUrl" class="h-8 w-8 shrink-0" alt="" aria-hidden="true" />
-          <span class="text-xl text-slate-900 font-semibold tabular-nums">{{ schedule.totalNap }}h</span>
+          class="@container bg-violet-500 rounded-r-lg flex items-center justify-between @max-[80px]:justify-center gap-1 px-1.5 overflow-hidden min-w-0 motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
+          :style="{ width: barPct(schedule.totalNap) }">
+          <img :src="napUrl" class="h-8 w-8 shrink-0 @max-[72px]:hidden" alt="" aria-hidden="true" width="32"
+            height="32" />
+          <span
+            class="text-xl @max-[80px]:text-sm @max-[28px]:hidden text-slate-950 font-semibold tabular-nums">{{
+              schedule.totalNap }}h</span>
         </div>
       </div>
 
@@ -320,7 +292,8 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
       <div v-if="schedule.napTimes.length" class="mt-4">
         <h2 class="text-slate-400 text-sm uppercase font-normal">Nap Schedule</h2>
         <div class="flex justify-between text-sm py-1 text-slate-300">
-          <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
+          <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20"
+              height="20" /> Wake</span>
           <span class="tabular-nums">{{ formatClock(schedule.wakeMinutes) }}</span>
         </div>
         <!-- @doc:anti-anxiety-mechanics — ranges, not a stopwatch.
@@ -328,13 +301,15 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
              atypical days widen these windows further (napWindowsAt). -->
         <div v-for="(win, i) in napWins" :key="i"
           class="flex justify-between gap-3 text-sm py-1 border-t border-slate-800 text-slate-300">
-          <span class="flex items-center gap-2 shrink-0"><img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
+          <span class="flex items-center gap-2 shrink-0"><img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true"
+              width="20" height="20" /> Nap {{ i + 1
             }}</span>
           <span class="text-right">aim for roughly <span class="tabular-nums">{{ formatClockRange(win.earliest, win.latest)
             }}</span> <span class="text-muted whitespace-nowrap">· about {{ formatDuration(win.lengthMinutes) }}</span></span>
         </div>
         <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
-          <span class="flex items-center gap-2"><img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
+          <span class="flex items-center gap-2"><img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20"
+              height="20" /> Bedtime</span>
           <span class="tabular-nums">{{ guidanceMode === 'clock'
             ? formatClock(schedule.bedtimeMinutes)
             : formatClockRange(bedtimeWin.earliest, bedtimeWin.latest) }}</span>
@@ -376,8 +351,7 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
           Send a read-only link to a sitter or grandparent — today's plan with the next nap and bedtime
           up front. Opens in any browser; nothing they can edit, no account needed.
         </p>
-        <button type="button"
-          class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+        <button type="button" class="btn btn-quiet"
           v-on:click="copySitterLink">Copy sitter link</button>
         <span v-if="copyState === 'copied'" role="status" class="ml-2 text-emerald-400 text-sm">Copied!</span>
         <p v-if="copyState === 'failed'" class="text-slate-300 text-xs mt-2 break-all select-all">{{ sitterLink }}</p>

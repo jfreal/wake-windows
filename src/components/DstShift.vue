@@ -60,7 +60,7 @@ function spanPct(start: number, end: number) {
         v-for="m in MODES"
         :key="m.id"
         type="button"
-        class="rounded px-3 py-2 min-h-11 text-sm border"
+        class="btn px-3 border"
         :class="mode === m.id
           ? 'bg-slate-700 border-slate-500 text-slate-100'
           : 'bg-slate-800 border-slate-800 hover:bg-slate-700 text-slate-300'"

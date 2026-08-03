@@ -50,7 +50,7 @@ const children = computed<ChildView[]>(() =>
 
 <template>
   <div class="flex items-center gap-3 mb-2">
-    <img class="h-20" :src="logoUrl" alt="Wake Windows">
+    <img class="h-20" :src="logoUrl" alt="Wake Windows" width="70" height="80" fetchpriority="high">
     <span class="text-slate-400 text-xs uppercase border border-slate-700 rounded px-2 py-1">Sitter view · read-only</span>
   </div>
 
@@ -64,7 +64,7 @@ const children = computed<ChildView[]>(() =>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div class="bg-slate-800 rounded-lg p-4">
         <span class="flex items-center gap-2 text-slate-400 text-sm uppercase">
-          <img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Next nap
+          <img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Next nap
         </span>
         <div v-if="child.nextNap" class="mt-1">
           <div class="text-3xl text-slate-200 tabular-nums">~{{ formatClockRange(child.nextNap.earliest, child.nextNap.latest) }}</div>
@@ -75,7 +75,7 @@ const children = computed<ChildView[]>(() =>
 
       <div class="bg-slate-800 rounded-lg p-4">
         <span class="flex items-center gap-2 text-slate-400 text-sm uppercase">
-          <img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Next bedtime
+          <img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Next bedtime
         </span>
         <div class="mt-1">
           <div class="text-3xl text-slate-200 tabular-nums">~{{ formatClockRange(child.bedtime.earliest, child.bedtime.latest) }}</div>
@@ -86,18 +86,18 @@ const children = computed<ChildView[]>(() =>
     <div class="mt-4">
       <span class="text-slate-400 text-sm uppercase">{{ child.label ? `${child.label} — today's plan` : "Today's plan" }}</span>
       <div class="flex justify-between text-sm py-1 text-slate-300">
-        <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Wake</span>
+        <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Wake</span>
         <span class="tabular-nums">{{ formatClock(child.wakeMinutes) }}</span>
       </div>
       <div v-for="(nap, i) in child.napWindows" :key="i"
         class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300"
         :class="{ 'opacity-60': nap.latest < nowMinutes }">
-        <span class="flex items-center gap-2"><img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Nap {{ i + 1
+        <span class="flex items-center gap-2"><img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Nap {{ i + 1
           }} <span class="text-muted">({{ formatDuration(nap.lengthMinutes) }})</span></span>
         <span class="tabular-nums">~{{ formatClockRange(nap.earliest, nap.latest) }}</span>
       </div>
       <div class="flex justify-between text-sm py-1 border-t border-slate-800 text-slate-300">
-        <span class="flex items-center gap-2"><img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" /> Bedtime</span>
+        <span class="flex items-center gap-2"><img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Bedtime</span>
         <span class="tabular-nums">~{{ formatClockRange(child.bedtime.earliest, child.bedtime.latest) }}</span>
       </div>
     </div>

@@ -51,6 +51,14 @@ const views = computed(() => {
 function inRange(row: Row): boolean {
     return row.you >= row.min && row.you <= row.max;
 }
+
+// Sources overlap heavily on the broad ranges, so the same sentence ("at this
+// age, this schedule recommends no more than 15.5 hours of sleep") came back
+// once per source — three identical amber rows stacked up, which reads as three
+// problems rather than one. Show each distinct warning once, under the tables
+// it applies to.
+const warnings = computed(() =>
+    [...new Set(views.value.flatMap((v) => v.warnings))]);
 </script>
 
 <template>
@@ -96,9 +104,11 @@ function inRange(row: Row): boolean {
             <p v-else class="text-muted text-sm mt-1">
                 No guidance for {{ view.months }} months in this source.
             </p>
+        </div>
 
-            <div v-for="w in view.warnings" :key="w"
-                class="text-amber-400 text-sm mt-2 px-2 py-1 bg-amber-400/10 rounded">
+        <div v-if="warnings.length" aria-live="polite" class="space-y-1">
+            <div v-for="w in warnings" :key="w"
+                class="text-amber-400 text-sm px-2 py-1 bg-amber-400/10 rounded">
                 {{ w }}
             </div>
         </div>

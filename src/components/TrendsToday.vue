@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted, onUnmounted } from 'vue'
-import { loadLog, dailyTotals, startOfLocalDay } from '../models/sleepLog'
+import { ref, computed } from 'vue'
+import { dailyTotals, startOfLocalDay } from '../models/sleepLog'
 import {
      napCountForDay,
      isDayInProgress,
@@ -9,9 +9,9 @@ import {
      bandPosition,
 } from '../models/trends'
 import { formatDuration } from '../models/time'
-import { ScheduleSetting } from '../models/ScheduleSetting'
-import { applyPlanParams } from '../models/planUrl'
 import { getSources } from '../models/Citations'
+import { schedule } from '../stores/plan'
+import { entries, now } from '../stores/sleepLog'
 import TierBadge from './TierBadge.vue'
 
 // @doc:trends-daily-totals
@@ -24,25 +24,14 @@ import TierBadge from './TierBadge.vue'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
-// Display-only tick. Totals are recomputed from stored timestamps each second so
-// an in-progress nap's "so far" minutes climb live, and so edits made in the log
-// below (same tab, no `storage` event) are picked up without a manual refresh.
-const now = ref(Date.now())
-const entries = ref(loadLog())
-let ticker: ReturnType<typeof setInterval> | undefined
-onMounted(() => {
-     ticker = setInterval(() => {
-          now.value = Date.now()
-          entries.value = loadLog()
-     }, 1000)
-})
-onUnmounted(() => { if (ticker) clearInterval(ticker) })
+// Log and clock both come from stores/sleepLog.ts. This panel used to run its
+// own 1-second interval that re-parsed the whole log out of localStorage on
+// every tick, purely to notice edits made in the panel below it — sharing the
+// reactive array makes that re-read unnecessary, and the shared ticker only
+// runs at 1s while a timer is actually going.
 
-// Age drives the total-sleep context band. Read from the same plan URL the rest
-// of the app uses (bd/s) — no new state, and it can't drift from the schedule.
-const params = Object.fromEntries(new URLSearchParams(window.location.search).entries())
-const schedule = reactive(new ScheduleSetting())
-applyPlanParams(schedule, params.bd, params.s)
+// Age drives the total-sleep context band, read from the live plan so it can't
+// drift from the schedule above.
 const band = computed(() => sleepBandForMonths(schedule.monthsSinceBirth))
 const bandSources = computed(() => (band.value ? getSources(band.value.sourceIds) : []))
 
@@ -50,17 +39,17 @@ const dayStart = computed(() => startOfLocalDay(now.value))
 const dayEnd = computed(() => dayStart.value + DAY_MS)
 
 const totals = computed(() =>
-     dailyTotals(entries.value, dayStart.value, dayEnd.value, now.value))
+     dailyTotals(entries, dayStart.value, dayEnd.value, now.value))
 const napCount = computed(() =>
-     napCountForDay(entries.value, dayStart.value, dayEnd.value, now.value))
+     napCountForDay(entries, dayStart.value, dayEnd.value, now.value))
 const inProgress = computed(() =>
-     isDayInProgress(entries.value, dayStart.value, dayEnd.value, now.value))
+     isDayInProgress(entries, dayStart.value, dayEnd.value, now.value))
 
 const totalHours = computed(() => totals.value.totalMs / (60 * 60 * 1000))
 const position = computed(() =>
      band.value ? bandPosition(totalHours.value, band.value) : null)
 
-const hasAnyData = computed(() => entries.value.length > 0)
+const hasAnyData = computed(() => entries.length > 0)
 
 // @doc:trends-daily-totals
 // Feeding totals (C02) aren't built yet, so there is no data source — the feed
@@ -71,7 +60,7 @@ const feedTotals = ref<{ count: number; ozOrMl: number; unit: 'oz' | 'mL' } | nu
 
 // --- 7-day sparkline -------------------------------------------------------
 
-const series = computed(() => sevenDaySleepSeries(entries.value, now.value, 7))
+const series = computed(() => sevenDaySleepSeries(entries, now.value, 7))
 
 // Scale bars against the age-band ceiling (so a typical day nearly fills) with a
 // floor at the busiest day and a hard 24h cap, so nothing overflows the box.
@@ -181,7 +170,7 @@ const showBreakdown = ref(false)
                <div class="flex items-baseline justify-between">
                     <div class="text-slate-400 text-xs uppercase">Sleep · last 7 days</div>
                     <button type="button"
-                         class="inline-flex items-center text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-11 px-1"
+                         class="btn-inline"
                          :aria-expanded="showBreakdown"
                          v-on:click="showBreakdown = !showBreakdown">
                          {{ showBreakdown ? 'Hide breakdown' : 'View breakdown' }}

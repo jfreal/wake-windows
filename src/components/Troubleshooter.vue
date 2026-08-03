@@ -27,7 +27,10 @@ const leaf = computed(() => (node.value?.kind === 'leaf' ? node.value : null))
 const steps = computed(() => (session.value ? answeredSteps(session.value) : []))
 const leafSources = computed(() => (leaf.value?.sourceIds ? getSources(leaf.value.sourceIds) : []))
 
-// Reassurance leans green, the pediatrician exit leans amber, advice stays neutral.
+// Reassurance leans green, the pediatrician exit leans amber, advice stays
+// neutral. These are left-edge-free full borders on a single card — the answer
+// is not nested inside another card (it replaces the question in place), so the
+// panel never stacks a box in a box in a box.
 const leafStyles: Record<LeafKind, string> = {
      advice: 'border-slate-700 bg-slate-800/60',
      reassurance: 'border-emerald-400/30 bg-emerald-400/5',
@@ -62,27 +65,32 @@ function exit() {
                v-for="tree in troubleshooterTrees"
                :key="tree.id"
                type="button"
-               class="block w-full text-left bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded p-2.5 min-h-11"
+               class="btn btn-quiet w-full justify-start flex-col items-start gap-0 py-2.5 px-2.5 text-left"
                v-on:click="start(tree)"
           >
                <span class="font-medium">{{ tree.title }}</span>
-               <span class="block text-muted text-xs mt-0.5">{{ tree.tagline }}</span>
+               <!-- muted-raised: the tagline sits on a slate-800 fill, where plain
+                    `muted` measures 4.13:1 — under the floor. -->
+               <span class="block text-muted-raised text-xs mt-0.5">{{ tree.tagline }}</span>
           </button>
      </div>
 
+     <!-- One frame, not two: the walk-through owns the border, and the answer
+          card below replaces the question inside it rather than nesting under a
+          second one. -->
      <div v-else class="rounded border border-slate-800 p-3">
           <div class="flex items-center justify-between gap-2 mb-2">
                <span class="text-slate-300 text-sm font-semibold">{{ session.tree.title }}</span>
-               <div class="shrink-0 space-x-3">
+               <div class="shrink-0 flex items-center gap-1">
                     <button
                          v-if="steps.length"
                          type="button"
-                         class="text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-11"
+                         class="btn-inline"
                          v-on:click="back"
                     >← Back</button>
                     <button
                          type="button"
-                         class="text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-11"
+                         class="btn-inline"
                          v-on:click="exit"
                     >All problems</button>
                </div>
@@ -106,7 +114,7 @@ function exit() {
                               v-for="(option, i) in question.options"
                               :key="option.next"
                               type="button"
-                              class="block w-full text-left bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded p-2.5 min-h-11"
+                              class="btn btn-quiet w-full justify-start px-2.5 text-left"
                               v-on:click="pick(i)"
                          >{{ option.label }}</button>
                     </div>
@@ -119,12 +127,15 @@ function exit() {
                     </p>
                     <p v-for="(paragraph, i) in leaf.body" :key="i" class="text-slate-300 text-sm mt-2">{{ paragraph }}</p>
 
-                    <div v-if="leaf.suggestion" class="mt-3 rounded bg-slate-900/60 p-2.5">
-                         <p class="text-slate-400 text-xs uppercase tracking-wide mb-1">Try this</p>
+                    <!-- The suggestion is set off by a rule and a label, not by a
+                         third nested box. Uppercase without extra tracking, matching
+                         the app's section labels — one uppercase treatment, not two. -->
+                    <div v-if="leaf.suggestion" class="mt-3 border-t border-slate-700 pt-2.5">
+                         <p class="text-slate-400 text-xs uppercase mb-1">Try this</p>
                          <p class="text-slate-200 text-sm">{{ leaf.suggestion }}</p>
                     </div>
 
-                    <p v-if="leaf.patienceNote" class="text-muted text-xs italic mt-3">{{ leaf.patienceNote }}</p>
+                    <p v-if="leaf.patienceNote" class="text-muted-raised text-xs italic mt-3">{{ leaf.patienceNote }}</p>
 
                     <div v-if="leaf.tier" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3">
                          <TierBadge :tier="leaf.tier" />
@@ -141,7 +152,7 @@ function exit() {
 
                     <button
                          type="button"
-                         class="mt-3 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11"
+                         class="btn btn-quiet mt-3"
                          v-on:click="exit"
                     >Troubleshoot another problem</button>
                </div>

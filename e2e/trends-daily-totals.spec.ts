@@ -1,5 +1,6 @@
 // @test:trends-daily-totals
 import { test, expect } from '@playwright/test';
+import { setEntryToMidday } from './helpers';
 
 // Feature: Trends & Daily Totals at a Glance (Analytics & Insights) — status: Built.
 // A glanceable "Today" block (total sleep + nap count) plus a 7-day sleep
@@ -38,8 +39,12 @@ test.describe('Trends & Daily Totals at a Glance [@feature:trends-daily-totals]'
   test('a logged past nap flows into today\'s totals and nap count', async ({ page }) => {
     await page.goto(plan);
     // Log a completed one-hour block via the sleep log below, pinned to a nap so
-    // it lands wholly in today.
+    // it lands wholly in today. The block is moved to a fixed midday hour first:
+    // "Add past sleep" defaults to the hour ending NOW, which straddles local
+    // midnight when the suite runs between 00:00 and 01:00, and dailyTotals then
+    // correctly splits it across two days.
     await page.getByRole('button', { name: 'Add past sleep' }).click();
+    await setEntryToMidday(page);
     await page.getByRole('button', { name: 'Nap', exact: true }).click();
 
     const today = page.getByRole('region', { name: 'Today' });

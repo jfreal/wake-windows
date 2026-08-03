@@ -178,10 +178,10 @@ onUnmounted(() => {
           <div class="flex items-baseline justify-between gap-2">
                <h2 id="white-noise-heading" class="text-slate-400 text-sm uppercase font-normal">White noise</h2>
                <button v-if="!enabled" type="button"
-                    class="inline-flex items-center text-sky-400 hover:text-sky-300 text-sm underline underline-offset-2 min-h-11 px-1"
+                    class="btn-inline text-sm"
                     v-on:click="enabled = true">Add white noise</button>
                <button v-else type="button"
-                    class="inline-flex items-center text-sky-400 hover:text-sky-300 text-xs underline underline-offset-2 min-h-11 px-1"
+                    class="btn-inline"
                     v-on:click="stop(); enabled = false">Hide</button>
           </div>
 
@@ -207,14 +207,16 @@ onUnmounted(() => {
                          :aria-pressed="isPlaying && currentTrackId === t.id"
                          v-on:click="toggleTrack(t.id)">
                          <span class="text-sm">{{ t.label }}</span>
-                         <span class="text-xs text-muted">{{ t.hint }}</span>
+                         <!-- muted-raised: this hint sits on a slate-800 track button,
+                              where the body-tuned `muted` measures 4.13:1. -->
+                         <span class="text-xs text-muted-raised">{{ t.hint }}</span>
                     </button>
                </div>
 
                <!-- Transport + status -->
                <div class="flex items-center gap-3 mt-3">
                     <button type="button"
-                         class="inline-flex items-center bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded px-4 min-h-11 disabled:opacity-50"
+                         class="btn btn-quiet"
                          :disabled="!isPlaying" v-on:click="stop()">Stop</button>
                     <span role="status" aria-live="polite" class="text-sm"
                          :class="isPlaying ? 'text-emerald-400' : 'text-muted'">
@@ -226,8 +228,12 @@ onUnmounted(() => {
                <!-- Volume -->
                <div class="mt-3">
                     <label for="white-noise-volume" class="text-slate-400 text-xs uppercase">Volume</label>
+                    <!-- h-11: a native range renders a ~16px box, so the draggable
+                         thumb was a 16px target. Giving the input the full 44px
+                         height centres the track and makes the whole strip
+                         grabbable, which is the point for one-handed use. -->
                     <input id="white-noise-volume" type="range" min="0" max="1" step="0.01" :value="volume"
-                         class="w-full max-w-xs mt-1 accent-sky-500" v-on:input="onVolumeInput" />
+                         class="w-full max-w-xs mt-1 h-11 accent-sky-500" v-on:input="onVolumeInput" />
                </div>
 
                <!-- Sleep timer -->

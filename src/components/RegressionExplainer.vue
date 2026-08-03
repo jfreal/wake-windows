@@ -106,8 +106,8 @@ const reassuranceSources = getSources(['galland-2012', 'littleones-night-waking'
                               target="_blank"
                               rel="noopener noreferrer"
                               :title="src.title"
-                              class="inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2"
-                         >{{ src.org }} <span aria-hidden="true" class="text-muted">&nbsp;↗</span></a>
+                              class="link-ext min-h-11"
+                         >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
                     </div>
                </div>
 
@@ -127,7 +127,7 @@ const reassuranceSources = getSources(['galland-2012', 'littleones-night-waking'
                          {{ paragraph }}
                     </p>
 
-                    <p class="mt-3 text-slate-400 text-xs uppercase tracking-wide">What changes</p>
+                    <p class="mt-3 text-slate-400 text-xs uppercase">What changes</p>
                     <ul class="mt-1 space-y-1 text-sm text-slate-200 list-disc pl-5">
                          <li v-for="point in phase.changes" :key="point">{{ point }}</li>
                     </ul>
@@ -140,8 +140,8 @@ const reassuranceSources = getSources(['galland-2012', 'littleones-night-waking'
                               target="_blank"
                               rel="noopener noreferrer"
                               :title="src.title"
-                              class="inline-flex items-center min-h-11 text-sky-400 hover:text-sky-300 underline underline-offset-2"
-                         >{{ src.org }} <span aria-hidden="true" class="text-muted">&nbsp;↗</span></a>
+                              class="link-ext min-h-11"
+                         >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
                     </div>
                </div>
           </div>

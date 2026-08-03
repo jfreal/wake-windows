@@ -58,8 +58,16 @@ const shownNote = computed(() => (sitterMode ? (handoff?.note ?? '') : note.valu
 
 // Next nap window from the plan (range, never a countdown). Same guidance-mode
 // widening as the parent/sitter views so the handoff reads identically.
-const slop = windowSlopMinutes(effectiveGuidanceMode(schedule.monthsSinceBirth, schedule.atypical));
-const nextNap = computed(() => schedule.nextNapWindowAt(slop, nowMinutes));
+//
+// `slop` has to be computed, not a plain const: it is derived from the baby's
+// corrected age and the atypical flag, so evaluating it once at setup froze the
+// widening at whatever mode applied when the panel mounted. The window would
+// then track live edits to dwt/bed/wws (those flow through the reactive
+// schedule) while the ±minutes around it silently did not — the recap would
+// claim to match a cues-first day it had never noticed had started.
+const slop = computed(() =>
+  windowSlopMinutes(effectiveGuidanceMode(schedule.monthsSinceBirth, schedule.atypical)));
+const nextNap = computed(() => schedule.nextNapWindowAt(slop.value, nowMinutes));
 
 // A handoff summary is worth showing when there's a note, a last nap, or a next
 // window to hand over. In sitter mode a link with no handoff renders nothing.

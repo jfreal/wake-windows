@@ -21,6 +21,9 @@ test.describe('24-hour visual day breakdown [@feature:24h-visual-day-breakdown]'
     await page.goto('/?bd=2026-03-01&s=7-2.75/2.75/2.75/2.75-7');
 
     const bar = page.getByRole('img', { name: /awake.*night sleep.*naps/ });
+    // toBeVisible first: toHaveAttribute passes on an attached-but-hidden
+    // element, so on its own it would not prove the bar rendered at all.
+    await expect(bar).toBeVisible();
     await expect(bar).toHaveAttribute('aria-label', /11 hours awake.*12 hours night sleep.*1 hours of naps/);
 
     // Nothing in the bar is clipped: any figure still shown fits its band.
@@ -31,8 +34,19 @@ test.describe('24-hour visual day breakdown [@feature:24h-visual-day-breakdown]'
     }).length);
     expect(clipped).toBe(0);
 
-    // And the figures are readable as text either way.
-    await expect(page.getByRole('cell', { name: 'Total Wake' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Sleep Stats', exact: true })).toBeVisible();
+    // At this width the nap band is a sliver and drops its figure entirely —
+    // which is only acceptable because the number is still readable as text.
+    // Assert the VALUES, not just the row labels: the labels being present says
+    // nothing about whether "1h" survived anywhere on the page.
+    //
+    // Scoped to the Sleep Stats block. The guidance comparison tables further
+    // down carry rows labelled "Night sleep"/"Day sleep" with their own hour
+    // figures, so an unscoped row lookup matches four tables, not one.
+    const stats = page.getByRole('heading', { name: 'Sleep Stats', exact: true }).locator('..');
+    const statsRow = (label: string) => stats.getByRole('row').filter({ hasText: label });
+
+    await expect(statsRow('Naps (')).toContainText('1h');
+    await expect(statsRow('Night Sleep')).toContainText('12h');
+    await expect(statsRow('Total Wake')).toContainText('11h');
   });
 });

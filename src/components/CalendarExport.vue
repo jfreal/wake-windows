@@ -43,7 +43,12 @@ const done = ref(false)
 // Clear the "file ready" note as soon as the plan moves: the downloaded .ics is
 // a snapshot, so leaving the confirmation up next to changed times would imply
 // the calendar already knows about them.
-watch(() => [schedule.dwt, schedule.bed, schedule.wws.join('/'), schedule.atypical], () => {
+//
+// `slop.value` is watched rather than the age fields it derives from. The
+// exported windows are widened by guidance mode, so a corrected birthdate or
+// gestational-age fix can change the times without touching dwt/bed/wws —
+// watching the derived value covers that, and any future input to it.
+watch(() => [schedule.dwt, schedule.bed, schedule.wws.join('/'), slop.value], () => {
   done.value = false
 })
 

@@ -1,5 +1,6 @@
 // @test:sleep-nap-logging
 import { test, expect } from '@playwright/test';
+import { setEntryToMidday } from './helpers';
 
 // Feature: Sleep & Nap Logging (Tracking & Logging) — status: Built.
 // Local-only timer + editable/backdatable entries; hidden from the read-only
@@ -31,11 +32,15 @@ test.describe('Sleep & Nap Logging [@feature:sleep-nap-logging]', () => {
 
   test('a backdated past sleep updates today\'s totals', async ({ page }) => {
     await page.goto('/');
-    // "Add past sleep" drops in a completed one-hour block ending now (today),
-    // so today's nap total jumps to 1 h.
+    // "Add past sleep" drops in a completed one-hour block ending NOW, which is
+    // only wholly inside today if the suite runs after 01:00 local. Between
+    // midnight and 1am it straddles the boundary and dailyTotals correctly
+    // splits it (e.g. 48 min yesterday + 12 min today), failing an assertion of
+    // "1 h". Pin the block to a fixed midday hour so the test measures the
+    // totals, not the clock the runner happened to start at.
     await page.getByRole('button', { name: 'Add past sleep' }).click();
-    // Pin it to a nap (the inferred label depends on the wall-clock hour) — a
-    // one-hour block ending now lands wholly in today, so naps read 1 h.
+    await setEntryToMidday(page);
+    // Pin it to a nap; the inferred label depends on the wall-clock hour.
     await page.getByRole('button', { name: 'Nap', exact: true }).click();
     await expect(page.getByText('Naps today').locator('..')).toContainText('1 h');
   });

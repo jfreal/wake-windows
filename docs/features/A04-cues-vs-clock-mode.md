@@ -28,6 +28,7 @@ Predictors surface a clock time from birth onward with no developmental framing.
   - **~6 months and up:** Clock mode becomes primary as the internal clock matures and morning wake stabilizes; the A01 plan takes the lead, cues remain a secondary check.
 - Smooth handoff, not a hard switch: around 5–6 months present both, weighting cues.
 - Tie the framing to a Tier 1/2 citation (circadian/melatonin maturation) so the mode change is transparent, not arbitrary.
+- **Newborn day/night confusion** (under 2 months corrected, `newbornDayNightNote`): the banner adds a cited Tier 3 line for the newborn FAQ with no prior coverage — days and nights mixed up is an immature body clock, not a habit and not a mistake; bright active days, dark boring nights, and gently ending naps past ~2 hours all help; it typically sorts itself out by around 8 weeks. Reassurance-first by construction, and asserted as such in `GuidanceMode.test.ts`. Null above the threshold, so it disappears on its own rather than aging into nonsense.
 
 ## Scope — MVP (if pulled into MVP)
 - Age-based default mode with a one-line rationale and citation.

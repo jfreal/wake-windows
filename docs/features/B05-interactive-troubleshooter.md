@@ -30,6 +30,10 @@ A branching **decision tree** (deterministic, no LLM) covering the highest-volum
 
 Each terminal answer gives a concrete, range-based suggestion, a "give it ≥1–2 weeks" note, and a **Tier badge + citation** (B01). Free, no account, works offline.
 
+Two additions from the 2026-08 sweep:
+- **"Crib hour"** is named and honestly tiered on the cycle-linking leaf (research 08 T10): what it is (leaving a calm baby in the crib for the full hour from nap start so a mid-nap wake-up gets a chance to turn back into sleep), that it is a widespread consultant convention rather than a studied protocol with genuinely mixed reports, and its prerequisite — it only makes sense for a baby who already settles independently and stays content. A fussing baby is done; go get them.
+- **Overtired vs undertired** gets a standalone card (`OvertiredUndertired.vue`) outside the trees. The trees disambiguate it in three separate places; the card lifts the shared logic into one cited reference — the tells side by side, time-to-fall-asleep as the single most useful one (watched over 3–4 nights, not judged from one), the earlier-bedtime fix first because it is the gentler mistake if the guess is wrong, and the anti-anxiety corrective that online sleep culture reaches for "overtired" far more often than the evidence supports. It points back at the troubleshooter for the step-by-step version rather than competing with it.
+
 ## Scope — MVP
 Three trees (early rising, short naps, split-night/false-start). Static branching logic. Cited terminal answers. No account, offline-capable.
 

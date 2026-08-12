@@ -31,6 +31,8 @@ A public (no-account) page with three parts:
 ## Scope — MVP
 Static page: framing block, 24h-total table (T1), wake-window table (T3), nap-transition table (T3), uncertainty section, full source list with working links. Linked from every citation card (B01).
 
+Alongside it, **"Parents ask"** (`FaqPanel.vue` over `data/faq.ts`) is the question-shaped door into the same source library: one native `<details>` per question, a cited short answer inside, a tier badge on every answer, and an "In this app:" pointer to wherever the fuller treatment lives. State-free — no account, and nothing tracks which questions anyone opens. The source library itself is up to 82 entries as of 2026-08 (`meta.lastVerified`), each one still carrying org, venue, credentials, year, and a summary; industry-affiliated sources are labeled as such in the `org` field rather than quietly promoted.
+
 ## Scope — later
 "Last researched" date + changelog; printable/shareable version; localized units; deep links from each in-app recommendation to its exact row.
 

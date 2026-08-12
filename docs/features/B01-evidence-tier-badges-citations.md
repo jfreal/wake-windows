@@ -33,6 +33,11 @@ Badges are **color-blind-safe**: distinct shape + text label, never color alone 
 ## Scope — MVP
 Tier badge + citation card on: 24h total check, wake-window ranges, safe-sleep panel. Static tier/source mapping. Accessible (shape+text, screen-reader labels).
 
+### "Parents ask" — the cited FAQ catalog
+The badge system's widest surface is the FAQ (`data/faq.ts`, rendered by `FaqPanel.vue`): the questions parents actually ask, each with a short honest answer, a tier badge, and named sources. Curated from research 07 (60+ questions from expert sites and search patterns) and 08 (22 recurring community themes). Content is data, not markup, so `faq.test.ts` can enforce the invariants the panel depends on: unique ids, every question really a question, answers substantive, every tier a known tier, **every source id resolving to a real entry in `citations.json`** (so the panel can never render an empty citation row), no scolding language, and coverage of the highest-frequency themes that previously had none.
+
+The honest-tiering pattern shows best in the two schedule-adjacent panels: **"Should I wake a sleeping baby?"** puts the Tier 3 capping convention and the Tier 1 actigraphy evidence that softens it side by side, both cited, so the parent can hold the tension instead of inheriting one camp's certainty. That is the badge system doing the job it exists for.
+
 ## Scope — later
 Badges on troubleshooter answers (B05), regression explainer (B06), sleep-training overview (B07); user setting to show/hide inline badges.
 

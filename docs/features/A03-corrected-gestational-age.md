@@ -32,6 +32,7 @@ General predictors (Huckleberry, Napper) center full-term chronological age; cor
 
 ## Scope — MVP
 - Due-date / weeks-early input, corrected-age computation, explicit on-screen statement, and propagation into A01 and the totals check.
+- **The preemie note**, shown under the "Weeks in Womb" input whenever gestational age is 20–36 weeks: names the adjusted age the plan is using, says adjusted age is the standard starting point through about age two, and adds the nuance parents ask for (research 08 T14) — many preemies land somewhere between adjusted and actual age, and the baby outranks both numbers.
 
 ## Scope — later
 - Fenton preterm growth percentiles if growth tracking (C06) ships.
@@ -41,6 +42,7 @@ General predictors (Huckleberry, Napper) center full-term chronological age; cor
 - Correction can push a baby into a younger wake-window band than their birthday implies — expected; make the "why" visible.
 - Late-preterm (34–36 wk) still merits correction; don't gate it to only very-early births.
 - Once corrected age passes ~2 years, stop correcting; communicate the transition rather than silently switching.
+- The preemie note is gated on a **real** gestational number (20 ≤ weeks < 37), matching the schedule warning's own 20–44 range. A bare `weeks < 37` would be wrong twice over: an emptied number input hands back `''`, and `'' < 37` is true in JS — so clearing the field to retype it would tell a full-term parent their baby was born early, quoting an adjusted age of 0 mo (`40 - ''` is 40, so the month math subtracts a full nine months and clamps). Guarded in `ChildInputs.vue`, regression-tested in `e2e/corrected-gestational-age.spec.ts`.
 
 ## Evidence & citations
 - "Preterm: use adjusted (corrected) age" — **Tier 1** convention reinforced across research: research 00 credibility rule 6; research 01 §2 operational conventions; research 02 §10.

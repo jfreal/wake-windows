@@ -31,7 +31,13 @@ A persistent, always-accessible **Tier 1** reference panel summarizing AAP 2022,
 - **No bed-sharing;** never sofa/armchair (risk up to ~67×).
 - Supporting: pacifier at sleep, avoid overheating, no smoke exposure, supervised awake tummy time; stop swaddling at first signs of rolling (~3–4 mo); home monitors not recommended for SIDS.
 
+Nap-specific essentials, added from the 2026-08 FAQ sweep (research 07 §15) because the nap-time questions parents actually ask were the ones the panel didn't answer:
+- **Naps too:** if baby falls asleep in a car seat, swing, or carrier, move them to a firm, flat surface as soon as practical.
+- **Never doze off with baby on a couch or armchair** — the riskiest arrangement of all. If you might drift, put baby down first.
+
 Every item carries a **T1 badge + AAP 2022 citation** (B01). Tone: factual, calm, no guilt.
+
+The same hard rule is restated in the **contact-naps panel**, where the question actually arises: a contact nap needs an awake adult, and a planned nap in the crib is far safer than an accidental nap in a recliner. It is deliberately styled in the calm slate register rather than amber — this is load-bearing safety information, not a scold — and it sits *after* the reassurance that contact naps are normal and not a bad habit, so the safety line lands without turning the whole subject into a warning.
 
 ## Scope — MVP
 Static panel, reachable from home and from any nap/bedtime view. Tier badges + AAP citation. Plain, non-alarmist copy. Accessible / dark-room legible.

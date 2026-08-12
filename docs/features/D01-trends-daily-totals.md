@@ -33,6 +33,8 @@ Today totals block (sleep h:m, nap count) + a 7-day sleep-total sparkline. Tap-t
 
 **As built:** `TrendsToday.vue` reads the same on-device sleep log (`ww.sleepLog.v1`) as C01 and reuses `dailyTotals`/`startOfLocalDay`; the aggregation (nap count, in-progress "so far" flag, 7-day series, age-band lookup) lives in `src/models/trends.ts` with unit tests. The total is shown as context against the age-appropriate Tier 1 total-sleep band (AASM/NSF, from `citations.json`), never a grade — no color-coding, no red. The **feed count / oz tiles are wired behind a guard** and stay hidden until the feeding log (C02) exists to supply data — no fabricated numbers. Block stays to four numbers max.
 
+**The observed average.** Beside the published band sits the baby's own number: the mean of the days in the last week that actually have logged sleep, today's partial day excluded so an in-progress morning can't drag it down, and null until at least three such days exist. It is deliberately **not** called a 7-day average, and the copy names its sample ("Across the 3 days you logged this week…") and says it counts only sleep entered here. The reason is the failure mode: a parent who logs naps but not nights would otherwise be shown a number several hours short of the real day and told to schedule by it. So the line says what it is made of — if the log is complete, the baby's own total is the better anchor when it disagrees with the published band; if some sleep goes untracked, it reads low by whatever is missing. Same honesty rule A10 follows when its sample is thin.
+
 ## Scope — later
 14/30-day windows, feed volume trend, weekday vs. weekend view, per-caregiver contribution breakdown, export hook into D02.
 
@@ -40,6 +42,7 @@ Today totals block (sleep h:m, nap count) + a 7-day sleep-total sparkline. Tap-t
 - **Midnight boundary:** define "today" clearly and let sleep spanning midnight split correctly (avoid the Napper "midnight bug").
 - **Sparse data:** show honest partial totals; never blank-shame an empty day (empty-tracker guilt).
 - **In-progress nap/feed:** count elapsed time toward the running total, labeled "so far."
+- **Partial logging is invisible to the math.** A day where only two naps got entered counts as a whole day, and a day with nothing logged is skipped entirely rather than averaged in as zero. Neither can be detected from the log, so the observed-average line discloses its sample instead of pretending to a complete record.
 
 ## Evidence & citations
 Total-sleep context bands: AASM 2016 (12–16 h at 4–12 mo) and NSF 2015 (14–17 h at 0–3 mo) — Tier 1. Wake-window/nap-count context is Tier 3, labeled as guidance.

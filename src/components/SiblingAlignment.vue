@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { intersectIntervals, totalOverlapMinutes } from '../models/napOverlap'
 import { formatClockRange, formatDuration } from '../models/time'
+import { getSources } from '../models/Citations'
 
 // @doc:sibling-twins-alignment
 // Stacked dual-track 24h view: both children's days on one clock-positioned
@@ -64,6 +65,14 @@ const hourMarks = [
   { at: 720, label: '12 PM' },
   { at: 1080, label: '6 PM' },
 ]
+
+// @doc:sibling-twins-alignment — the two practice rules twin parents ask for
+// (research/07 §13): sync by waking the second twin, and AAP's one-surface-each.
+// Shown only when the two children are close enough in age to be plausibly
+// twins/near-twins on one schedule; sibling pairs years apart skip it.
+const twinAged = computed(() =>
+  Math.abs(props.a.monthsSinceBirth - props.b.monthsSinceBirth) <= 2)
+const twinSources = getSources(['huckleberry-twins', 'aap-safesleep-2022'])
 </script>
 
 <template>
@@ -121,5 +130,24 @@ const hourMarks = [
       Different ages usually mean different rhythms — that's expected, not something to fix.
       Overlap tends to appear on its own as nap counts converge.
     </p>
+  </div>
+
+  <!-- Twins on one schedule: the two practice rules parents ask about. -->
+  <div v-if="twinAged" class="mt-3 text-xs text-muted space-y-1">
+    <p>
+      Twins? The usual convention is one shared schedule: when the first twin wakes, wake the
+      other within ~15–30 minutes, and give the sleepier twin the slack (a slightly longer nap
+      or earlier bedtime) rather than a separate day. One twin's timing always being a little
+      "off" the shared plan is normal, not a problem to solve.
+    </p>
+    <p>
+      Safe-sleep note: room-sharing is fine, but each baby needs their own sleep surface — no
+      crib-sharing, for naps or nights.
+    </p>
+    <span class="inline-flex flex-wrap gap-x-3 gap-y-1">
+      <a v-for="src in twinSources" :key="src.id" :href="src.url" target="_blank"
+        rel="noopener noreferrer" :title="src.title" class="link-ext min-h-11"
+      >{{ src.org }} <span aria-hidden="true" class="text-muted">↗</span></a>
+    </span>
   </div>
 </template>

@@ -326,12 +326,16 @@ const shortNaps: TroubleshooterTree = {
                title: 'Cycle-linking just needs practice — and steady timing',
                body: [
                     'Daytime sleep pressure is lower than at night, so linking daytime cycles is the last sleep skill to arrive; some babies simply need repetition. Short naps also cluster around schedule shifts and nap transitions.',
+                    // "Crib hour" gets the honest-tiering treatment (research/08 T10):
+                    // what it is, that it's a convention with mixed reports, and its
+                    // prerequisite — which this branch (independent settling) meets.
+                    'You may also see "crib hour" recommended: leaving baby in the crib for a full hour from nap start, if they\'re calm, so wake-ups mid-nap get a real chance to turn back into sleep. It\'s a widespread consultant convention, not a studied protocol — some families see naps lengthen within days, others see no change — and it only makes sense for a baby who already settles independently and stays content. A fussing baby is done; go get them. Nap time ending early is not a failure, theirs or yours.',
                ],
                suggestion:
-                    'Hold nap timing steady and give baby ~10–15 minutes to resettle before ending the nap. If short naps arrived together with nap-fighting and early waking, check whether a nap transition is due; on a short-nap day, protect the night with a slightly earlier bedtime.',
+                    'Hold nap timing steady and give baby ~10–15 minutes to resettle before ending the nap (a calm baby can have up to the full hour, if you want to try the crib-hour convention). If short naps arrived together with nap-fighting and early waking, check whether a nap transition is due; on a short-nap day, protect the night with a slightly earlier bedtime.',
                patienceNote: PATIENCE,
                tier: 3,
-               sourceIds: ['peaceful-45min', 'huckleberry-catnapping'],
+               sourceIds: ['peaceful-45min', 'huckleberry-catnapping', 'pls-short-naps'],
           },
      ],
 }

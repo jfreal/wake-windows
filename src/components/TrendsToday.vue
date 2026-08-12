@@ -62,6 +62,17 @@ const feedTotals = ref<{ count: number; ozOrMl: number; unit: 'oz' | 'mL' } | nu
 
 const series = computed(() => sevenDaySleepSeries(entries, now.value, 7))
 
+// @doc:trends-daily-totals — observed "sleep budget": the mean of days that
+// actually have logged sleep (today's partial day excluded so an in-progress
+// morning can't drag the average down). Null until 3 complete logged days
+// exist — an average of one day would be noise wearing a number's clothes.
+const weeklyAvgLabel = computed(() => {
+     const complete = series.value.filter((d) => d.totalMs > 0 && d.dayStart !== dayStart.value)
+     if (complete.length < 3) return null
+     const avgMs = complete.reduce((s, d) => s + d.totalMs, 0) / complete.length
+     return formatDuration(avgMs / 60000)
+})
+
 // Scale bars against the age-band ceiling (so a typical day nearly fills) with a
 // floor at the busiest day and a hard 24h cap, so nothing overflows the box.
 const seriesMaxMs = computed(() => {
@@ -162,6 +173,15 @@ const showBreakdown = ref(false)
                               v-if="i > 0">, </span><a :href="s.url" target="_blank" rel="noopener noreferrer"
                               class="text-sky-400 hover:text-sky-300 underline underline-offset-2">{{ s.leadAuthor || s.org
                               }}<span aria-hidden="true"> ↗</span></a></template>)</template>.
+               </p>
+               <!-- @doc:trends-daily-totals @doc:anti-anxiety-mechanics — the "sleep
+                    budget" reframe (research/08 T1, T18): published charts are
+                    population averages; the baby's own observed 7-day total is the
+                    honest anchor when the charts don't fit. -->
+               <p v-if="weeklyAvgLabel" class="text-muted text-xs mt-1">
+                    Your baby's own 7-day average is <span class="text-slate-300 tabular-nums">{{ weeklyAvgLabel }}</span>/day
+                    — published bands are averages of many babies, and when the two disagree, your baby's own
+                    total is usually the better anchor for the schedule.
                </p>
           </div>
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
-import { ATYPICAL_REASONS } from '../models/GuidanceMode'
+import { ATYPICAL_REASONS, ATYPICAL_TIPS } from '../models/GuidanceMode'
 
 // @doc:atypical-day-flag
 // One-tap "Today is atypical" toggle with optional reason chips. The flag is
@@ -15,6 +16,10 @@ function toggle() {
 function pickReason(id: string) {
      props.schedule.atypicalReason = props.schedule.atypicalReason === id ? '' : id
 }
+
+// @doc:atypical-day-flag — reason-specific counting rule (car naps, daycare);
+// most reasons have none and show nothing extra.
+const reasonTip = computed(() => ATYPICAL_TIPS[props.schedule.atypicalReason] ?? null)
 </script>
 
 <template>
@@ -50,5 +55,9 @@ function pickReason(id: string) {
                     {{ reason.label }}
                </button>
           </div>
+
+          <p v-if="schedule.atypical && reasonTip" class="text-muted text-xs mt-2">
+               {{ reasonTip }}
+          </p>
      </div>
 </template>

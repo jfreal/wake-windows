@@ -6,8 +6,11 @@ import {
     cuesReliabilityNote,
     MODE_GUIDANCE,
     ATYPICAL_REASONS,
+    ATYPICAL_TIPS,
     isAtypicalReason,
     ATYPICAL_MESSAGE,
+    newbornDayNightNote,
+    DAY_NIGHT_NOTE_UNTIL_MONTHS,
     CUES_UNTIL_MONTHS,
     CLOCK_FROM_MONTHS,
     CUES_UNRELIABLE_FROM_MONTHS,
@@ -106,13 +109,15 @@ describe('MODE_GUIDANCE', () => {
 });
 
 describe('atypical day flag', () => {
-    it('offers the spec reasons', () => {
+    it('offers the spec reasons (plus the 2026-08 daycare/car-nap additions)', () => {
         expect(ATYPICAL_REASONS.map((r) => r.id)).toEqual(
-            ['illness', 'teething', 'travel', 'regression', 'vaccination', 'other']);
+            ['illness', 'teething', 'travel', 'regression', 'vaccination', 'daycare', 'car-nap', 'other']);
     });
 
     it('validates reason ids (unknown URL values fall back gracefully)', () => {
         expect(isAtypicalReason('teething')).toBe(true);
+        expect(isAtypicalReason('daycare')).toBe(true);
+        expect(isAtypicalReason('car-nap')).toBe(true);
         expect(isAtypicalReason('bad-day')).toBe(false);
         expect(isAtypicalReason('')).toBe(false);
     });
@@ -120,5 +125,32 @@ describe('atypical day flag', () => {
     it('uses the calm, no-demerit message from the spec', () => {
         expect(ATYPICAL_MESSAGE).toBe(
             "Atypical day — don't over-adjust. Follow cues today; your normal plan will still be here tomorrow.");
+    });
+
+    it('reason tips exist only for reasons with a counting rule, and never scold', () => {
+        expect(Object.keys(ATYPICAL_TIPS).sort()).toEqual(['car-nap', 'daycare']);
+        for (const id of Object.keys(ATYPICAL_TIPS)) {
+            expect(isAtypicalReason(id), `tip for unknown reason "${id}"`).toBe(true);
+            expect(ATYPICAL_TIPS[id]).not.toMatch(/you missed|off track|behind schedule|should have/i);
+        }
+    });
+});
+
+// @doc:cues-vs-clock-mode
+describe('newborn day/night-confusion note', () => {
+    it('shows under 2 months (corrected) and not after', () => {
+        expect(newbornDayNightNote(0)).not.toBeNull();
+        expect(newbornDayNightNote(1)).not.toBeNull();
+        expect(newbornDayNightNote(DAY_NIGHT_NOTE_UNTIL_MONTHS)).toBeNull();
+        expect(newbornDayNightNote(6)).toBeNull();
+    });
+
+    it('is reassurance-first, cited, and Tier 3', () => {
+        const note = newbornDayNightNote(1)!;
+        expect(note.text).toMatch(/Normal at this age/);
+        expect(note.text).not.toMatch(/you missed|habit you created|failure/i);
+        expect(note.tier).toBe(3);
+        expect(note.sourceIds).toContain('mcgraw-1999');
+        expect(note.sourceIds).toContain('huckleberry-day-night');
     });
 });

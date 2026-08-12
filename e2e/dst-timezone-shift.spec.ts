@@ -42,7 +42,10 @@ test.describe('Daylight Saving & Time-Zone Shift Tool [@feature:dst-timezone-shi
 
   test('the plan carries the Tier 3 badge and speaks in ranges', async ({ page }) => {
     await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=fall`);
-    await expect(page.getByText('Tier 3 · Practitioner convention').first()).toBeVisible();
+    // filter({ visible: true }): Tier 3 badges also exist inside collapsed
+    // guidance <details> panels earlier in the DOM; the DST plan's badge is
+    // the first VISIBLE one.
+    await expect(page.getByText('Tier 3 · Practitioner convention').filter({ visible: true }).first()).toBeVisible();
     await expect(page.getByText(/Ranges, not targets/)).toBeVisible();
   });
 

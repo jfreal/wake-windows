@@ -13,6 +13,10 @@ import AccessibilityStatement from './components/AccessibilityStatement.vue'
 import RegressionExplainer from './components/RegressionExplainer.vue'
 import NapTransition from './components/NapTransition.vue'
 import SleepTrainingOverview from './components/SleepTrainingOverview.vue'
+import ContactNaps from './components/ContactNaps.vue'
+import DaycareGuidance from './components/DaycareGuidance.vue'
+import OvertiredUndertired from './components/OvertiredUndertired.vue'
+import FaqPanel from './components/FaqPanel.vue'
 import AboutAuthor from './components/AboutAuthor.vue'
 import TipJar from './components/TipJar.vue'
 import DeleteData from './components/DeleteData.vue'
@@ -99,6 +103,26 @@ import { sitterMode } from './stores/plan'
          content, hidden in the read-only sitter view like the other guidance panels. -->
     <div v-if="!sitterMode" class="mt-3">
       <SleepTrainingOverview />
+    </div>
+
+    <!-- Guidance panels from the 2026-08 gap analysis (research/09): the
+         highest-frequency parent questions that previously had no coverage.
+         State-free cited content, hidden in the sitter view like the rest. -->
+    <div v-if="!sitterMode" class="mt-3">
+      <OvertiredUndertired />
+    </div>
+
+    <div v-if="!sitterMode" class="mt-3">
+      <ContactNaps />
+    </div>
+
+    <div v-if="!sitterMode" class="mt-3">
+      <DaycareGuidance />
+    </div>
+
+    <!-- @doc:methodology-sources-page — the cited FAQ catalog ("Parents ask"). -->
+    <div v-if="!sitterMode" class="mt-3">
+      <FaqPanel />
     </div>
 
     <!-- Author / first-hand Experience signal (YMYL E-E-A-T); hidden in the

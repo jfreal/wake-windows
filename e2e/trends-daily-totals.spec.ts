@@ -63,6 +63,41 @@ test.describe('Trends & Daily Totals at a Glance [@feature:trends-daily-totals]'
     await expect(today.getByText('so far')).toBeVisible();
   });
 
+  // The observed average is a mean over the days that HAVE logged sleep, not a
+  // 7-day average — blank days are skipped and a nap-only day counts whole. It
+  // has to name its sample and say "logged", or a parent who tracks naps but
+  // not nights is handed a number hours short of the real day and told to
+  // schedule by it.
+  test('the observed average names its sample and does not claim a full week', async ({ page }) => {
+    await page.addInitScript(() => {
+      const MIN = 60000;
+      const now = new Date();
+      let id = 0;
+      const dayAt = (offset: number, hour: number) =>
+        new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, hour, 0, 0, 0).getTime();
+      // Three past days, naps only (2 × 90 min = 3 h) — nights untracked, the
+      // common case. Today stays empty, so it is excluded either way.
+      const entries: any[] = [];
+      for (let day = -3; day <= -1; day++) {
+        for (const hour of [9, 13]) {
+          entries.push({
+            id: 'e' + id++, start: dayAt(day, hour), end: dayAt(day, hour) + 90 * MIN,
+            pausedMs: 0, pauseStart: null, kind: 'nap', kindOverridden: true,
+          });
+        }
+      }
+      localStorage.setItem('ww.sleepLog.v1', JSON.stringify(entries));
+    });
+
+    await page.goto(plan);
+    const today = page.getByRole('region', { name: 'Today' });
+    const observed = today.getByText(/days you logged this week/);
+    await expect(observed).toBeVisible();
+    await expect(observed).toContainText('Across the 3 days');
+    await expect(observed).toContainText('3 h/day');
+    await expect(today).not.toContainText('7-day average');
+  });
+
   test('tap-through reveals the 7-day breakdown', async ({ page }) => {
     await page.goto(plan);
     const today = page.getByRole('region', { name: 'Today' });

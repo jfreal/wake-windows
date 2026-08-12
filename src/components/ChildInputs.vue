@@ -22,7 +22,16 @@ const templates = computed(() => templatesForMonths(props.schedule.monthsSinceBi
 // @doc:corrected-gestational-age — the preemie nuance parents ask about
 // (research/08 T14): adjusted age drives the plan, but many preemies land
 // between adjusted and actual — the baby outranks both numbers.
-const preterm = computed(() => props.schedule.weeks < 37)
+//
+// Guarded on the same 20–44 range the schedule warning uses, and deliberately
+// not a bare `weeks < 37`: an emptied number input hands back '' (Vue casts it
+// with looseToNumber, which leaves a non-numeric string alone), and `'' < 37`
+// is true — a parent clearing the field to retype it would be told their
+// full-term baby was born early, quoting an adjusted age of 0 mo.
+const preterm = computed(() => {
+  const w = Number(props.schedule.weeks)
+  return Number.isFinite(w) && w >= 20 && w < 37
+})
 
 // Half-hour clock options matching the original hand-written lists: value ""
 // is 12:00, ".5" is 12:30, then "1"…"11.5".

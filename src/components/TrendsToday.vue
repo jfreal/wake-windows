@@ -64,13 +64,20 @@ const series = computed(() => sevenDaySleepSeries(entries, now.value, 7))
 
 // @doc:trends-daily-totals — observed "sleep budget": the mean of days that
 // actually have logged sleep (today's partial day excluded so an in-progress
-// morning can't drag the average down). Null until 3 complete logged days
-// exist — an average of one day would be noise wearing a number's clothes.
-const weeklyAvgLabel = computed(() => {
-     const complete = series.value.filter((d) => d.totalMs > 0 && d.dayStart !== dayStart.value)
-     if (complete.length < 3) return null
-     const avgMs = complete.reduce((s, d) => s + d.totalMs, 0) / complete.length
-     return formatDuration(avgMs / 60000)
+// morning can't drag the average down). Null until 3 such days exist — an
+// average of one day would be noise wearing a number's clothes.
+//
+// It returns the day count with the number, and the copy says "logged", because
+// this is NOT a 7-day average: blank days are skipped, and a day where only two
+// naps got logged counts as a whole day. Calling it "your baby's 7-day average"
+// would hand a parent who logs naps but not nights a number several hours low —
+// and then tell them to schedule by it. Same honesty rule PersonalizedWindows
+// follows when its sample is thin: say what the number is made of.
+const loggedAverage = computed(() => {
+     const logged = series.value.filter((d) => d.totalMs > 0 && d.dayStart !== dayStart.value)
+     if (logged.length < 3) return null
+     const avgMs = logged.reduce((s, d) => s + d.totalMs, 0) / logged.length
+     return { label: formatDuration(avgMs / 60000), days: logged.length }
 })
 
 // Scale bars against the age-band ceiling (so a typical day nearly fills) with a
@@ -178,10 +185,12 @@ const showBreakdown = ref(false)
                     budget" reframe (research/08 T1, T18): published charts are
                     population averages; the baby's own observed 7-day total is the
                     honest anchor when the charts don't fit. -->
-               <p v-if="weeklyAvgLabel" class="text-muted text-xs mt-1">
-                    Your baby's own 7-day average is <span class="text-slate-300 tabular-nums">{{ weeklyAvgLabel }}</span>/day
-                    — published bands are averages of many babies, and when the two disagree, your baby's own
-                    total is usually the better anchor for the schedule.
+               <p v-if="loggedAverage" class="text-muted text-xs mt-1">
+                    Across the {{ loggedAverage.days }} days you logged this week, sleep entered here averaged
+                    <span class="text-slate-300 tabular-nums">{{ loggedAverage.label }}</span>/day. Published bands
+                    are averages of many babies — so if your log is complete, your baby's own total is the better
+                    anchor when the two disagree; if some sleep goes untracked, this number reads low by whatever
+                    is missing.
                </p>
           </div>
 

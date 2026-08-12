@@ -91,6 +91,32 @@ export function cuesReliabilityNote(months: number): string | null {
     return 'After ~9 months sleepy cues get less reliable, so let the clock clearly lead.'
 }
 
+// @doc:cues-vs-clock-mode
+/** Day/night confusion typically resolves by ~8 weeks; the note shows below
+ * this corrected age (months). */
+export const DAY_NIGHT_NOTE_UNTIL_MONTHS = 2
+
+export interface NewbornNote {
+    text: string
+    tier: number
+    sourceIds: string[]
+}
+
+/** Newborn day/night-confusion note (research/07 §8 — a common newborn FAQ
+ * with no prior coverage). Reassurance-first: an immature body clock, not a
+ * habit and not a mistake; null once baby is past the confusion age. */
+export function newbornDayNightNote(months: number): NewbornNote | null {
+    if (months >= DAY_NIGHT_NOTE_UNTIL_MONTHS) return null
+    return {
+        text:
+            'Days and nights mixed up? Normal at this age — the body clock is still under construction. '
+            + 'Bright, active days; dark, boring nights; and gently ending naps that run past ~2 hours all '
+            + 'help it along. It typically sorts itself out by around 8 weeks.',
+        tier: 3,
+        sourceIds: ['mcgraw-1999', 'huckleberry-day-night'],
+    }
+}
+
 // @doc:atypical-day-flag
 // One-tap "today is atypical" disruption flag (illness, teething, travel,
 // regression, vaccination, other). Reassurance-first: calm copy, wider windows,
@@ -107,8 +133,23 @@ export const ATYPICAL_REASONS: AtypicalReason[] = [
     { id: 'travel', label: 'Travel' },
     { id: 'regression', label: 'Regression' },
     { id: 'vaccination', label: 'Vaccination' },
+    { id: 'daycare', label: 'Daycare day' },
+    { id: 'car-nap', label: 'Car/stroller nap' },
     { id: 'other', label: 'Other' },
 ]
+
+// @doc:atypical-day-flag
+/** Reason-specific one-liners for the disruptions parents ask about most
+ * (research/08 T13, T20). Practical counting rules, never scolding; reasons
+ * without an entry just get the standard atypical treatment. */
+export const ATYPICAL_TIPS: Record<string, string> = {
+    'car-nap':
+        'A car or stroller catnap under ~30 minutes: stretch the next wake window a little and carry on. '
+        + 'Longer: count it as a real nap and let the rest of the day shift. One motion nap changes nothing long-term.',
+    daycare:
+        'Daycare naps run on daycare rules — that\'s fine. If today\'s naps ran short, an earlier bedtime '
+        + '(even ~6:00 PM) absorbs it better than a late rescue nap.',
+}
 
 export function isAtypicalReason(id: string): boolean {
     return ATYPICAL_REASONS.some((r) => r.id === id)

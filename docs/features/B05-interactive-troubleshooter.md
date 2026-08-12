@@ -30,6 +30,10 @@ A branching **decision tree** (deterministic, no LLM) covering the highest-volum
 
 Each terminal answer gives a concrete, range-based suggestion, a "give it ≥1–2 weeks" note, and a **Tier badge + citation** (B01). Free, no account, works offline.
 
+Two additions from the 2026-08 sweep:
+- **"Crib hour"** is named and honestly tiered on the cycle-linking leaf (research 08 T10): what it is (leaving a calm baby in the crib for the full hour from nap start so a mid-nap wake-up gets a chance to turn back into sleep), that it is a widespread consultant convention rather than a studied protocol with genuinely mixed reports, and its prerequisite — it only makes sense for a baby who already settles independently and stays content. A fussing baby is done; go get them.
+- **Overtired vs undertired** gets a standalone card (`OvertiredUndertired.vue`) outside the trees. The trees disambiguate it in three separate places; the card lifts the shared logic into one cited reference — the tells side by side, time-to-fall-asleep as the single most useful one (watched over 3–4 nights, not judged from one), the earlier-bedtime fix first because it is the gentler mistake if the guess is wrong, and the anti-anxiety corrective that online sleep culture reaches for "overtired" far more often than the evidence supports. It points back at the troubleshooter for the step-by-step version rather than competing with it.
+
 ## Scope — MVP
 Three trees (early rising, short naps, split-night/false-start). Static branching logic. Cited terminal answers. No account, offline-capable.
 
@@ -42,7 +46,7 @@ More trees (bedtime resistance, nap-transition confusion, regressions → B06); 
 - Treat pre-6 AM wakes as night.
 
 ## Evidence & citations
-Tier 3, research 02 §§2–4: 45-minute intruder & catnapping (Huckleberry, Taking Cara Babies, Peaceful Sleeper); false start vs. split night (Taking Cara Babies, Cozy Baby Sleep, Baby Sleep Science); early waking causes/fixes and the ≥1–2 week evaluation window (Taking Cara Babies, Little Ones, Huckleberry, Cozy Baby Sleep). Cite by name on each leaf.
+Tier 3, research 02 §§2–4: 45-minute intruder & catnapping (Huckleberry, Taking Cara Babies, Peaceful Sleeper); false start vs. split night (Taking Cara Babies, Cozy Baby Sleep, Baby Sleep Science); early waking causes/fixes and the ≥1–2 week evaluation window (Taking Cara Babies, Little Ones, Huckleberry, Cozy Baby Sleep). Crib hour: `pls-short-naps` (Precious Little Sleep) alongside `peaceful-45min` on the cycle-linking leaf — a named convention with no study behind it, which is exactly what the Tier 3 badge says. Overtired vs undertired: `tcb-short-naps`, `babysleepscience-wakings`, and `flynnevans-critique` for the two-process-model correction. Cite by name on each leaf; every non-medical leaf carries at least one source, asserted in `Troubleshooter.test.ts`.
 
 ## Effort
 Medium. Tree authoring + a small deterministic engine; content-heavy but no backend/AI.

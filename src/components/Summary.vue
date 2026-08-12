@@ -25,6 +25,8 @@ import SitterView from './SitterView.vue'
 import Troubleshooter from './Troubleshooter.vue'
 import ChildInputs from './ChildInputs.vue'
 import HowCalculated from './HowCalculated.vue'
+import WindowMechanics from './WindowMechanics.vue'
+import NapCaps from './NapCaps.vue'
 import PersonalizedWindows from './PersonalizedWindows.vue'
 import SiblingAlignment from './SiblingAlignment.vue'
 import logoUrl from '../assets/logo.png'
@@ -329,6 +331,15 @@ const cuesFirst = computed(() => guidanceMode.value !== 'clock');
              with the user's own numbers, reachable right from the schedule. -->
         <div class="mt-3">
           <HowCalculated :schedule="schedule" :slop-minutes="windowSlop" />
+        </div>
+
+        <!-- The two definitional FAQs that belong right next to the schedule
+             they apply to: where a window starts/ends, and whether to cap naps. -->
+        <div class="mt-2">
+          <WindowMechanics />
+        </div>
+        <div class="mt-2">
+          <NapCaps />
         </div>
       </div>
 

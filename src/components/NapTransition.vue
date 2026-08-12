@@ -106,6 +106,17 @@ const barTotal = computed(() => {
                     watch, not a schedule to enforce.
                </p>
 
+               <!-- Strike vs transition (research/08 T12): the disambiguation parents
+                    ask for — a short-lived refusal with a nameable cause is a strike,
+                    not a schedule change. Keeps a leap or a tooth from triggering a
+                    premature nap drop. -->
+               <p class="text-muted text-xs mt-2">
+                    One caveat before changing anything: a <span class="text-slate-300">nap strike</span> —
+                    refusals lasting under ~2 weeks, often alongside teething, a cold, or a new skill — looks
+                    just like this but passes on its own. Transitions announce themselves for 2+ weeks without
+                    another explanation. When in doubt, keep offering the nap and wait it out.
+               </p>
+
                <!-- The gentle plan: lengthen wake windows ~15 min at a time. -->
                <div v-if="plan" class="mt-3">
                     <div class="flex items-center gap-2 mb-1">
@@ -161,7 +172,8 @@ const barTotal = computed(() => {
           <div v-else-if="showWatch" class="mt-2">
                <p class="text-muted text-xs">
                     Watching for the <strong class="text-slate-300">{{ result.label }}</strong> transition
-                    from your logs. Nothing to change yet — one rough day isn't a transition.
+                    from your logs. Nothing to change yet — one rough day isn't a transition, and a week of
+                    nap-fighting with a tooth coming in is usually a strike that passes on its own.
                </p>
                <button type="button"
                     class="btn-inline mt-1"

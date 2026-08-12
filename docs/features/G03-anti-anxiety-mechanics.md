@@ -28,6 +28,11 @@ Napper markets "a gentle, understanding friend who's there to help, not judge" �
 - **Out-of-range informs, never scolds.** Reassuring, plain copy tied to normal-variation evidence (Iglowstein 2003) — "this is within normal variation," not "you're off track."
 - **Hide unused trackers by default** to kill empty-tracker guilt; parents opt in to what they want to see.
 - Reassuring copy on regressions/night wakings ("this is normal and expected"). Never imply a baby is "behind" or "broken."
+- **Reassurance runs first, always.** Where a subject carries guilt, the panel opens by removing it and only then offers the practical part. Contact naps: normal, bonding-positive, nothing to fix — and the transition path is offered explicitly *only if the parent wants out*, never prescribed. Daycare: two schedules can coexist, rough daycare naps are an adjustment and an environment fact, "not something you can fix from the office." Overtired/undertired: if the baby seems happy and nights are fine, neither label needs to apply at all.
+- **Name the disagreement instead of picking a side.** Where sources genuinely differ — what counts as awake, whether to cap a long nap, when the second nap drops — the app shows both and says why they differ, which is also the honest justification for showing ranges at all. Inheriting one camp's certainty would be the anxious move.
+- **Numbers disclose what they're made of.** The observed sleep average (D01) names how many days it actually averaged and says it counts only logged sleep, rather than handing a partially-logged parent a confident number to feel behind against.
+
+These are enforced as data where they can be: `faq.test.ts` and `GuidanceMode.test.ts` fail on "you missed", "off track", "behind schedule", "should have", "failure"/"failing" in FAQ answers and atypical-day tips, the same way the e2e anti-anxiety spec enforces them on the page.
 
 ## Scope — MVP
 Range-based schedule display + non-judgmental out-of-range copy + no streak mechanics + hidden-by-default optional trackers. Encode these as design rules in the component library, not one-off screens.

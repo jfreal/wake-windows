@@ -4,10 +4,15 @@ import TierBadge from './TierBadge.vue'
 
 // @doc:safe-sleep-panel @doc:accessibility-dark-room
 // Safe-sleep guidance is Tier 1 and applies to every nap and night (spec §7).
+// The nap-specific lines (car seat/swing transfer, couch/armchair dozing) come
+// from the 2026-08 FAQ sweep (research/07 §15) — the nap-time questions
+// parents actually ask, all AAP-citable.
 const essentials = [
      'Place baby fully on their back for every sleep, day and night, until age 1.',
      'Use a firm, flat, non-inclined surface; no soft bedding, pillows, or bumpers.',
      'Room-share without bed-sharing, ideally for the first 6 months.',
+     'Naps too: if baby falls asleep in a car seat, swing, or carrier, move them to a firm, flat surface as soon as practical.',
+     'Never doze off with baby on a couch or armchair — it is the riskiest sleep arrangement of all. If you might drift, put baby down first.',
 ]
 const sources = getSources(['aap-safesleep-2022', 'nichd-safetosleep', 'lullaby-trust-2025'])
 </script>

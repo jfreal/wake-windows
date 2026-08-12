@@ -4,6 +4,7 @@ import {
      effectiveGuidanceMode,
      MODE_GUIDANCE,
      cuesReliabilityNote,
+     newbornDayNightNote,
      ATYPICAL_MESSAGE,
      ATYPICAL_REASONS,
 } from '../models/GuidanceMode'
@@ -23,6 +24,13 @@ const reasonLabel = computed(
      () => ATYPICAL_REASONS.find((r) => r.id === props.atypicalReason)?.label ?? null
 )
 const showSources = ref(false)
+
+// @doc:cues-vs-clock-mode — newborn day/night-confusion note, age-gated in the
+// model (<2 months corrected); its citations render inline like the
+// Iglowstein link in the nap schedule.
+const newbornNote = computed(() => newbornDayNightNote(props.months))
+const newbornNoteSources = computed(() =>
+     newbornNote.value ? getSources(newbornNote.value.sourceIds) : [])
 </script>
 
 <template>
@@ -48,6 +56,17 @@ const showSources = ref(false)
           <p class="text-muted text-xs mt-1">
                {{ guidance.rationale }}
                <span v-if="olderNote"> {{ olderNote }}</span>
+          </p>
+
+          <p v-if="newbornNote" class="text-muted text-xs mt-1">
+               {{ newbornNote.text }}
+               <template v-for="(src, i) in newbornNoteSources" :key="src.id"><span v-if="i > 0">, </span><a
+                    :href="src.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :title="src.title"
+                    class="text-sky-400 hover:text-sky-300 underline underline-offset-2"
+               >{{ src.org }}<span aria-hidden="true"> ↗</span></a></template>
           </p>
 
           <div class="flex flex-wrap items-center gap-2 mt-1">

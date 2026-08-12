@@ -29,6 +29,7 @@ Smart Sleep Coach is the tell — up to 4 profiles with "individual schedules" a
 - Overlap is framed as a **best-effort observation, never a target**. No overlap gets honest, guilt-free copy: "different rhythms — expected, not something to fix."
 - Both schedules ride the URL: the second child adds `bd2`/`s2` beside the existing `bd`/`s` params (`planUrl.ts`), so old single-child links keep working unchanged.
 - The **"optimize for overlap"** toggle (nudging naps only within each child's labeled Tier-3 range, never outside it) is not built yet — see Scope, below.
+- **The two twin practice rules** (research 07 §13), shown under the timeline only when the two children are within 2 months of each other — plausible twins or near-twins on one schedule, so real siblings years apart don't get twin advice: sync to the first twin awake and wake the other within ~15–30 minutes, giving the sleepier twin the slack (a longer nap or earlier bedtime) rather than a separate day; and the AAP safe-sleep rule that room-sharing is fine but each baby needs their own sleep surface — no crib-sharing, naps or nights. Cited (`huckleberry-twins`, `aap-safesleep-2022`), and explicit that one twin's timing always being a little "off" the shared plan is normal, not a problem to solve.
 
 ## Scope — MVP
 Two children, stacked 24h view with the overlap band highlighted. **Shipped.**

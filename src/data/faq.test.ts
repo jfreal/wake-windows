@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { faqEntries } from './faq';
 import { getSource, getSources } from '../models/Citations';
+import { SCOLDING_PATTERN } from '../models/tone';
 
 // @doc:evidence-tier-badges-citations
 // The FAQ is cited content: every entry must resolve to real sources so the
@@ -34,9 +35,22 @@ describe('FAQ data integrity', () => {
         }
     });
 
+    // The badge must not outrank everything behind it. Deliberately "at least one
+    // source at or above the claimed tier" rather than "every source" — an answer
+    // is allowed to hang a Tier 3 practitioner explainer next to the Tier 1 study
+    // it popularizes, which is the whole point of showing both. What this catches
+    // is the real over-claim: a Tier 1 badge with nothing but blogs under it.
+    it('no entry claims a stronger tier than its best source supports', () => {
+        for (const e of faqEntries) {
+            const tiers = getSources(e.sourceIds).map((s) => s.tier);
+            expect(Math.min(...tiers), `"${e.id}" claims tier ${e.tier} with sources ${tiers.join('/')}`)
+                .toBeLessThanOrEqual(e.tier);
+        }
+    });
+
     it('answers never scold (anti-anxiety tone rules)', () => {
         for (const e of faqEntries) {
-            expect(e.answer).not.toMatch(/you missed|off track|behind schedule|\bfailure\b|\bfailing\b/i);
+            expect(e.answer, `scolding language in "${e.id}"`).not.toMatch(SCOLDING_PATTERN);
         }
     });
 

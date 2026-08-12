@@ -194,6 +194,10 @@ describe('shipped trees (spec B05)', () => {
                 const label = `${tree.id}/${node.id}`;
                 expect(node.tier, label).toBe(3);
                 expect(node.patienceNote, label).toMatch(/1–2 week/);
+                // Assert the list is non-empty first: the loop below is vacuous on
+                // an empty or missing sourceIds, so an uncited leaf would sail
+                // through a test whose name promises it can't.
+                expect(node.sourceIds?.length ?? 0, `${label} has no citations`).toBeGreaterThan(0);
                 for (const id of node.sourceIds ?? []) {
                     expect(getSource(id), `${label} cites missing source ${id}`).toBeDefined();
                 }

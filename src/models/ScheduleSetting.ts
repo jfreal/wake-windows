@@ -1,5 +1,26 @@
 import { roundToStep } from './time';
 
+/**
+ * Gestational weeks as a number the age math can use.
+ *
+ * An `<input type="number">` hands back '' when the parent clears the field —
+ * Vue's looseToNumber leaves a non-numeric string alone — and '' coerces to 0 in
+ * arithmetic, so `40 - weeks` used to read as forty weeks premature and knock
+ * nine months off the plan mid-keystroke, silently swapping the age band, the
+ * guidance mode, and the offered templates. No usable number means no
+ * correction: 40. Out-of-range but numeric values are left alone — the schedule
+ * warning already calls those out, and second-guessing a typed number would hide
+ * it instead.
+ *
+ * A module function rather than a private getter on purpose: a `private` member
+ * makes the class fail to match the type `reactive()` produces for it, and every
+ * `ScheduleSetting` in the app comes out of a `reactive()` call.
+ */
+function usableGestationalWeeks(weeks: number): number {
+    const w = Number(weeks);
+    return Number.isFinite(w) && w > 0 ? w : 40;
+}
+
 // @doc:wake-window-schedule-generator @doc:bedtime-calculator @doc:corrected-gestational-age
 // Holds the inputs (birthday, wake time, wake-window lengths, bedtime, gestational weeks)
 // that drive the generated schedule.
@@ -52,7 +73,7 @@ class ScheduleSetting {
         if (Number.isNaN(birthMs)) return 0; // no/invalid birthday entered yet
         const msInWeek = 1000 * 60 * 60 * 24 * 7;
         const chronologicalWeeks = (Date.now() - birthMs) / msInWeek;
-        const gestationalAdjustment = 40 - this.weeks;
+        const gestationalAdjustment = 40 - usableGestationalWeeks(this.weeks);
         return Math.max(0, Math.round(chronologicalWeeks - gestationalAdjustment));
     }
 
@@ -63,7 +84,7 @@ class ScheduleSetting {
         const chronologicalMonths =
             (now.getFullYear() - this.birthday.getFullYear()) * 12
             + now.getMonth() - this.birthday.getMonth();
-        const gestationalAdjustmentMonths = Math.round((40 - this.weeks) / 4.345);
+        const gestationalAdjustmentMonths = Math.round((40 - usableGestationalWeeks(this.weeks)) / 4.345);
         const adjusted = chronologicalMonths - gestationalAdjustmentMonths;
         return adjusted <= 0 ? 0 : adjusted;
     }

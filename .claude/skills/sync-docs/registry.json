@@ -12,7 +12,7 @@
       "src/components/ChildInputs.vue:99",
       "src/components/NapCaps.vue:5",
       "src/components/WindowMechanics.vue:5",
-      "src/models/ScheduleSetting.ts:3",
+      "src/models/ScheduleSetting.ts:24",
       "src/models/scheduleTemplates.test.ts:9",
       "src/models/scheduleTemplates.ts:1",
       "src/models/SleepRecommendations.ts:16",
@@ -47,7 +47,8 @@
     "summary": "Corrected / Gestational-Age Adjustment",
     "sources": [
       "src/components/ChildInputs.vue:22",
-      "src/models/ScheduleSetting.ts:3"
+      "src/models/ScheduleSetting.test.ts:195",
+      "src/models/ScheduleSetting.ts:24"
     ],
     "tests": [
       "e2e/corrected-gestational-age.spec.ts:1"
@@ -67,13 +68,13 @@
       "src/components/Summary.vue:185",
       "src/components/Summary.vue:288",
       "src/components/Summary.vue:302",
-      "src/models/GuidanceMode.test.ts:139",
+      "src/models/GuidanceMode.test.ts:140",
       "src/models/GuidanceMode.ts:1",
       "src/models/GuidanceMode.ts:94",
-      "src/models/ScheduleSetting.test.ts:377",
-      "src/models/ScheduleSetting.ts:137",
-      "src/models/ScheduleSetting.ts:151",
-      "src/models/ScheduleSetting.ts:161"
+      "src/models/ScheduleSetting.test.ts:399",
+      "src/models/ScheduleSetting.ts:158",
+      "src/models/ScheduleSetting.ts:172",
+      "src/models/ScheduleSetting.ts:182"
     ],
     "tests": [
       "e2e/cues-vs-clock-mode.spec.ts:1"
@@ -87,7 +88,7 @@
     "status": "Built",
     "summary": "Bedtime Calculator + Preferred-Bedtime Cap",
     "sources": [
-      "src/models/ScheduleSetting.ts:3"
+      "src/models/ScheduleSetting.ts:24"
     ],
     "tests": [
       "e2e/bedtime-calculator.spec.ts:1"
@@ -130,11 +131,11 @@
       "src/models/GuidanceMode.ts:30",
       "src/models/GuidanceMode.ts:120",
       "src/models/GuidanceMode.ts:141",
-      "src/models/ScheduleSetting.test.ts:368",
-      "src/models/ScheduleSetting.test.ts:377",
-      "src/models/ScheduleSetting.ts:15",
-      "src/models/ScheduleSetting.ts:137",
-      "src/models/ScheduleSetting.ts:151",
+      "src/models/ScheduleSetting.test.ts:390",
+      "src/models/ScheduleSetting.test.ts:399",
+      "src/models/ScheduleSetting.ts:36",
+      "src/models/ScheduleSetting.ts:158",
+      "src/models/ScheduleSetting.ts:172",
       "src/stores/plan.ts:14",
       "src/stores/plan.ts:47"
     ],
@@ -212,7 +213,7 @@
       "src/components/FaqPanel.vue:6",
       "src/components/NapCaps.vue:5",
       "src/components/TierBadge.vue:5",
-      "src/data/faq.test.ts:5",
+      "src/data/faq.test.ts:6",
       "src/data/faq.ts:1",
       "src/models/Citations.ts:3"
     ],
@@ -488,10 +489,10 @@
       "src/components/Summary.vue:82",
       "src/components/Summary.vue:117",
       "src/components/Summary.vue:358",
-      "src/models/ScheduleSetting.test.ts:310",
-      "src/models/ScheduleSetting.test.ts:326",
-      "src/models/ScheduleSetting.ts:151",
-      "src/models/ScheduleSetting.ts:161",
+      "src/models/ScheduleSetting.test.ts:332",
+      "src/models/ScheduleSetting.test.ts:348",
+      "src/models/ScheduleSetting.ts:172",
+      "src/models/ScheduleSetting.ts:182",
       "src/stores/plan.ts:13",
       "src/stores/plan.ts:37"
     ],
@@ -699,12 +700,13 @@
       "src/components/Summary.vue:301",
       "src/components/TrendsToday.vue:184",
       "src/components/WindowMechanics.vue:5",
-      "src/models/ScheduleSetting.test.ts:280",
-      "src/models/ScheduleSetting.ts:131",
+      "src/models/ScheduleSetting.test.ts:302",
+      "src/models/ScheduleSetting.ts:152",
       "src/models/scheduleTemplates.ts:1",
       "src/models/time.ts:13",
       "src/models/time.ts:20",
-      "src/models/time.ts:31"
+      "src/models/time.ts:31",
+      "src/models/tone.ts:1"
     ],
     "tests": [
       "e2e/anti-anxiety-mechanics.spec.ts:1"

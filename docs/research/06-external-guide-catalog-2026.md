@@ -123,4 +123,8 @@ Note the medical-vs-consultant conflict on 2→1: Mayo says the morning nap comm
 
 ## Recommended citations.json additions
 
-`mindell-2010-crosscultural`, `horvath-plunkett-2018`, `gilchrist-2025-frontiers`, `reynaud-2025-bmc`, `oster-parentdata-2024`, `possums-2019-sleephealth` (+ optional `romper-2024` as journalism, T3), and a manual pull of PMID 41339164. All URLs above verified live 2026-08-12 except the two marked robots-blocked (use DOI landing pages).
+**Added** (2026-08-12, now in `citations.json`): `mindell-2010-crosscultural`, `horvath-plunkett-2018`, `gilchrist-2025-frontiers`, `reynaud-2026-bmc` (registered under its publication year, not the 2025 DOI stem — the id in this doc originally read `reynaud-2025-bmc`), `oster-parentdata-2024`, and `romper-2024` (journalism, T3). The Possums/NDC entry landed as `possums-ndc` rather than `possums-2019-sleephealth`.
+
+**Still pending:** a manual pull of PMID 41339164.
+
+All URLs above verified live 2026-08-12 except the two marked robots-blocked (use DOI landing pages).

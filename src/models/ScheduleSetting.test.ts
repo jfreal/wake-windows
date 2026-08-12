@@ -192,6 +192,28 @@ describe('ScheduleSetting', () => {
             expect(ss.monthsSinceBirth).toBe(6);
         });
 
+        // @doc:corrected-gestational-age
+        // A cleared "Weeks in Womb" field arrives here as '' (Vue's looseToNumber
+        // leaves a non-numeric string alone), and '' coerces to 0 in arithmetic —
+        // so `40 - weeks` used to read as forty weeks premature and knock nine
+        // months off the plan while the parent was mid-retype, silently swapping
+        // the age band, the guidance mode, and the offered templates.
+        it('treats an unusable gestational value as no correction, not 40 weeks early', () => {
+            vi.setSystemTime(new Date(2024, 8, 15)); // Sep 15, 2024
+            const ss = new ScheduleSetting();
+            ss.birthdayDate = "2024-03-15"; // 6 months ago
+
+            for (const blank of ['', ' ', 'abc', null, undefined, NaN]) {
+                ss.weeks = blank as unknown as number;
+                expect(ss.monthsSinceBirth, `weeks=${JSON.stringify(blank)}`).toBe(6);
+                expect(ss.weeksSinceBirth, `weeks=${JSON.stringify(blank)}`).toBe(26);
+            }
+
+            // A real number still corrects, blank-guard or not.
+            ss.weeks = 32;
+            expect(ss.monthsSinceBirth).toBe(4);
+        });
+
         it('should adjust for premature babies', () => {
             vi.setSystemTime(new Date(2024, 8, 15)); // Sep 15, 2024
             const ss = new ScheduleSetting();

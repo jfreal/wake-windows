@@ -35,7 +35,7 @@ Show every step: "Wake 7:00 + first window 2h → nap ~9:00." Attach a Tier 3 ba
 ### Where a window starts and ends
 Shipped in the **"What counts as awake?"** panel (`WindowMechanics.vue`), under the nap schedule:
 - **Starts** at the real wake-up — alert, eyes open for a while. A few minutes of dozy fussing with eyes mostly closed is still sleep, not the start of the day.
-- **Ends** when the wind-down starts and the baby is laid down. The 5–20 quiet minutes it then takes to fall asleep is rest time, not overtime charged to the window.
+- **Ends** when the baby is laid down — one event, not "wind-down or laid down", so there is nothing to interpret. The 5–20 quiet minutes it then takes to fall asleep is rest time, not overtime charged to the window.
 - Published sources genuinely disagree here (crib-out-to-crib-in vs eyes-open-to-eyes-shut) by 10–15 minutes. The panel says so, and names that disagreement as the reason every time in this app is a **range**: any reasonable definition lands inside it. These are practitioner conventions (Tier 3), not studied definitions.
 
 ### Named templates

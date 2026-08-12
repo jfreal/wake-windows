@@ -26,7 +26,7 @@ Pampers' Smart Sleep Coach includes safe-sleep content. Most wake-window schedul
 A persistent, always-accessible **Tier 1** reference panel summarizing AAP 2022, informational not alarmist:
 - **Back to sleep**, every sleep, until age 1.
 - **Firm, flat, non-inclined surface** (CPSC-compliant crib/bassinet/play yard; fitted sheet only). Loungers/nests/inclined sleepers are not for sleep.
-- **Room-share (separate surface) for ≥6 months** — up to ~50% SIDS reduction.
+- **Same room, separate surface — ideally for at least the first 6 months** (not "starting at 6 months", which is how the shorthand reads) — up to ~50% SIDS reduction.
 - **No loose bedding / soft objects** — no pillows, blankets, bumpers, stuffed toys, weighted products.
 - **No bed-sharing;** never sofa/armchair (risk up to ~67×).
 - Supporting: pacifier at sleep, avoid overheating, no smoke exposure, supervised awake tummy time; stop swaddling at first signs of rolling (~3–4 mo); home monitors not recommended for SIDS.

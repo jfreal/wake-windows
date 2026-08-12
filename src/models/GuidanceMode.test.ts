@@ -16,6 +16,7 @@ import {
     CUES_UNRELIABLE_FROM_MONTHS,
 } from './GuidanceMode';
 import { getSources } from './Citations';
+import { SCOLDING_PATTERN } from './tone';
 import { ScheduleSetting } from './ScheduleSetting';
 
 describe('guidanceModeForMonths', () => {
@@ -131,7 +132,7 @@ describe('atypical day flag', () => {
         expect(Object.keys(ATYPICAL_TIPS).sort()).toEqual(['car-nap', 'daycare']);
         for (const id of Object.keys(ATYPICAL_TIPS)) {
             expect(isAtypicalReason(id), `tip for unknown reason "${id}"`).toBe(true);
-            expect(ATYPICAL_TIPS[id]).not.toMatch(/you missed|off track|behind schedule|should have/i);
+            expect(ATYPICAL_TIPS[id], `scolding language in tip "${id}"`).not.toMatch(SCOLDING_PATTERN);
         }
     });
 });
@@ -148,9 +149,22 @@ describe('newborn day/night-confusion note', () => {
     it('is reassurance-first, cited, and Tier 3', () => {
         const note = newbornDayNightNote(1)!;
         expect(note.text).toMatch(/Normal at this age/);
-        expect(note.text).not.toMatch(/you missed|habit you created|failure/i);
+        expect(note.text).not.toMatch(SCOLDING_PATTERN);
         expect(note.tier).toBe(3);
         expect(note.sourceIds).toContain('mcgraw-1999');
         expect(note.sourceIds).toContain('huckleberry-day-night');
+    });
+
+    // Naming the ids isn't enough — the banner renders whatever getSources returns,
+    // and getSources silently drops ids it can't find, so a typo would show a note
+    // with no citations at all rather than failing anywhere.
+    it('every cited source resolves to a real record the banner can render', () => {
+        const note = newbornDayNightNote(1)!;
+        const sources = getSources(note.sourceIds);
+        expect(sources.length, 'a cited source id did not resolve').toBe(note.sourceIds.length);
+        for (const src of sources) {
+            expect(src.org, `source "${src.id}" has no org to label the link`).toBeTruthy();
+            expect(src.url, `source "${src.id}" has no url`).toMatch(/^https?:\/\//);
+        }
     });
 });

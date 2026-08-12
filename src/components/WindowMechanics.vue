@@ -33,8 +33,8 @@ const sources = getSources(['tcb-wake-windows', 'cleveland-wake-windows', 'oster
                </p>
                <p>
                     <span class="text-slate-200">Settling time doesn't count against you.</span> The window
-                    ends when you start the wind-down and lay baby down — taking 5–20 quiet minutes to
-                    actually fall asleep is normal rest time, not overtime.
+                    ends when you lay baby down — taking 5–20 quiet minutes to actually fall asleep after
+                    that is normal rest time, not overtime.
                </p>
                <p>
                     Parents debate these definitions endlessly ("eyes open to eyes shut" vs "out of the crib

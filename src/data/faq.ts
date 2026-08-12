@@ -209,7 +209,7 @@ export const faqEntries: FaqEntry[] = [
             + 'are both normal babies.',
         tier: 1,
         sourceIds: ['iglowstein-2003', 'galland-2012', 'mindell-2010-crosscultural'],
-        inApp: 'the Today panel, which shows your baby\'s own 7-day average',
+        inApp: 'the Today panel, which averages the days you have actually logged',
     },
     {
         id: 'regression-4mo',

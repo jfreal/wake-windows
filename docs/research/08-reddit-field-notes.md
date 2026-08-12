@@ -1,6 +1,6 @@
 # 08 — Reddit Field Notes: What Parents Actually Ask (and Say About Sleep Apps)
 
-**What this is:** a mine of Reddit (r/sleeptrain, r/NewParents, r/beyondthebump, r/ScienceBasedParenting, r/daddit, r/AttachmentParenting, r/NICUParents) for real parent questions about nap schedules and real sentiment about competing sleep apps. Compiled 2026-08-12 via live mirror fetches (~1,250 post titles scanned, 60 full threads read with comments; example phrasings are actual post titles; canonical reddit.com URLs throughout, in the source list at the end). Threads skew 2023–2026.
+**What this is:** a mine of Reddit (r/sleeptrain, r/NewParents, r/beyondthebump, r/ScienceBasedParenting, r/daddit, r/AttachmentParenting, r/NICUParents) for real parent questions about nap schedules and real sentiment about competing sleep apps. Compiled 2026-08-12 via live mirror fetches (~1,250 post titles scanned, 60 full threads read with comments; example phrasings are actual post titles; threads are listed at the end as subreddit-prefixed ids, e.g. `r/sleeptrain/comments/1f6l1ef` — prefix `https://reddit.com/` to open one). Threads skew 2023–2026.
 
 **Why this doc matters:** the three highest-friction questions on Reddit — the eyes-open ambiguity, overtired-vs-undertired, and "my baby doesn't match the chart" — are all best answered with ranges + individual-variation framing. The community's own consensus framework ("sleep budgets" — compute your baby's real 24h total instead of obeying published windows) is exactly the ranges-not-stopwatches stance. And every major app complaint (paywalled predictions, scolding notifications, anxiety amplification, generic paid plans) is something this product avoids by design.
 
@@ -104,7 +104,9 @@
 
 ---
 
-## Source threads (canonical reddit.com URLs; verified via live mirror)
+## Source threads (subreddit-prefixed thread ids; prefix `https://reddit.com/`; verified via live mirror)
+
+Bare ids continue the subreddit named immediately before them.
 
 **Mechanics/start-of-window:** r/sleeptrain/comments/1f6l1ef · 1jmx7n5 · 18dpesg · tw47n8 · kv4a03
 **Schedule-check / budgets:** r/sleeptrain/comments/1shs4me · 1sibvem · 1em7bff · 1sf5hr9

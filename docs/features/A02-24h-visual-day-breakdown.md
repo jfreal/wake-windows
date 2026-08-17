@@ -23,18 +23,29 @@ Napper's circular "clock" view is genuinely loved, but users criticized a redesi
 Most schedulers show a list or a timeline; Napper's clock is the standout loved visual. No competitor markets a deliberately low-glare, dark-room-friendly rendering. That is the opening here.
 
 ## Our approach (spec)
-- Render the generated plan (A01) as both a **24-hour circular clock** and a **linear timeline**; user picks the default.
+- Render the generated plan (A01) as a **linear 24-hour timeline**, with a **circular clock** as a possible later alternative.
 - Sleep blocks and wake blocks visually distinct but low-contrast-friendly; naps show as ranges (bands), not razor-thin ticks — reinforcing "ranges, not a stopwatch."
 - Persistent **daily totals** (total sleep, total wake, nap count) with a Tier 1 badge comparing to AASM/NSF ranges.
-- **Dark-room mode:** dimmable, warm/low-blue palette, large tap targets, no bright white flashes; readable one-handed.
+- Warm, low-glare palette, large tap targets, no bright white flashes; readable one-handed.
 - Static SVG-style rendering — no animation, no clutter. Learn from Napper: calm beats busy.
 
+**Implementation note (2026-08).** The first build was a *proportional* bar: three
+blocks whose widths were each phase's share of 24h. That answered "how much of the
+day is nap/night/awake" — which the totals table already answered in words — while
+the question a parent has in a dark nursery is "where am I in the day". It is now a
+**positional** strip, midnight to midnight, with a marker for the current time, so a
+9am nap and a 4pm nap are visibly different things. Because segments are positional
+they can be very narrow, so no figure is ever drawn inside one; every number the
+strip encodes lives in the Sleep Stats table directly beneath it. The circular clock
+remains unbuilt.
+
 ## Scope — MVP
-- Circular clock + linear timeline of one day's plan.
+- Positional linear day strip (midnight to midnight) with a now-marker.
 - Daily totals with Tier 1 range check.
-- Dark-room dimming and high-legibility layout.
+- Low-glare, high-legibility layout.
 
 ## Scope — later
+- A circular 24-hour clock view as an alternative rendering (unbuilt).
 - Overlay logged actuals vs. planned (once C01 tracking exists).
 - Multi-day / week strip; twins overlay (A09).
 

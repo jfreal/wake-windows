@@ -76,7 +76,7 @@ const twinSources = getSources(['huckleberry-twins', 'aap-safesleep-2022'])
 </script>
 
 <template>
-  <span class="text-slate-400 text-sm uppercase">Shared quiet block</span>
+  <span class="eyebrow">Shared quiet block</span>
 
   <div class="flex gap-2 mt-2" role="img" :aria-label="ariaSummary">
     <div class="flex flex-col gap-1 shrink-0 text-xs text-slate-400">

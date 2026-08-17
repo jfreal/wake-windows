@@ -78,20 +78,31 @@ A few things worth calling out:
 ```text
 src/
   main.ts                     App entry — mounts Vue
-  App.vue                     Root shell (layout, responsive padding)
-  style.css                   Tailwind v4 entry + base tokens
-  components/
-    Summary.vue               Inputs, 24h bar, stats, nap schedule, URL persistence
+  App.vue                     Shell: tab nav, header, footer, sitter branch
+  style.css                   Tailwind v4 entry + the paper palette + fonts
+  views/                      One file per screen
+    TodayView.vue             Countdown, day strip, nap schedule, ranges
+    LogView.vue               The big asleep/awake toggle + the entry list
+    LearnView.vue             The cited guidance library
+    SettingsView.vue          Plan inputs, sharing, stances, delete
+  stores/                     One plan, one log, one open tab, one sheet
+  components/                 Presentational + feature panels
     Recommendations.vue       Age-matched guidance with cited, linked sources
   models/                     Framework-agnostic, unit-tested domain layer
     ScheduleSetting.ts        Sleep math, corrected age, nap-time computation
     SleepRecommendations.ts   Recommendation data, brackets, validation
+    today.ts                  Day segments, what-happens-next, band geometry
     time.ts                   Clock-time formatting
     *.test.ts                 Vitest unit tests
 ```
 
-State is held in a single reactive `ScheduleSetting` in `Summary.vue`; the schedule is
-serialized to (and restored from) the URL query string, keeping the app fully stateless.
+The app is four screens — Today / Log / Learn / Settings — with the countdown to
+the next nap as the largest thing on the first one. The plan is a single
+reactive `ScheduleSetting` in `stores/plan.ts`, and it — along with the open
+screen — is serialized to and restored from the URL query string, so a plan
+needs no account and no server to travel. The sleep log is separate
+(`stores/sleepLog.ts`) and stays on the device in localStorage; it is never part
+of a shared link.
 
 ## Getting started
 

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('No-AI / No-Data-Training Stance [@feature:no-ai-no-data-training]', () => {
   test('stance panel states the no-AI promise precisely and cites competitor AI data flows', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=settings');
     const summary = page.locator('summary', { hasText: 'No AI — on purpose' });
     await expect(summary).toBeVisible();
     await summary.click(); // open the <details>
@@ -18,7 +18,7 @@ test.describe('No-AI / No-Data-Training Stance [@feature:no-ai-no-data-training]
   });
 
   test('"How this was calculated" walks the arithmetic with the plan\'s own numbers', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=learn&topic=how-calculated');
     // "How this was calculated" is also quoted inside the stance panel's body
     // copy, so target the disclosure element itself.
     const summary = page.locator('summary', { hasText: 'How this was calculated' });

@@ -8,7 +8,7 @@ function birthdayDaysAgo(days: number): string {
 
 test.describe('Daylight Saving & Time-Zone Shift Tool [@feature:dst-timezone-shift]', () => {
   test('fall-back preset renders the 4-day later ramp plus the change day', async ({ page }) => {
-    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7`);
+    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&tab=settings`);
     await page.getByRole('button', { name: /Fall back/ }).click();
 
     await expect(page.getByText('4 days before', { exact: true })).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('Daylight Saving & Time-Zone Shift Tool [@feature:dst-timezone-shi
   });
 
   test('spring-forward preset walks the day earlier instead', async ({ page }) => {
-    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7`);
+    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&tab=settings`);
     await page.getByRole('button', { name: /Spring forward/ }).click();
 
     await expect(page.getByText('−15 min')).toBeVisible();
@@ -34,14 +34,14 @@ test.describe('Daylight Saving & Time-Zone Shift Tool [@feature:dst-timezone-shi
   });
 
   test('a shared link opens the identical step plan for the other caregiver', async ({ page }) => {
-    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=spring`);
+    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=spring&tab=settings`);
     await expect(page.getByRole('button', { name: /Spring forward/ }))
       .toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByText('Change day onward')).toBeVisible();
   });
 
   test('the plan carries the Tier 3 badge and speaks in ranges', async ({ page }) => {
-    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=fall`);
+    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=fall&tab=settings`);
     // filter({ visible: true }): Tier 3 badges also exist inside collapsed
     // guidance <details> panels earlier in the DOM; the DST plan's badge is
     // the first VISIBLE one.
@@ -50,7 +50,7 @@ test.describe('Daylight Saving & Time-Zone Shift Tool [@feature:dst-timezone-shi
   });
 
   test('deselecting the preset clears the plan and the URL param', async ({ page }) => {
-    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=fall`);
+    await page.goto(`/?bd=${birthdayDaysAgo(150)}&s=7-2/2/2/2-7&shift=fall&tab=settings`);
     await page.getByRole('button', { name: /Fall back/ }).click();
     await expect(page.getByText('Change day onward')).not.toBeVisible();
     await expect(page).not.toHaveURL(/shift=/);

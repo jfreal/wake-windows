@@ -7,9 +7,11 @@ import { test, expect } from '@playwright/test';
 // readiness caveat.
 test.describe('Sleep-Training Methods Overview (Neutral) [@feature:sleep-training-overview]', () => {
   test('renders the neutral method menu, tier-1 evidence, and the readiness caveat', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=learn&topic=sleep-training');
 
-    const panel = page.getByText('Sleep-training methods', { exact: false }).first();
+    // Target the disclosure itself: the Learn screen's article heading carries
+    // the same words, and clicking a heading opens nothing.
+    const panel = page.locator('summary', { hasText: 'Sleep-training methods' });
     await expect(panel).toBeVisible();
     await panel.click();
 

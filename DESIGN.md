@@ -1,117 +1,106 @@
 ---
 name: Wake Windows
-description: A calm, cited nap-schedule planner for parents of infants — a dark-room utility built for tired thumbs.
+description: A calm, cited nap-schedule planner for parents of infants — four screens on warm paper, built for tired thumbs.
 colors:
-  bg: "#0f172a"          # slate-900 — body / app surface
-  surface: "#1e293b"     # slate-800 — inputs, callout tints, panel fills
-  border: "#1e293b"      # slate-800 — hairline dividers (default)
-  border-strong: "#334155" # slate-700 — the one heavier divider (Total Sleep row)
-  ink: "#e2e8f0"         # slate-200 — emphasis text, list copy
-  ink-body: "#cbd5e1"    # slate-300 — default body text
-  ink-label: "#94a3b8"   # slate-400 — section labels, field labels (6.96:1 on bg)
-  muted: "#7c899e"       # accessible muted text ON THE BODY — meta, notes, footnotes (5.04:1 on bg)
-  muted-raised: "#8894a9" # the same role on a slate-800 panel (4.78:1 there; plain muted is only 4.13:1)
-  decorative: "#64748b"  # slate-500 — non-text only (link underlines, glyphs); fails AA as text
-  accent: "#38bdf8"      # sky-400 — links, expanders, the only interactive accent
-  accent-hover: "#7dd3fc" # sky-300 — link/expander hover
-  accent-fill: "#0369a1" # sky-700 — the one primary button fill (5.93:1 with white)
-  accent-fill-hover: "#075985" # sky-800 — primary hover DARKENS (sky-600 + white = 4.1:1, fails)
-  accent-on: "#bae6fd"   # sky-200 — text of a pressed toggle on the sky-400/10 on-state fill
-  wake: "#f97316"        # orange-500 — 24h bar: awake time (sun)
-  night: "#06b6d4"       # cyan-500 — 24h bar: night sleep (moon)
-  nap: "#8b5cf6"         # violet-500 — 24h bar: naps (baby). NEVER an interactive state.
-  in-range: "#34d399"    # emerald-400 — "You" value inside the guidance range
-  out-range: "#fbbf24"   # amber-400 — "You" value outside range + all warnings
-  safe: "#6ee7b7"        # emerald-300 — Safe-sleep panel heading
-  tier1: "#27b06a"       # evidence-based badge (border + text); 6.38:1 on bg, 5.23:1 on slate-800
-  tier2: "#c9940c"       # practice-based heuristic badge; 6.57:1 on bg, 5.38:1 on slate-800
-  tier3: "#94a3b8"       # practitioner convention — deliberately a NEUTRAL, not a hue (see §2)
+  paper: "#F6F0E6"        # the page
+  paper-sunk: "#EFE7DA"   # a track or an inset well (the day strip, the sheet's math block)
+  card: "#FFFDF9"         # panels — LIGHTER than the page, not darker
+  line: "#E3D9CB"         # hairline dividers and card borders
+  line-strong: "#C9B7A2"  # the one heavier divider; card border on hover
+  ink: "#2A2320"          # emphasis text, numerals (13.9:1 on paper)
+  ink-body: "#3D352F"     # default body text (10.5:1)
+  muted: "#6E635C"        # labels, meta, notes — the quietest text allowed (5.01:1 on paper, 5.65:1 on card)
+  decorative: "#AC9F92"   # non-text only (2.9:1); forbidden for real text
+  accent: "#A9502F"       # terracotta — links, expanders, focus ring (4.76:1) AND the filled surface (white on it, 5.45:1)
+  accent-hover: "#8E4A2E" # link hover, and the primary fill's DARKER hover (6.58:1)
+  accent-on: "#7A3C24"    # ink of a pressed toggle on the accent/10 wash
+  on-fill: "#FFF7EF"      # text on a terracotta or night fill
+  wake: "#C7A470"         # day strip: awake (sun)
+  night: "#4E5570"        # day strip: night sleep (moon). Also the "asleep" hero surface.
+  nap: "#A9502F"          # day strip: naps (baby). Same value as the accent — see §2.
+  in-range: "#3D6350"     # a "You" value inside the guidance range (5.94:1)
+  out-range: "#7F5D2C"    # a "You" value outside range + all warnings (5.20:1). Amber-brown, never red.
+  safe: "#35594A"         # Safe-sleep panel heading
+  tier1: "#3D6350"        # evidence-based badge
+  tier2: "#7F5D2C"        # practice-based heuristic badge
+  tier3: "#6E635C"        # practitioner convention — deliberately a NEUTRAL, not a hue (see §2)
 typography:
+  display:
+    fontFamily: "Faustina, Georgia, 'Times New Roman', serif"
+    fontSize: "clamp(1.125rem, 4vw, 3.75rem)"
+    fontWeight: 500
+    lineHeight: 1.15
+    fontFeature: "tabular-nums"
   body:
-    fontFamily: "Inter, Avenir, Helvetica, Arial, sans-serif"
+    fontFamily: "'Hanken Grotesk Variable', Inter, system-ui, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.5
-    letterSpacing: "normal"
-  stat:
-    fontFamily: "Inter, Avenir, Helvetica, Arial, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 700
-    lineHeight: 1.4
-    letterSpacing: "normal"
   label:
-    fontFamily: "Inter, Avenir, Helvetica, Arial, sans-serif"
-    fontSize: "0.875rem"
+    fontFamily: "'Hanken Grotesk Variable', Inter, system-ui, sans-serif"
+    fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.4
-    letterSpacing: "normal"
+    letterSpacing: "0.14em"
     fontFeature: "uppercase"
   meta:
-    fontFamily: "Inter, Avenir, Helvetica, Arial, sans-serif"
+    fontFamily: "'Hanken Grotesk Variable', Inter, system-ui, sans-serif"
     fontSize: "0.75rem"
     fontWeight: 400
     lineHeight: 1.4
   badge:
-    fontFamily: "Inter, Avenir, Helvetica, Arial, sans-serif"
+    fontFamily: "'Hanken Grotesk Variable', Inter, system-ui, sans-serif"
     fontSize: "0.6875rem"
     fontWeight: 500
     lineHeight: 1
 rounded:
-  sm: "0.25rem"
-  lg: "0.5rem"
+  sm: "0.875rem"   # 14px — buttons are pills, fields and callouts are soft
+  lg: "1.25rem"    # 20px — panels
+  2xl: "1.75rem"   # 28px — the hero, the sheet
+  full: "9999px"   # every button, every chip, the day strip, the log toggle
 spacing:
   field: "0.625rem"
-  panel: "0.75rem"
+  panel: "1rem"
   section: "1.5rem"
 controlHeight: "2.75rem"  # 44px. Every button, toggle, chip, input and select. Not negotiable.
+elevation:
+  lift: "0 14px 30px -14px rgba(42,35,32,.45)"   # the hero, the log toggle
+  sheet: "0 -18px 44px -20px rgba(42,35,32,.5)"  # the evidence sheet / drawer
 components:
-  # These five live as real CSS classes in src/style.css (@layer components), not
-  # as utility strings repeated at each call site — see "The One Sizing Place Rule".
+  # These live as real CSS classes in src/style.css (@layer components), not as
+  # utility strings repeated at each call site — see "The One Sizing Place Rule".
+  card:                # .card — bg card, 1px line border, radius lg
+    backgroundColor: "{colors.card}"
+    borderColor: "{colors.line}"
+    rounded: "{rounded.lg}"
+  eyebrow:             # .eyebrow — the one section label in the app
+    textColor: "{colors.muted}"
+    typography: "{typography.label}"
+  display:             # .display — Faustina, tabular numerals
+    typography: "{typography.display}"
   field:               # .field — input / select / textarea
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "#E5DBCC"
     textColor: "{colors.ink}"
-    typography: "{typography.body}"
     rounded: "{rounded.sm}"
-    padding: "0.625rem"
     minHeight: "{controlHeight}"
   button-quiet:        # .btn .btn-quiet — the default button. Almost everything.
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "#E5DBCC"
     textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.sm}"
-    padding: "0 1rem"
+    rounded: "{rounded.full}"
     minHeight: "{controlHeight}"
-  button-primary:      # .btn .btn-primary — starts something. Two uses, total.
-    backgroundColor: "{colors.accent-fill}"
+  button-primary:      # .btn .btn-primary — starts something.
+    backgroundColor: "{colors.accent}"
     textColor: "#ffffff"
-    typography: "{typography.body}"
-    rounded: "{rounded.sm}"
-    padding: "0 1rem"
+    rounded: "{rounded.full}"
     minHeight: "{controlHeight}"
   button-inline:       # .btn-inline — text-weight button that reads as a link
     textColor: "{colors.accent}"
     typography: "{typography.meta}"
     minHeight: "{controlHeight}"
-  tier-badge-1:
-    textColor: "{colors.tier1}"
+  tier-badge:          # TierBadge.vue — pill, tier ink on a 12% wash of itself
+    rounded: "{rounded.full}"
     typography: "{typography.badge}"
-    rounded: "{rounded.sm}"
-    padding: "0.125rem 0.375rem"
-  tier-badge-2:
-    textColor: "{colors.tier2}"
-    typography: "{typography.badge}"
-    rounded: "{rounded.sm}"
-    padding: "0.125rem 0.375rem"
-  tier-badge-3:
-    textColor: "{colors.tier3}"
-    typography: "{typography.badge}"
-    rounded: "{rounded.sm}"
-    padding: "0.125rem 0.375rem"
-  safe-sleep-panel:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sm}"
-    padding: "0.75rem"
+    padding: "0.125rem 0.5rem"
 ---
 
 # Design System: Wake Windows
@@ -120,271 +109,359 @@ components:
 
 **Creative North Star: "The Night-Feed Companion"**
 
-Wake Windows is a quiet dark-room utility for a sleep-deprived parent holding a phone
-in one hand at 3am. The whole system is tuned for that moment: a deep slate surface
-that won't scorch dark-adapted eyes, low-glare quiet ink, and a single clear reading —
-the schedule and the 24-hour bar — sitting above everything else. It is a tool, not a
-brand experience; it should disappear into the task of "when does the baby nap next,"
-then get out of the way. Authority comes from cited, tiered sources shown in-line, never
-from decoration or tone. The voice is plain and unalarmed: a parent who is already worried
-must never be made to feel they are failing.
+Wake Windows answers one question — *when does the baby sleep next* — for a parent holding a
+phone in one hand at 3am. The whole system is tuned for that moment: warm paper that reads as
+calm rather than clinical, a single countdown as the largest thing on screen, and everything
+else demoted behind it. It is a tool, not a brand experience; it should disappear into the task
+and get out of the way. Authority comes from cited, tiered sources, never from decoration or
+tone. The voice is plain and unalarmed: a parent who is already worried must never be made to
+feel they are failing.
 
-Density is deliberately low. One narrow column of inputs on the left, the day's readout on
-the right, generous vertical rhythm (`1.5rem` between sections) so nothing crowds. Color is
-Restrained by default — a single `sky-400` accent for anything interactive — with two earned
-exceptions: the warm-to-cool **day arc** of the 24-hour bar (orange wake → cyan night → violet
-nap, read as literal time-of-day, not decoration) and the emerald **Safe-sleep** panel, the
-one surface allowed to carry a tint because its content is non-negotiable.
+**The app is four screens, and the split is the design.**
 
-This system explicitly rejects the **generic baby-app pastel** aesthetic — no cutesy
-pastel-pink/blue, no rounded-blob nursery stickers, no cartoon flourish. Warmth is carried by
-tone and restraint, not by decoration. It equally rejects the **cold medical dashboard**
-(no gray-on-gray EHR density, no alarm-red), **anxious/alarmist framing** (out-of-range reads
-amber and informational, never red and scolding), and **generic SaaS scaffold** (no hero-metric
-template, no tracked-uppercase eyebrow on every section, no identical card grids, no gradient text).
+| Screen | What it holds |
+| --- | --- |
+| **Today** | The countdown, the day strip, the plain-language reassurance note, the day as a list, and the three normal-range bands. |
+| **Log** | One enormous asleep/awake toggle, then the corrections, then the week. |
+| **Learn** | Every cited guidance panel, as a topic library. Reading one changes nothing about your plan. |
+| **Settings** | The plan's inputs, the ways it leaves this device, and the promises about what does not. |
+
+This replaced a single ~25-panel scroll in which the schedule, the log, fourteen guidance
+panels and the policy stances all sat at the same level. The countdown a parent came for
+arrived at the same visual weight as the tier explainer. Nothing was deleted in the move —
+it was ranked.
+
+Density is deliberately low. Color is restrained: one terracotta accent for anything
+interactive, with one earned exception — the warm-to-cool **day arc** of the day strip
+(sun → nap → night, read as literal time-of-day) — and the emerald **Safe-sleep** panel, the
+one surface allowed a tint because its content is non-negotiable.
+
+This system explicitly rejects the **generic baby-app pastel** aesthetic — no pastel-pink/blue,
+no rounded-blob nursery stickers, no cartoon flourish. Warmth is carried by paper tone and
+restraint, not by decoration. It equally rejects the **cold medical dashboard** (no gray-on-gray
+EHR density, no alarm-red), **anxious/alarmist framing** (out-of-range reads calm and
+informational, never red and scolding), and **generic SaaS scaffold** (no hero-metric template,
+no identical card grids, no gradient text).
 
 **Key Characteristics:**
-- Deep slate dark theme, tuned for a dark room and one-handed phone use.
-- Restrained color: one `sky-400` accent; semantic colors (emerald/amber) earn their place.
-- Flat by default — depth from tonal layering + hairline borders, never shadows.
-- Evidence forward: every recommendation carries a Tier 1/2 badge and cited sources.
-- Amber, not red. Out-of-range informs; it does not alarm.
+- Warm paper, light. Cards are *lighter* than the page, and every surface break carries a hairline.
+- One countdown, above everything, on every visit.
+- Restrained color: one terracotta accent; semantic colors earn their place.
+- Evidence forward: every recommendation carries a tier badge, and every number opens a sheet
+  that shows the arithmetic on the parent's own figures.
+- Amber-brown, not red. Out-of-range informs; it does not alarm.
 
 ## 2. Colors
 
-A deep-slate dark palette carrying quiet ink, one sky accent, and a small vocabulary of
-semantic colors that only appear where they mean something.
+Warm paper carrying dark ink, one terracotta accent, and a small vocabulary of semantic colors
+that only appear where they mean something.
+
+**How the palette is applied.** The tokens above are wired into Tailwind's `slate`, `sky`,
+`orange`, `cyan` and `violet` scales in `src/style.css`, because the roles those names carried
+were always semantic — "body", "surface one step up", "emphasis ink", "the interactive family".
+The slate ramp is inverted end to end: `slate-900` is the lightest value now and `slate-100` the
+darkest. That is why the theme change is one file rather than four hundred edits across forty
+templates, and why `bg-slate-800` still means "the surface one step up from the page" wherever
+it appears.
 
 ### Primary
-- **Sky Signal** (`#38bdf8`, sky-400): The single interactive accent. Links, source expanders,
-  and the "↗" out-links. Hover lifts to **Sky Signal Light** (`#7dd3fc`, sky-300). It appears
-  nowhere decorative — if it is `sky-400`, it is something you can click.
+
+- **Terracotta** (`#A9502F`): The single interactive family. Links, expanders, the focus ring,
+  the one primary fill, and the pressed-toggle wash. Hover **darkens** to `#8E4A2E` in both
+  directions — as link ink it goes darker, and as a fill it goes darker too, because white on
+  a lighter terracotta fails AA.
 
 ### Secondary — The Day Arc
-The 24-hour bar's three segments, read left to right as literal time-of-day. Warm to cool.
-- **Waking Sun** (`#f97316`, orange-500): Awake time. Paired with the sun icon.
-- **Night Cyan** (`#06b6d4`, cyan-500): Night sleep. Paired with the moon icon.
-- **Nap Violet** (`#8b5cf6`, violet-500): Daytime naps. Paired with the sleeping-baby icon.
+
+The day strip's three colours, read left to right as literal time-of-day. Warm to cool.
+- **Waking Sun** (`#C7A470`): Awake time. Paired with the sun icon.
+- **Nap Terracotta** (`#A9502F`): Daytime naps. Paired with the sleeping-baby icon.
+- **Night** (`#4E5570`): Night sleep. Paired with the moon icon. Also the surface of the hero
+  and the log toggle while the baby is asleep.
 
 ### Tertiary — Semantic & Evidence
-- **In-Range Emerald** (`#34d399`, emerald-400): A "You" value that falls inside the guidance range.
-- **Out-of-Range Amber** (`#fbbf24`, amber-400): A "You" value outside range, and every warning.
-  Deliberately amber, never red. Warnings sit on a 10% amber wash (`bg-amber-400/10`).
-- **Safe Emerald** (`#6ee7b7`, emerald-300): Heading of the Safe-sleep panel, on an
-  `emerald-900/15` fill inside an `emerald-700/50` hairline — the one tinted surface.
-- **Tier 1 Green** (`#27b06a`): Evidence-based badge, border + text. 6.38:1 on the body and
-  5.23:1 on a slate-800 panel — badges appear on both, so both have to clear AA at 11px.
-- **Tier 2 Goldenrod** (`#c9940c`): Practice-based heuristic badge, border + text. 6.57 / 5.38:1.
-- **Tier 3 Neutral** (`#94a3b8`, slate-400): Practitioner convention — the weakest tier, and the
-  only one with no hue. That is the point: green reads "backed", goldenrod reads "take as an
-  estimate", and a plain neutral reads "this is just what practitioners do", claiming nothing.
-  It also keeps a third hue out of a Restrained palette. (It replaced `#d06848`, which was both
-  undocumented and an orange-red — the one colour this system forbids — and which measured
-  4.01:1 on slate-800 panels.)
+
+- **In-Range Green** (`#3D6350`): A value inside the published range.
+- **Out-of-Range Amber-Brown** (`#7F5D2C`): A value outside range, and every warning.
+  Deliberately not red. Warnings sit on a 10% wash of the same colour.
+- **Safe Green** (`#35594A`): Heading of the Safe-sleep panel — the one tinted surface.
+- **Tier 1 Green** (`#3D6350`) / **Tier 2 Amber-Brown** (`#7F5D2C`) / **Tier 3 Neutral**
+  (`#6E635C`). Tier 3 has no hue on purpose: green reads "backed", amber-brown reads "take as
+  an estimate", and a plain neutral reads "this is just what practitioners do", claiming
+  nothing. It also keeps a third hue out of a restrained palette.
 
 ### Neutral
-- **App Slate** (`#0f172a`, slate-900): The body / app background. The dark room.
-- **Surface Slate** (`#1e293b`, slate-800): Input fields, panel fills, and every default
-  hairline divider. One step up from the body.
-- **Divider Slate** (`#334155`, slate-700): The single heavier divider — the "Total Sleep" total row.
-- **Ink** (`#e2e8f0`, slate-200): Emphasis and list copy. (14.5:1)
-- **Body Ink** (`#cbd5e1`, slate-300): Default body and data text. (12:1)
-- **Label Ink** (`#94a3b8`, slate-400): Section and field labels. (6.96:1)
-- **Muted Ink** (`#7c899e`): Meta, notes, ranges, footnotes — the quietest *text* allowed
-  **on the body**. (5.04:1) Exposed as the `text-muted` utility.
-- **Muted Ink Raised** (`#8894a9`): The same role on a `slate-800` panel. (4.78:1 there, 5.83:1
-  on the body.) Exposed as `text-muted-raised`.
-- **Decorative Slate** (`#64748b`, slate-500): Non-text only — link-underline color, `↗` glyphs.
-  Measures 3.75:1, so it is **forbidden for real text**; use `text-muted` instead.
+
+- **Paper** (`#F6F0E6`): The page.
+- **Paper Sunk** (`#EFE7DA`): A track or an inset well — the day strip's groove, the "your
+  numbers" block inside a sheet.
+- **Card** (`#FFFDF9`): Panels. On paper a panel is lighter than the page, which is the
+  opposite of the dark theme this replaced and the reason every card also needs its border.
+- **Line** (`#E3D9CB`) / **Line Strong** (`#C9B7A2`): Hairlines, and the one heavier divider.
+- **Ink** (`#2A2320`, 13.9:1) → **Body Ink** (`#3D352F`, 10.5:1) → **Muted** (`#6E635C`).
+- **Decorative** (`#AC9F92`): Non-text only. 2.9:1 — forbidden for real text.
 
 ### Named Rules
-**The One Accent Rule.** `sky` is the only interactive family — `sky-400` for links and
-expanders, `sky-700` for the one filled primary button, `sky-400/10` + `sky-200` for a pressed
-toggle. If something is sky, you can press it; if you can press it, it is sky. Never decorative.
 
-The corollary matters as much: **the day-arc colours never become interaction states.**
-`violet-500` means "nap", a literal block of the day, everywhere it appears — the 24-hour bar,
-the sibling tracks, the DST strip, the sparkline, the nap/night label on a log entry. A violet
-"this toggle is on" gives one colour two jobs, and it is the mistake this rule exists to catch.
+**The One Accent Rule.** Terracotta is the only interactive family. If it is terracotta ink,
+you can press it; if you can press it, it is terracotta.
 
-**The Amber-Not-Red Rule.** Out-of-range and warning states are amber (`#fbbf24`), never red.
-A tired parent reading their plan must be informed, not alarmed. Red is forbidden in this system
-— including for a Stop button, which is not destructive: raise the surface tone instead
-(`slate-700` on `slate-800`) and let position and label carry the weight.
+**Nap is the accent, and that is deliberate.** In the dark theme the day-arc colours were
+forbidden from ever becoming interaction states, because `violet` meant "nap" and nothing else.
+Here nap and accent are the same value, and the equivalence is the point: terracotta means
+*sleep is the thing happening or the thing to do* — the nap band on the strip, the hero while
+the baby is awake, the log toggle, the nap dot in the day list. The rule that survives is the
+narrower one: **`#C7A470` wake and `#4E5570` night are never interaction states.** They are
+blocks of the day, everywhere, always.
 
-**The Muted Floor Rule.** Quiet text has two shades because it sits on two surfaces.
-`text-muted` (`#7c899e`) is the floor on the `slate-900` body at 5.04:1; on a `slate-800` fill
-it drops to 4.13:1 and **`text-muted-raised` (`#8894a9`, 4.78:1) is the floor instead**. On a
-`slate-700` fill neither clears AA — use `slate-300`. `slate-500` and below (slate-500 = 3.75:1,
-slate-600 = 2.36:1) fail everywhere and are prohibited for real text; `slate-500` survives only
-as a decorative underline / glyph colour. This applies to placeholders too — the global
-`::placeholder` rule in `style.css` is slate-400, and no field may override it downward.
+**The Amber-Not-Red Rule.** Out-of-range and warning states are `#7F5D2C`, never red. A tired
+parent reading their plan must be informed, not alarmed. Red is forbidden in this system —
+including for a Stop button, which is not destructive: raise the surface tone instead and let
+position and label carry the weight.
 
-**A colour is only "verified" against the surface it lands on.** Every tier badge, every muted
-shade, every pressed-toggle ink in this system has been measured on *each* surface it renders
-on, not just on the body. A token that passes at 5:1 on `slate-900` can be at 4.0:1 one panel up.
+**The Muted Floor Rule.** `#6E635C` is the floor for real text, and it is legal on *both* the
+paper body (5.01:1) and a card (5.65:1) — which is why this theme needs one muted shade where
+the dark one needed two. The handoff palette's `#8A7C70` is **not** in this system: it measures
+3.48:1 on paper, and this app publishes an accessibility statement claiming AA. Anything at or
+below `#AC9F92` is decorative only.
+
+**A colour is only "verified" against the surface it lands on.** Every tier ink, every muted
+shade, every ink on a filled surface has been measured on *each* surface it renders on. This is
+also why the filled accent is `#A9502F` rather than the handoff's lighter `#C46B4C`: white on
+that measures 3.83:1, so it can carry a 60px numeral and nothing else.
 
 ## 3. Typography
 
-**Body Font:** Inter (with Avenir, Helvetica, Arial, sans-serif fallback)
+**Display:** Faustina — headings, screen titles, and every large numeral.
+**UI / body:** Hanken Grotesk — everything else.
 
-**Character:** One humanist sans doing all the work — headings, labels, data, body. No display
-pairing; a product tool does not need one. `tabular-nums` on all figures so schedule times and
-ranges stay column-aligned as they change.
+Both are **self-hosted** (`@fontsource`), never loaded from Google. This app is an offline-first
+PWA whose whole pitch is that nothing about your baby leaves the phone; a `fonts.gstatic.com`
+link would break the offline shell *and* hand a third party an IP address on every open.
+
+`tabular-nums` on all figures so schedule times and ranges stay column-aligned as they change.
 
 ### Hierarchy
-- **Stat** (bold 700, 1.25rem / `text-xl`): The schedule shorthand and the 24-hour bar's hour
-  figures. The loudest type in the app, and it is still only 20px.
-- **Body** (400, 0.875rem / `text-sm`, line-height 1.5): The default. List copy, table cells,
-  nap-schedule rows, guidance values. Prose capped at ~65–75ch (the `max-w-3xl` column).
-- **Label** (400, 0.875rem / `text-sm`, UPPERCASE): Section headers ("Summary", "Sleep Stats",
-  "Nap Schedule") and field labels. Uppercase **is** the sectioning device — see the rule below.
-- **Meta** (400, 0.75rem / `text-xs`): Age ranges, source notes, tier explainers, disclaimer.
-- **Badge** (medium 500, 0.6875rem / `text-[11px]`, line-height 1): Tier badge text only.
+
+- **Countdown** (Faustina 500, `text-6xl`): The hero figure. The loudest type in the app, and
+  the only thing at that size.
+- **Screen / article title** (Faustina 500, `text-3xl`).
+- **Panel heading** (Faustina 500, `text-lg`).
+- **Body** (400, `text-sm`, line-height 1.5): The default.
+- **Eyebrow** (`.eyebrow` — 400, `text-xs`, UPPERCASE, `tracking-[0.14em]`): Section headers.
+- **Meta** (400, `text-xs`): Hints, source notes, the disclaimer.
+- **Badge** (500, `text-[11px]`): Tier badge text only.
 
 ### Named Rules
-**The Uppercase-Is-The-Section Rule.** Small uppercase `slate-400` labels are the section
-rhythm of this app and are already load-bearing. Because they exist, adding a second eyebrow —
-a tracked all-caps kicker above them — is forbidden. One sectioning device, not two.
 
-That includes sub-labels *inside* panels ("What changes", "Try this", "Where the category went
-instead"). Uppercase is fine; **uppercase plus `tracking-wide` is not**, because letterspacing is
-what turns a label into a kicker. There is exactly one uppercase treatment in this app, and
-adding tracking to a handful of places quietly creates a second one.
+**The One Section Label Rule.** `.eyebrow` is the sectioning device, and it is the *only* one.
+Tracked uppercase is now correct — on paper, a tracked small label is what separates a section
+from the prose above it — but there is exactly one such treatment and it lives in one class.
+The dark theme's rule forbidding tracking existed because an untracked uppercase label was
+already doing this job; adding a tracked variant would have created a second device. The
+underlying rule is unchanged: **one sectioning device, not two.**
 
-**The Tabular Rule.** Every number the user reads against another number (`You` vs `Range`,
-nap start–end times) uses `tabular-nums`. Non-negotiable; misaligned digits read as sloppy.
+**The Tabular Rule.** Every number the user reads against another number uses `tabular-nums`.
+Non-negotiable; misaligned digits read as sloppy.
 
 ## 4. Elevation
 
-Flat. There is not a single `box-shadow` in the system, and there should not be. Depth is
-conveyed entirely by **tonal layering** — the `slate-800` surface sitting one step above the
-`slate-900` body — and by hairline `slate-800` borders (`slate-700` for the one emphasized
-total row). On a dark theme tuned for a dark room, shadows would be invisible anyway; a
-lighter surface reads as "closer" far more legibly.
+Three elevations, and no others:
 
-### Named Rules
-**The No-Shadow Rule.** Surfaces are distinguished by tone and hairline borders, never by
-shadow. If you reach for a `box-shadow` to separate two things, raise the surface tone or add a
-`slate-800` border instead. Glassmorphism and blur are forbidden.
+| Token | Where |
+| --- | --- |
+| flat + hairline | Every card. Tone alone is enough one step from the page. |
+| `--shadow-lift` | The Today hero and the Log toggle — the two things that float above their screen. |
+| `--shadow-sheet` | The evidence sheet / drawer, which is genuinely over the page. |
+
+### Named Rule
+
+**The Earned Shadow Rule.** A shadow means "this layer is above the page", and only two things
+in the app are. Everywhere else, separate surfaces with tone and a hairline. This is a real
+change from the dark theme's absolute no-shadow rule: on a dark surface a shadow is invisible,
+so tone was the only tool; on paper a soft shadow is the legible way to say "modal". It is a
+vocabulary of three, not a licence. Glassmorphism and blur are still forbidden.
 
 ## 5. Components
 
 The component feel is **sturdy and reassuring**: clear affordances, generous tap targets for
-tired hands, dependable and quiet. Nothing tactile-loud, nothing that reinvents a standard control.
+tired hands, dependable and quiet. Nothing tactile-loud, nothing that reinvents a standard
+control.
 
-Every control class in this section is a real CSS class in `src/style.css` (`@layer components`),
-not a utility string copied around the templates. See the sizing rule at the end of the section.
+Every control class in this section is a real CSS class in `src/style.css` (`@layer
+components`), not a utility string copied around the templates.
 
 ### Inputs / Fields — `.field`
-- **Style:** `slate-800` fill, `slate-200` text, `text-sm`, `rounded-sm` (4px), `0.625rem`
-  padding, full-width, `min-h-11`. Native `<input type="date/number/datetime-local">`, `<select>`
-  and `<textarea>` — standard controls, not reinvented.
-- **Focus:** A global `sky-400` `focus-visible` ring (2px, 2px offset) is applied to all
-  interactive elements in `style.css` — 8.33:1 on the body. Placeholders use `slate-400`,
-  set globally; never overridden per field.
-- **Invalid:** A `peer-invalid` amber hint ("please enter a birthdate") appears below the field.
-- **Disabled:** 50% opacity (`.field:disabled`).
+
+Warm fill, ink text, `rounded-sm`, full-width, `min-h-11`. Native `<input type="date/number/
+datetime-local">`, `<select>` and `<textarea>` — standard controls, not reinvented. A global
+terracotta `focus-visible` ring (2px, 2px offset) applies to every interactive element.
+Placeholders use the muted ink, set globally; never overridden per field.
 
 ### Buttons — `.btn` plus one weight
-`.btn` carries the shared shape and the 44px height; a weight class carries the colour.
 
-- **`.btn-quiet`** — the default, and almost everything: Copy sitter link, Add to calendar,
-  Add past sleep, Pause/Resume/Delete, troubleshooter options, `+`/`−` step buttons (with
-  `.btn-icon` for the 44×44 square). `slate-800` fill, `hover:slate-700`, `slate-200`.
-  The app is input-driven and URL-persisted, so there is nothing to "submit".
-- **`.btn-primary`** — the two places something actually *starts*: "Start sleep timer" and the
-  service-worker "Refresh". `sky-700` fill with white (5.93:1), **darkening** to `sky-800` on
-  hover, because white on `sky-600` measures 4.1:1 and fails. Two uses is the budget; a third
-  means the hierarchy has stopped meaning anything.
-- **`.btn-inline`** — a text-weight button that reads as a link (← Back, Sources (3), View
-  breakdown). `sky-400`, underlined, padded out to 44px without drawing a box.
-- **`.btn-chip`** — pill toggle (the atypical-day reasons). Still 44px tall; a pill is a shape,
-  not a licence for a 26px target.
-- **Toggles** (`aria-pressed`) build on `.btn` / `.btn-chip` and add their own on/off colours —
-  on is `bg-sky-400/10 border-sky-400/50 text-sky-200` (11.3:1). A pressed state is not a third
-  weight.
-- **States honored:** default, hover, `focus-visible` (global sky-400 ring), `aria-pressed`, and
-  `disabled` (40% opacity — the remove button disables at the last remaining window).
+`.btn` carries the shared pill shape and the 44px height; a weight class carries the colour.
+
+- **`.btn-quiet`** — the default, and almost everything. Warm fill, ink text.
+- **`.btn-primary`** — where something actually starts. Terracotta fill with white, **darkening**
+  on hover.
+- **`.btn-inline`** — a text-weight button that reads as a link, padded to 44px without drawing
+  a box.
+- **`.btn-chip`** — pill toggle (the atypical-day reasons). Still 44px tall.
+- **Toggles** (`aria-pressed`) build on `.btn` / `.btn-chip` and supply their own on/off colours.
+  A pressed state is not a third weight.
 
 ### Named Rule
+
 **The One Sizing Place Rule.** The 44px control height lives in `.btn` / `.btn-chip` / `.field`
-and nowhere else. It is not `min-h-11` typed at each call site. This is not tidiness: when it was
-per-call-site it had already drifted to 36px across six buttons in the sleep log and 26px on the
-atypical-day chips, while the public accessibility statement still claimed 44px everywhere.
-A standard repeated by hand is a standard that quietly stops being true.
+and nowhere else. It is not `min-h-11` typed at each call site. This is not tidiness: when it
+was per-call-site it had already drifted to 36px across six buttons in the sleep log and 26px on
+the atypical-day chips, while the public accessibility statement still claimed 44px everywhere.
+A standard repeated by hand is a standard that quietly stops being true. The e2e suite now
+measures every control on **all four screens**, because the way this breaks is a new screen.
 
-### Tables (Guidance comparison)
-- **Style:** borderless except `border-t border-slate-800` between rows. Three columns:
-  label + TierBadge, **You** (`emerald-400` in range / `amber-400` out), **Range** (`slate-400`).
-  All figures `tabular-nums`, right-aligned.
+### Layout — one column, then two
 
-### Panels / Callouts
-- **Safe-sleep panel:** `rounded-sm`, `emerald-700/50` border, `emerald-900/15` fill, `slate-200`
-  list copy, `emerald-300` uppercase heading + Tier 1 badge. The only tinted surface in the app.
-- **Warning row:** `amber-400` text on `bg-amber-400/10`, `rounded-sm`, `⚠️` prefix. Informational, not alarming.
-- **Sources & Evidence:** a native `<details>`/`<summary>` disclosure with a `slate-800` border. Standard, keyboard-accessible.
+Every screen is a single column on a phone and **two from `lg`**, in the same order, wrapped:
 
-### Signature — The 24-Hour Bar
-The identity component. A `flex h-10` row of three proportional segments (widths = each phase's
-share of 24h): **Waking Sun** orange, **Night Cyan**, **Nap Violet**, left end `rounded-l-lg`,
-right end `rounded-r-lg`. Each segment is itself `flex items-center justify-between` — icon left
-(`sun.png` / `moon.png` / `sleeping-baby2.png`, `aria-hidden`), hour count right in **dark
-`slate-950` text** (white failed on the bright segments). `slate-950` reads 7.2 / 8.3 / 4.58:1 on
-orange / cyan / violet — i.e. it clears the full 4.5:1 body-text bar on all three, so the figure
-stays legal at any size. `slate-900` was only legal at `text-xl` via the large-text exemption
-(4.06:1 on violet), which silently became a failure the moment the figure stepped down to 14px.
-The row carries `role="img"` with an `aria-label` summarizing the split, so the visualization has
-a text alternative. This is the one place saturated color is not just allowed but required — it is
-a data visualization of the day, read warm-to-cool as time-of-day.
+| Screen | Left | Right |
+| --- | --- | --- |
+| Today | hero, day strip, the ranges | the note, guidance, the schedule, what's logged |
+| Log | the toggle + quick actions | the entries, then the week |
+| Settings | the plan and what refines it | what acts on it, and the promises about it |
 
-**Each segment is its own `@container`**, and what it shows depends on how wide *that band* is,
-not on the viewport — a 4h nap band is ~100px on a laptop and ~57px on a phone. It degrades in
-steps rather than falling off a cliff: under 80px the decorative icon is dropped and the figure
-steps down to `text-sm` and centres; only under 28px, where nothing legible fits, does the figure
-go too. A band never renders a clipped number. Note the query measures the **content box**, so
-those thresholds sit inside the `px-1.5` padding — a band whose border box is 57px is querying
-45px, which is the kind of off-by-a-padding that makes a breakpoint fire one step early.
+Learn is the exception: a card grid (`sm:2 / xl:3`), because sixteen full-width rows is a scroll
+and sixteen cards is a library you can scan.
 
-Nothing is lost when a band does go bare: the Sleep Stats table directly below carries all three
-figures, and so does the `aria-label`. **Anything the bar can hide must exist in text nearby** —
-that is the condition that makes hiding it acceptable.
+Nothing appears in one layout that is missing from the other. The two-column form exists so a
+control does not grow to the width of a desk monitor — the Log toggle is a *target*, and a 900px
+circle is not a better one.
 
-The width transition is the one deliberate layout-property animation in the system: width *is*
-the data, and scaling instead would distort the icon and the digits. Three boxes, one row,
-300ms, input-driven — and `motion-safe:` only.
+### Navigation — `AppTabs`
+
+One component in two layouts: a bar pinned to the bottom edge on a phone, and a full **sidebar**
+from `md` up — card fill, right border, sticky and full height, carrying the mark, the nav, whose
+plan this is, and the evidence link. Same list, same order, same labels either way; building a
+separate desktop nav is how the two stop agreeing about what the app contains. Labels are
+**always visible**; an icon-only tab bar is smaller and, at 3am, a guess. Marked up as a real
+`<nav>` of buttons with `aria-current` on the open one, and a "Skip to content" link ahead of it.
+
+On a wide screen the sidebar carries the brand mark and its `alt`, and the page header collapses
+to its invisible `<h1>`. One mark on screen, not two.
+
+### Signature — The Countdown Hero
+
+The identity component. A `rounded-2xl` filled panel carrying, in order: a small uppercase
+kicker with an icon, the countdown in Faustina at 60px, one sentence naming **both ends of the
+window**, and a footer with "Where this time comes from" beside the one-tap sleep toggle. The
+surface is terracotta while the baby is awake and night blue while asleep — the colour *is* the
+state.
+
+The figure counts down to when the window **opens**, and stops at zero rather than counting into
+a deficit. A parent 20 minutes into a window is not late, and the app never says so.
+
+### Signature — The Day Strip
+
+Midnight to midnight, left to right, with a 3px marker for right now. It replaced a three-block
+proportional bar that answered "how much of the day is nap/night/awake" — a question the stats
+table already answered in words — while the question a parent has in a dark nursery is "where am
+I in the day". Position carries that; proportion did not, and a nap at 9am and a nap at 4pm were
+indistinguishable before.
+
+Because segments are positional they can be a few pixels wide, so **nothing is ever written
+inside a band**. The strip carries `role="img"` with an aria-label summarising the day, and the
+**Sleep Stats** table directly below carries every figure the picture encodes. That is the
+condition that lets the strip be a thin ribbon: *anything the picture shows must exist as text
+nearby.*
+
+### Signature — The Evidence Sheet
+
+One modal surface, opened from anywhere: a bottom sheet on a phone, a right-hand drawer from `sm`
+up, same markup either way. It carries the tier badge, plain-language reasoning, **the arithmetic
+on the user's own numbers**, and the citation with a working link. Every number on Today is a
+button that opens it.
+
+This is what lets the home screen be short: fourteen always-open explainer panels became one
+sheet with fourteen things to say. It is honestly modal — `aria-modal`, Escape closes, the
+backdrop closes, focus moves in on open and back to the trigger on close.
+
+The dismiss differs by form, and only because the form differs: the phone sheet is short, so the
+"Got it" button at the end of it is the natural exit; the drawer is a full-height scroll, so it
+needs a `×` that is always in view. Neither is decoration, and there is never both.
+
+### The "why?" chip — `TierWhyButton`
+
+`◐ Tier 2 · why?` beside a section heading: the badge and the explainer trigger as one control.
+A tier badge next to a heading was already a claim about the evidence under it, so making that
+same pill the button that opens the reasoning means nobody has to learn that the badge is one
+thing and the ⓘ beside it is another.
+
+**The pill is 22px and the button is 44px.** Those are not in conflict — the target is the
+transparent box around the pill. Shrinking the target to match the badge would have been the easy
+version and the 44px rule broken quietly.
+
+### Lists that edit — the Edit affordance
+
+The Log screen lists what happened; the means of changing it is a control, not a permanent form.
+Three logged naps used to render six datetime fields, which is a form pretending to be a record.
+Every row still shows everything — kind, length, clock times, running state — and **only the
+means of changing it** sits behind `Edit`. Same rule in Settings, from the other side: the plan
+inputs are a settings *list* (label + one-line purpose left, control right-aligned, one hairline
+row each), so the plan can be read back without reading a form.
 
 ### Signature — The Tier Badge
-An `inline-flex` pill: 1px border + text in the tier color (`#27b06a` Tier 1, `#c9940c` Tier 2,
-`#94a3b8` Tier 3), `rounded-sm`, `text-[11px]`. Critically, it encodes tier by **shape as well as
-color** — a solid `●` for Tier 1, a half `◐` for Tier 2, a hollow `○` for Tier 3 — so it survives
-color-blindness. Never distinguish tiers by color alone. Badges render on the body *and* on
-`slate-800` panels, so all three colours are verified against both.
+
+A pill: tier ink on a 12% wash **mixed from that same ink**, so a tier can never end up with a
+tint that does not match its text. It encodes tier by **shape as well as colour** — a solid `●`
+for Tier 1, a half `◐` for Tier 2, a hollow `○` for Tier 3 — so it survives colour-blindness.
+Never distinguish tiers by colour alone.
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** keep `sky` as the only interactive family — `sky-400` links/expanders/focus rings, `sky-700` the one primary fill, `sky-400/10` + `sky-200` a pressed toggle. If it's sky, you can press it.
-- **Do** render out-of-range and warning states in **amber** (`#fbbf24`), framed as information a parent can act on calmly.
-- **Do** attach a tier badge to every recommendation, and encode the tier by **shape (`●`/`◐`/`○`) as well as color**.
-- **Do** keep surfaces flat — separate them with tone (`slate-800` on `slate-900`) and hairline borders.
-- **Do** keep the global `sky-400` `focus-visible` ring on every interactive element (applied in `style.css`) — required for WCAG 2.2 AA.
-- **Do** keep body text at `slate-300` or lighter; use `text-muted` (`#7c899e`) as the floor on the body and `text-muted-raised` (`#8894a9`) as the floor on a `slate-800` panel.
-- **Do** measure a colour against **every surface it lands on**, not just the body — one panel up can cost a full point of contrast.
+
+- **Do** keep terracotta as the only interactive family. If it's terracotta, you can press it.
+- **Do** render out-of-range and warning states in `#7F5D2C`, framed as information a parent can
+  act on calmly.
+- **Do** attach a tier badge to every recommendation, and encode the tier by **shape (`●`/`◐`/`○`)
+  as well as colour**.
+- **Do** put every number behind an evidence sheet that shows the arithmetic on the user's own
+  figures. "No AI" is a claim you have to be able to *demonstrate*.
+- **Do** give every card a hairline. On paper, a lighter fill alone is not a boundary.
+- **Do** use `text-muted` (`#6E635C`) as the floor for real text, on any surface.
+- **Do** measure a colour against **every surface it lands on**.
 - **Do** use `tabular-nums` on every figure the user compares against another.
-- **Do** size controls with `.btn` / `.btn-chip` / `.field`, which carry the 44px height — never by typing `min-h-11` at the call site. (The One Sizing Place Rule.)
-- **Do** make sure anything a responsive rule can hide (a 24-hour-bar figure, an icon) still exists as text nearby.
+- **Do** size controls with `.btn` / `.btn-chip` / `.field`. (The One Sizing Place Rule.)
+- **Do** make sure anything the day strip encodes still exists as text nearby.
+- **Do** ask which of the four screens a new panel belongs to before building it. If the answer
+  is "Today", ask again — Today is the countdown and the day, and nothing else.
+- **Do** give a small control a 44px transparent target rather than making the visible thing
+  bigger. Badge-sized is a look; tap-sized is a rule.
+- **Do** put editing behind a control on a screen whose job is to *show*. A list that renders a
+  form per row is a form.
 
 ### Don't:
-- **Don't** introduce **generic baby-app pastel** — no pastel-pink/blue, no nursery-blob shapes, no cartoon stickers. Warmth comes from tone, not decoration.
-- **Don't** use **red** anywhere — not even for Stop. Out-of-range is amber; a "stop" is a raised slate tone. A worried parent must be informed, not alarmed. (The Amber-Not-Red Rule.)
-- **Don't** let a day-arc colour (`orange-500` wake, `cyan-500` night, `violet-500` nap) become an interaction state. Those three mean a block of the day, everywhere, always. (The One Accent Rule.)
-- **Don't** drift toward a **cold medical dashboard** — no gray-on-gray density, no clinical alarm styling.
-- **Don't** add a **tracked-uppercase eyebrow** above the existing uppercase section labels, and don't add `tracking-wide` to a sub-label inside a panel — tracking is what makes a label a kicker. (The Uppercase-Is-The-Section Rule.)
-- **Don't** ship **generic SaaS scaffold**: no hero-metric template, no identical card grids, no gradient text (`background-clip:text`).
-- **Don't** add `box-shadow`, glassmorphism, or blur to convey depth — raise the tone or add a `slate-800` border. (The No-Shadow Rule.)
-- **Don't** nest a card in a card in a card. A disclosure/answer replaces the content in its frame; set a sub-block off with a rule and a label, not a third box.
-- **Don't** use `slate-500` or darker for real text anywhere, including as a per-field `placeholder:` override — it fails AA. (The Muted Floor Rule.)
-- **Don't** use a colored `border-left`/`border-right` >1px as an accent stripe. (The former `border-l-2` source indent in EvidenceGuidance is now plain `pl-3` padding.)
-- **Don't** reinvent standard controls — keep native date/number/select and `<details>`; the tool should disappear into the task.
-- **Don't** let a panel rebuild its own copy of the plan or the sleep log from `window.location` / `localStorage`. There is one reactive plan (`stores/plan.ts`) and one reactive log (`stores/sleepLog.ts`); a private copy goes stale silently, which is how the calendar export came to ship the plan as it was at page load.
+
+- **Don't** introduce **generic baby-app pastel** — no pastel-pink/blue, no nursery-blob shapes,
+  no cartoon stickers. Warmth comes from paper tone, not decoration.
+- **Don't** use **red** anywhere — not even for Stop. (The Amber-Not-Red Rule.)
+- **Don't** let `#C7A470` wake or `#4E5570` night become an interaction state. Those two mean a
+  block of the day, everywhere, always.
+- **Don't** use `#8A7C70` or anything at or below `#AC9F92` for real text — they fail AA on
+  paper. (The Muted Floor Rule.)
+- **Don't** use the lighter terracotta `#C46B4C` under white text: it measures 3.83:1.
+- **Don't** add a shadow to anything that is not floating above the page. Three elevations, and
+  the third is the modal sheet. (The Earned Shadow Rule.)
+- **Don't** add a second sectioning device. `.eyebrow` is it.
+- **Don't** load a webfont from a CDN. Self-host or use the fallback stack — offline and privacy
+  are both product promises here.
+- **Don't** ship **generic SaaS scaffold**: no hero-metric template, no identical card grids, no
+  gradient text.
+- **Don't** nest a card in a card in a card. A disclosure replaces the content in its frame; set
+  a sub-block off with a rule and a label, not a third box.
+- **Don't** reinvent standard controls — keep native date/number/select and `<details>`.
+- **Don't** let a panel rebuild its own copy of the plan, the log, or the open tab from
+  `window.location` / `localStorage`. There is one reactive plan (`stores/plan.ts`), one log
+  (`stores/sleepLog.ts`), one tab (`stores/tabs.ts`) and one sheet (`stores/sheet.ts`). A private
+  copy goes stale silently, which is how the calendar export came to ship the plan as it was at
+  page load.

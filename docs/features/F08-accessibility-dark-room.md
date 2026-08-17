@@ -25,12 +25,13 @@ The research marks this a **Confirmed gap**: accessibility is unmarketed across 
 
 ## Our approach (spec)
 Bake WCAG 2.2 AA into every surface and say so publicly:
-- **Dark-room first.** Deep slate surface, low-glare quiet ink; body text ≥4.5:1 (verified, not assumed — `text-muted` #7c899e = 5.04:1 is the floor per DESIGN).
-- **One-hand targets.** All interactive elements ≥44px, thumb-reachable.
+- **Low-glare, verified contrast.** Body text ≥4.5:1 against whatever it sits on — verified, not assumed. The 2026-08 redesign moved the app from a deep-slate dark surface to warm paper (`#F6F0E6`); the floor is now one muted ink, `#6E635C`, which clears AA on the page (5.01:1) *and* on a card (5.65:1). Anything at or below `#AC9F92` is decorative only. See DESIGN §2.
+- **One-hand targets.** All interactive elements ≥44px, thumb-reachable. The bottom tab bar is the primary navigation on phones for exactly this reason.
 - **Reduced motion.** `prefers-reduced-motion` honored on every animation.
-- **Full keyboard nav** with a visible `sky-400` focus-visible ring (2px, 8.33:1) on all controls.
-- **Screen reader.** The 24h bar carries `role="img"` + summarizing `aria-label`; decorative imagery `aria-hidden`; native date/number/select and `<details>` for free semantics.
-- **Not color alone.** Tier badges encode meaning by shape (`●`/`◐`) + text; amber-not-red for warnings.
+- **Full keyboard nav** with a visible 2px terracotta focus-visible ring on all controls, and a "Skip to content" link ahead of the navigation on every screen.
+- **Navigation is announced, not just coloured.** The four screens are a real `<nav>`; the open one carries `aria-current="page"`.
+- **Screen reader.** The day strip carries `role="img"` + a summarizing `aria-label`; decorative imagery is `aria-hidden`; native date/number/select and `<details>` give free semantics. The evidence sheet is honestly modal — `aria-modal`, Escape closes, focus moves in on open and returns to the trigger on close.
+- **Not color alone.** Tier badges encode meaning by shape (`●`/`◐`/`○`) + text; amber-brown, not red, for warnings.
 - **Public accessibility statement** page documenting conformance, known gaps, and contact.
 
 ## Scope — MVP
@@ -43,11 +44,11 @@ Bake WCAG 2.2 AA into every surface and say so publicly:
 - Third-party audit and WCAG 2.2 AA conformance report (VPAT-style).
 
 ## Edge cases & gotchas
-- Contrast on the dark slate surface is easy to fail — verify every state (in-range emerald, out-of-range amber, muted meta), don't assume.
+- Contrast is easy to fail on *filled* surfaces — verify every state (in-range green, out-of-range amber-brown, muted meta, and any ink on a terracotta or night fill), don't assume. White on the lighter terracotta `#C46B4C` measures 3.83:1, which is why filled accents use `#A9502F`.
 - Dense citation-list links carry the WCAG 2.2 AA 24px minimum target, not the app's 44px control standard — a deliberate trade documented in the accessibility statement's known gaps.
-- Reduced-motion must cover the 24h-bar transitions, not just page fades.
-- Native controls give free accessibility but must keep visible focus in the dark theme.
-- Screen-reader users need the day arc's meaning in text, since color/shape are visual.
+- The 44px floor now has to hold on **four** screens, not one page. The e2e suite measures every control on each of them, because the way this regresses is a new screen.
+- Native controls give free accessibility but must keep visible focus; `color-scheme: light` keeps native pickers matching the page.
+- Screen-reader users need the day strip's meaning in text, since color and position are visual. Because the strip is positional its bands can be a few pixels wide, so nothing is written inside one — the Sleep Stats table below carries every figure.
 
 ## Evidence & citations
 FEATURE-INDEX F08 (Confirmed gap, P0, MVP). PRODUCT Accessibility & Inclusion and DESIGN color/contrast rules (Muted Floor, One Accent, Amber-Not-Red, tier shape-encoding). WCAG 2.2 AA as the stated target.

@@ -40,7 +40,7 @@ async function seed(page: import('@playwright/test').Page, windows: number[]) {
 test.describe('Personalized Windows from Local History (optional) [@feature:personalized-from-local-history]', () => {
   test('is off by default and does not touch the age plan', async ({ page }) => {
     await seed(page, [2.75, 2, 2]);
-    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7');
+    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7&tab=settings');
 
     const toggle = page.getByRole('button', { name: 'Personalize from my logs' });
     await expect(toggle).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('Personalized Windows from Local History (optional) [@feature:pers
 
   test('opting in nudges the morning window toward the logged median and shows its work', async ({ page }) => {
     await seed(page, [2.75, 2, 2]);
-    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7');
+    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7&tab=settings');
 
     await page.getByRole('button', { name: 'Personalize from my logs' }).click();
 
@@ -67,7 +67,7 @@ test.describe('Personalized Windows from Local History (optional) [@feature:pers
 
   test('one tap resets to the age default', async ({ page }) => {
     await seed(page, [2.75, 2, 2]);
-    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7');
+    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7&tab=settings');
 
     await page.getByRole('button', { name: 'Personalize from my logs' }).click();
     await expect(page.getByText('7-2.5/2/2-7')).toBeVisible();
@@ -79,7 +79,7 @@ test.describe('Personalized Windows from Local History (optional) [@feature:pers
 
   test('too little data keeps the age default and says so', async ({ page }) => {
     // No seeded log at all.
-    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7');
+    await page.goto('/?bd=2026-01-01&s=7-2/2/2-7&tab=settings');
 
     await page.getByRole('button', { name: 'Personalize from my logs' }).click();
     await expect(page.getByText(/Not enough logged sleep yet to personalize/)).toBeVisible();

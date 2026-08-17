@@ -130,7 +130,7 @@ async function copyHandoffLink() {
 
   <!-- Editing (parent) view: note field + live preview + copy link. -->
   <section v-if="!sitterMode" class="mt-6">
-    <h2 class="text-slate-400 text-sm uppercase font-normal">Caregiver handoff</h2>
+    <h2 class="eyebrow">Caregiver handoff</h2>
     <p class="text-muted text-xs mb-2">
       Leave a note for whoever has the baby next — it travels with a read-only link, next to today's plan
       and a quick "since you last had the baby" recap built from your logs. No account, nothing to edit on
@@ -147,7 +147,7 @@ async function copyHandoffLink() {
 
     <!-- Live preview of what the incoming caregiver will see. -->
     <div class="mt-3 bg-slate-800/60 rounded-lg p-3">
-      <span class="text-slate-400 text-xs uppercase">Since you last had the baby</span>
+      <span class="eyebrow">Since you last had the baby</span>
       <p v-if="napLine" class="text-slate-200 text-sm mt-1">{{ napLine }}</p>
       <p v-else class="text-slate-400 text-sm mt-1">No naps logged yet.</p>
       <p class="text-slate-300 text-sm mt-1">
@@ -167,7 +167,7 @@ async function copyHandoffLink() {
   <!-- Read-only (sitter) view: static text only, no controls. Renders nothing
        for a plain sitter link that carries no handoff. -->
   <section v-else-if="showSitterPanel" class="mt-6 bg-slate-800 rounded-lg p-4">
-    <span class="flex items-center gap-2 text-slate-400 text-sm uppercase">
+    <span class="flex items-center gap-2 eyebrow">
       <img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Since you last had the baby
     </span>
     <p v-if="shownNote" class="text-slate-200 mt-2 whitespace-pre-line">{{ shownNote }}</p>

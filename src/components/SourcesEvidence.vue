@@ -31,7 +31,7 @@ const byTier = computed(() =>
           <div class="px-3 pb-3 space-y-5">
                <!-- Tier explainer -->
                <div class="space-y-2">
-                    <p class="text-slate-400 text-xs uppercase">What do these tiers mean?</p>
+                    <p class="eyebrow">What do these tiers mean?</p>
                     <div v-for="t in [tiers['1'], tiers['2'], tiers['3']]" :key="t.id" class="text-xs">
                          <TierBadge :tier="t.id" />
                          <p class="text-slate-400 mt-1">{{ t.description }}</p>

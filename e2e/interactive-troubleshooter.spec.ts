@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Interactive Sleep Troubleshooter (Decision Tree) [@feature:interactive-troubleshooter]', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=learn&topic=troubleshooter');
   });
 
   test('offers the three problem trees', async ({ page }) => {

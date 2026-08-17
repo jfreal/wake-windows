@@ -9,6 +9,7 @@ import {
     type PlanExtras,
 } from '../models/planUrl'
 import { isAtypicalReason } from '../models/GuidanceMode'
+import { tabParam, topicParam } from './tabs'
 
 // @doc:shareable-plan-url @doc:sibling-twins-alignment @doc:read-only-babysitter-mode
 // @doc:atypical-day-flag @doc:dst-timezone-shift
@@ -88,9 +89,17 @@ const atParam = computed(() => (schedule.atypical ? (schedule.atypicalReason || 
 /** One or both children (bd/s, plus bd2/s2 when a sibling is on the plan). */
 export const planQuery = computed(() => buildPlanQuery(schedule, sibling.value))
 
-/** The plan plus its shared extras — exactly what the address bar shows. */
+/** The plan plus its shared extras — exactly what the address bar shows. The
+ * open tab rides along so a screen is a place you can link to and come back to;
+ * `planLink()` below deliberately does NOT inherit it, because which screen the
+ * sender happened to be looking at is not part of what they are sharing. */
 export const canonicalQuery = computed(() =>
-    withPlanExtras(planQuery.value, { shift: shiftParam.value, at: atParam.value }))
+    withPlanExtras(planQuery.value, {
+        shift: shiftParam.value,
+        at: atParam.value,
+        tab: tabParam.value,
+        topic: topicParam.value,
+    }))
 
 /**
  * An absolute link to this plan, optionally with extras layered on (sitter

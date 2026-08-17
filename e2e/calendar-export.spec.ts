@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Calendar Export (ICS) [@feature:calendar-export]', () => {
   // Birthday pinned far in the past so the baby is always in clock-guidance mode
   // (>6 mo corrected) → stable ±15 min windows independent of the run date.
-  const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7';
+  const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7&tab=settings';
 
   test('exports a well-formed .ics for today\'s plan', async ({ page }) => {
     await page.goto(PLAN);

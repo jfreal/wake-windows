@@ -1,9 +1,10 @@
 // @test:ephemerality-data-deletion
 import { test, expect } from '@playwright/test';
+import { openTab } from './helpers';
 
 test.describe('Ephemerality & One-Click Data Deletion [@feature:ephemerality-data-deletion]', () => {
   test('one click clears URL plan + storage and confirms nothing remains', async ({ page }) => {
-    await page.goto('/?bd=2026-01-01&s=8-3/3-8');
+    await page.goto('/?bd=2026-01-01&s=8-3/3-8&tab=settings');
     await page.evaluate(() => {
       localStorage.setItem('test-leftover', 'x');
       sessionStorage.setItem('test-session-leftover', 'x');
@@ -27,12 +28,14 @@ test.describe('Ephemerality & One-Click Data Deletion [@feature:ephemerality-dat
   // the data we just promised was gone — DeleteData shuts the store's
   // persistence down before clearing, rather than racing it.
   test('deleting immediately after logging a sleep leaves nothing behind', async ({ page }) => {
-    await page.goto('/?bd=2026-01-01&s=8-3/3-8');
+    await page.goto('/?bd=2026-01-01&s=8-3/3-8&tab=log');
 
-    await page.getByRole('button', { name: 'Start sleep timer' }).click();
+    await page.getByRole('button', { name: 'They went down' }).click();
     // The entry is real and on screen...
     await expect(page.getByRole('button', { name: 'Stop' })).toBeVisible();
-    // ...and the write for it is still in flight. Delete now, not later.
+    // ...and the write for it is still in flight. Switch screens (which does NOT
+    // reload — the debounced write is still queued) and delete now, not later.
+    await openTab(page, 'Settings');
     await page.getByRole('button', { name: 'Delete all my data' }).click();
 
     await expect(page.getByRole('status')).toContainText('All gone');
@@ -47,7 +50,7 @@ test.describe('Ephemerality & One-Click Data Deletion [@feature:ephemerality-dat
   });
 
   test('temporary-by-design copy is visible before deleting', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?tab=settings');
     await expect(page.getByText(/temporary by design/i)).toBeVisible();
     await expect(page.getByText(/no account to close and no subscription to cancel/i)).toBeVisible();
   });

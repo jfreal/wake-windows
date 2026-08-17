@@ -84,7 +84,7 @@ const barTotal = computed(() => {
 <template>
      <!-- @doc:nap-transition-detector — nothing renders outside a transition age. -->
      <section v-if="result.rule" class="mt-6">
-          <h2 class="text-slate-400 text-sm uppercase font-normal">Nap transitions</h2>
+          <h2 class="eyebrow">Nap transitions</h2>
 
           <!-- The gentle, dismissible prompt. -->
           <div v-if="showPrompt" class="mt-2 rounded border border-amber-400/40 bg-amber-400/5 p-3">

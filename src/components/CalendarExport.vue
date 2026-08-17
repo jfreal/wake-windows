@@ -71,7 +71,7 @@ function addToCalendar() {
 
 <template>
   <section class="rounded border border-slate-800 p-3">
-    <h2 class="text-slate-400 text-sm uppercase font-normal">Add to calendar</h2>
+    <h2 class="eyebrow">Add to calendar</h2>
     <p class="text-muted text-xs mt-1 mb-2">
       Drop today's naps and bedtime onto your calendar (Google, Apple, or Outlook). Each event is a
       guidance range, not a fixed appointment — anywhere in the window counts. No account, nothing leaves

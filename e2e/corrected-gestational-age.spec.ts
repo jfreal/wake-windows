@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Corrected / gestational-age input [@feature:corrected-gestational-age]', () => {
   test('accepts gestational weeks and warns on out-of-range values', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=settings');
     const weeks = page.locator('#weeks');
     await expect(weeks).toBeVisible();
     await weeks.fill('10');
@@ -17,7 +17,7 @@ test.describe('Corrected / gestational-age input [@feature:corrected-gestational
   // otherwise clearing the field to retype it tells a full-term parent their
   // baby was born early, quoting an adjusted age of 0 mo.
   test('the born-early note tracks a real gestational age, not a blank field', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=settings');
     const weeks = page.locator('#weeks');
     await weeks.fill('34');
     await expect(page.getByText(/Born early/)).toBeVisible();

@@ -66,6 +66,11 @@ export interface PlanExtras {
     note?: string | null;
     napStart?: number | null;
     napEnd?: number | null;
+    /** Which of the four screens is open. Blank on Today — the default screen
+     * carries no param, so a link to Today and a bare link are the same link. */
+    tab?: string | null;
+    /** The open Learn article, so an article is a thing you can send someone. */
+    topic?: string | null;
 }
 
 /**
@@ -78,6 +83,11 @@ export function withPlanExtras(baseQuery: string, extras: PlanExtras = {}): stri
     if (extras.shift) query += `&shift=${extras.shift}`;
     if (extras.at) query += `&at=${extras.at}`;
     if (extras.view) query += `&view=${extras.view}`;
+    if (extras.tab) query += `&tab=${extras.tab}`;
+    // Encoded, unlike `tab`: the tab is one of four literals this code owns,
+    // but the topic is seeded from the incoming query string, so an `&` in it
+    // would split into a second param and change what the link means.
+    if (extras.topic) query += `&topic=${encodeURIComponent(extras.topic)}`;
     // @doc:caregiver-handoff-notes — note is free text, so it must be encoded;
     // the timestamps are plain integers. napEnd omitted ⇒ nap still in progress.
     if (extras.note) query += `&hn=${encodeURIComponent(extras.note)}`;

@@ -64,10 +64,10 @@ function openTiers() {
   <aside v-if="layout === 'rail'"
     class="sticky top-0 flex h-screen w-56 shrink-0 flex-col gap-7 border-r border-line bg-card px-5 py-7 lg:w-64">
     <div class="flex items-center gap-3 px-2">
-      <!-- On a wide screen this IS the brand mark — the page header collapses to
-           its invisible heading — so this is the copy that carries the alt. -->
+      <!-- Decorative: the wordmark beside it says "Wake Windows" in text, so an
+           alt here would have a screen reader announce the brand twice. -->
       <span class="grid h-11 w-11 shrink-0 place-items-center rounded-[15px] bg-cyan-500">
-        <img :src="logoUrl" alt="Wake Windows" width="28" height="28" class="h-7 w-auto" />
+        <img :src="logoUrl" alt="" aria-hidden="true" width="28" height="28" class="h-7 w-auto" />
       </span>
       <span class="min-w-0">
         <span class="display block text-lg text-slate-200 leading-tight">Wake Windows</span>

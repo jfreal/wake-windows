@@ -175,6 +175,12 @@ const TOPICS: Topic[] = [
 
 const current = computed(() => TOPICS.find((t) => t.id === openTopic.value) ?? null)
 
+// `openTopic` is seeded straight from `?topic=`, and this screen owns the list
+// of what a topic can be. Clearing an unknown one here stops it being written
+// back into the canonical URL, where it would sit in the address bar for the
+// rest of the session and ride along in anything copied out of it.
+if (openTopic.value && !current.value) openTopic.value = null
+
 // The badge says "Tier 2"; this says what Tier 2 means. Spelling it out beside
 // the badge on the article itself saves the reader a trip to the explainer to
 // answer the only question the badge raises.

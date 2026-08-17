@@ -48,8 +48,14 @@ const showLink = computed(() => props.linkToSettings === true)
 
 <template>
   <!-- Amber and informational, never red: a parent who has mistyped a number is
-       not in trouble. -->
-  <div aria-live="polite" v-if="warnings.length" class="space-y-1.5">
+       not in trouble.
+
+       The live region is ALWAYS mounted and only its children come and go. A
+       region inserted together with its content is generally not announced —
+       assistive tech has to have been watching the node before it changed — so
+       putting the `v-if` here instead of on the children would make the warning
+       visible and silent. `empty:` keeps it from occupying space when idle. -->
+  <div aria-live="polite" class="space-y-1.5 empty:hidden">
     <p v-for="warning in warnings" :key="warning"
       class="text-amber-400 text-sm p-3 bg-amber-400/10 rounded-sm">
       &#9888;&#65039; {{ warning }}

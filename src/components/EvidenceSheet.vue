@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { closeSheet, sheet } from '../stores/sheet'
 import { getSources, getTier } from '../models/Citations'
 import TierBadge from './TierBadge.vue'
@@ -19,6 +19,7 @@ import TierBadge from './TierBadge.vue'
 
 const panel = ref<HTMLElement | null>(null)
 let opener: HTMLElement | null = null
+let previousOverflow = ''
 
 // "Tier 2" beside "Practice-based heuristic": the badge names the tier, this
 // says what it means, so the sheet never assumes you already know the scale.
@@ -27,12 +28,31 @@ const tierMeaning = computed(() => (sheet.value ? getTier(sheet.value.tier).labe
 watch(sheet, async (value, previous) => {
   if (value && !previous) {
     opener = document.activeElement as HTMLElement | null
+    // Document-level, not bound to the wrapper: clicking the sheet's own prose
+    // blurs to <body> in several browsers, and a handler scoped to the wrapper
+    // would then never see the keystroke — so Escape would quietly stop working
+    // the moment someone touched the text they came to read.
+    document.addEventListener('keydown', onKeydown)
+    // Nothing under a modal should scroll. Without this a flick outside the
+    // sheet moves the page behind the scrim, so dismissing it returns the
+    // reader somewhere other than where they left.
+    previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     await nextTick()
     panel.value?.focus()
   } else if (!value && previous) {
+    document.removeEventListener('keydown', onKeydown)
+    document.body.style.overflow = previousOverflow
     opener?.focus()
     opener = null
   }
+})
+
+// Unmounting with a sheet open (a tab switch driven from elsewhere) must not
+// leave the page unscrollable or the listener attached.
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onKeydown)
+  if (sheet.value) document.body.style.overflow = previousOverflow
 })
 
 const FOCUSABLE =
@@ -73,8 +93,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div v-if="sheet" class="fixed inset-0 z-50 flex items-end sm:items-stretch sm:justify-end"
-    v-on:keydown="onKeydown">
+  <div v-if="sheet" class="fixed inset-0 z-50 flex items-end sm:items-stretch sm:justify-end">
     <!-- The scrim is a button, not a div with a click handler: it is a real
          control ("dismiss"), so it should be one for anything that isn't a
          mouse. -->

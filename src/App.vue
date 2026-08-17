@@ -66,15 +66,16 @@ import logoUrl from './assets/logo.png'
       <AppTabs layout="rail" class="hidden md:flex" />
 
       <main class="min-w-0 flex-1 px-4 pb-28 md:px-8 md:pb-16 lg:px-12">
-        <!-- The mark carries the brand; the descriptive title is for crawlers
-             and screen readers, which is the same split the old header had. The
-             logo keeps a real `alt` — it is the only image in the app that
-             means something on its own. On desktop the sidebar already shows
-             it, so the header collapses to the invisible heading. -->
+        <!-- The mark carries the brand visually; the heading text carries it for
+             crawlers and screen readers, which is the same split the old header
+             had. The image is decorative precisely BECAUSE that text is inside
+             the same <h1> — giving it an alt as well would make the heading
+             announce "Wake Windows Wake Windows — Infant Nap Schedule…". On
+             desktop the sidebar shows the mark, so the header is heading-only. -->
         <header class="pt-5 pb-4 md:pt-8 md:pb-0">
           <h1>
-            <img class="h-9 w-auto md:hidden" :src="logoUrl" alt="Wake Windows" width="32" height="36"
-              fetchpriority="high" />
+            <img class="h-9 w-auto md:hidden" :src="logoUrl" alt="" aria-hidden="true"
+              width="32" height="36" fetchpriority="high" />
             <span class="sr-only">Wake Windows — Infant Nap Schedule &amp; Wake Windows Planner</span>
           </h1>
         </header>

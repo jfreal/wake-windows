@@ -21,10 +21,11 @@ test.describe('Offline Mode [@feature:offline-mode]', () => {
     await page.reload();
 
     // App shell renders from cache — no error page.
-    // The brand mark renders from cache. It lives in the page header on a phone
-    // and in the sidebar on a wide screen, so match it by name rather than by
-    // where it happens to sit at the runner's viewport.
-    await expect(page.getByRole('img', { name: 'Wake Windows' })).toBeVisible();
+    // The shell renders from cache. Asserted on the page heading, which is
+    // present at every width — the brand IMAGE is decorative (the heading text
+    // beside it already names the app) and moves between the header and the
+    // sidebar depending on viewport.
+    await expect(page.getByRole('heading', { level: 1, name: /Wake Windows/ })).toBeAttached();
 
     // Honest indicator instead of a spinner or error.
     await expect(page.getByText('Offline — your plan still works')).toBeVisible();

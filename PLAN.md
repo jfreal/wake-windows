@@ -94,6 +94,8 @@ src/
                               claims + competitor AI data-flow citations
     HowCalculated.vue         G04 "how this was calculated": the plan's
                               arithmetic spelled out with the user's own numbers
+    OfflineIndicator.vue      F07 offline banner ("your plan still works") +
+                              service-worker update prompt (refresh path)
   data/
     citations.json            Source library + per-age-band recommendations
                               (copied from ../../.research/citations.json)
@@ -113,9 +115,6 @@ src/
     today.ts                  The Today screen's arithmetic as pure functions:
                               day segments, "what happens next", band geometry
     *.test.ts                 Vitest unit tests
-  components/
-    OfflineIndicator.vue      F07 offline banner ("your plan still works") +
-                              service-worker update prompt (refresh path)
 ```
 
 ## Offline / PWA (F07)
@@ -145,9 +144,13 @@ Every number on the Today screen is a button that opens one evidence sheet
 (`stores/sheet.ts` + `EvidenceSheet.vue`) carrying the tier, the plain-language
 reason, the arithmetic on the parent's own figures, and the citation link.
 
-State lives in a single `reactive(ScheduleSetting)` in `stores/plan.ts`; the
-address bar is rewritten from a debounced `watch` on the canonical query, which
-folds in the DST preset, the atypical flag and the open tab/topic.
+Plan state lives in a single `reactive(ScheduleSetting)` in `stores/plan.ts`,
+and the address bar is rewritten from a debounced `watch` on the canonical
+query, which folds in the DST preset, the atypical flag and the open tab/topic.
+It is not the app's only state: the sleep log (`stores/sleepLog.ts`) persists to
+localStorage, and the open screen (`stores/tabs.ts`) and evidence sheet
+(`stores/sheet.ts`) are their own stores. Only the plan and the open screen ride
+the URL — sleep history stays on the device and is never in a shared link.
 
 ## History
 This project was modernized from a stale 2022 template (Vite 3 / TS 4.6 / Tailwind 3.1,

@@ -37,11 +37,15 @@ const elapsed = computed(() => {
     + ` · started ${formatClock(minutesFromMidnight(new Date(entry.start)))}`
 })
 
-// The accessible name deliberately avoids the words "start" and "stop": the
-// per-entry controls below already own those, and two different-sized buttons
-// answering to the same name is a maze for anyone driving by voice or by
-// screen reader.
-const label = computed(() => (asleep.value ? 'They woke up' : 'They went down'))
+// The accessible name opens with the word ON the button, then says what
+// pressing it does.
+//
+// WCAG 2.5.3 (Label in Name, Level A): the visible label has to be part of the
+// accessible name, or "click Awake" does nothing for a voice-control user — on
+// the primary action of this screen. The name still avoids "start" and "stop",
+// which the per-entry controls own; two different-sized buttons answering to
+// the same name is its own maze.
+const label = computed(() => (asleep.value ? 'Awake — they woke up' : 'Asleep — they went down'))
 
 function toggle() {
   const entry = runningEntry.value
@@ -63,6 +67,11 @@ function toggle() {
 // naps. Nothing else in the app binds a bare letter.
 function onKeydown(event: KeyboardEvent) {
   if (event.key !== 's' && event.key !== 'S') return
+  // `keydown` auto-repeats while the key is held, and each repeat would start
+  // or stop an entry — holding S for a second writes a dozen near-zero-length
+  // sleeps into the persisted log and into today's totals. `isComposing` for
+  // the same reason: an IME candidate window must never bank a nap.
+  if (event.repeat || event.isComposing) return
   if (event.metaKey || event.ctrlKey || event.altKey) return
   const el = event.target as HTMLElement | null
   if (el?.isContentEditable) return
@@ -90,7 +99,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       <span class="text-[15px] opacity-85" aria-hidden="true">{{ sub }}</span>
     </button>
 
-    <p class="text-center text-sm text-muted mt-4 text-pretty" aria-live="polite">
+    <!-- The elapsed readout re-renders every second while a timer runs, so it
+         must stay OUT of the live region: announcing a new duration once a
+         second makes the screen unusable with a screen reader for exactly as
+         long as the baby is asleep. Only the state change is announced. -->
+    <p class="sr-only" role="status">{{ asleep ? 'Sleep started' : 'Sleep stopped' }}</p>
+    <p class="text-center text-sm text-muted mt-4 text-pretty">
       <template v-if="asleep">{{ elapsed }}</template>
       <template v-else>One tap. Nothing else to fill in — you can fix the time afterwards.</template>
     </p>

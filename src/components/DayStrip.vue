@@ -87,19 +87,22 @@ const stats = computed(() => [
     <h2 class="eyebrow mt-5">Sleep Stats</h2>
     <table class="w-full mt-1.5 text-sm">
       <tbody>
+        <!-- The label column is a row header, not a second data cell: without
+             `th scope="row"` a screen reader reads a bare pair of values and the
+             tie between "Night Sleep" and "12h" exists only visually. -->
         <tr v-for="row in stats" :key="row.label" class="border-t border-line first:border-t-0">
-          <td class="py-1.5 text-slate-300">
+          <th scope="row" class="py-1.5 text-left font-normal text-slate-300">
             <span class="flex items-center gap-2">
               <span class="grid h-5 w-5 shrink-0 place-items-center rounded-sm" :style="{ background: row.color }">
                 <img :src="row.icon" alt="" aria-hidden="true" width="14" height="14" class="h-3.5 w-3.5" />
               </span>
               {{ row.label }}
             </span>
-          </td>
+          </th>
           <td class="py-1.5 text-right text-slate-200 tabular-nums">{{ row.hours }}h</td>
         </tr>
         <tr class="border-t border-line-strong">
-          <td class="py-1.5 text-slate-300 pl-7">Total Sleep</td>
+          <th scope="row" class="py-1.5 pl-7 text-left font-normal text-slate-300">Total Sleep</th>
           <td class="py-1.5 text-right text-slate-200 tabular-nums font-medium">{{ schedule.totalSleep }}h</td>
         </tr>
       </tbody>

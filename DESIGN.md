@@ -165,12 +165,14 @@ templates, and why `bg-slate-800` still means "the surface one step up from the 
 it appears.
 
 ### Primary
+
 - **Terracotta** (`#A9502F`): The single interactive family. Links, expanders, the focus ring,
   the one primary fill, and the pressed-toggle wash. Hover **darkens** to `#8E4A2E` in both
   directions — as link ink it goes darker, and as a fill it goes darker too, because white on
   a lighter terracotta fails AA.
 
 ### Secondary — The Day Arc
+
 The day strip's three colours, read left to right as literal time-of-day. Warm to cool.
 - **Waking Sun** (`#C7A470`): Awake time. Paired with the sun icon.
 - **Nap Terracotta** (`#A9502F`): Daytime naps. Paired with the sleeping-baby icon.
@@ -178,6 +180,7 @@ The day strip's three colours, read left to right as literal time-of-day. Warm t
   and the log toggle while the baby is asleep.
 
 ### Tertiary — Semantic & Evidence
+
 - **In-Range Green** (`#3D6350`): A value inside the published range.
 - **Out-of-Range Amber-Brown** (`#7F5D2C`): A value outside range, and every warning.
   Deliberately not red. Warnings sit on a 10% wash of the same colour.
@@ -188,6 +191,7 @@ The day strip's three colours, read left to right as literal time-of-day. Warm t
   nothing. It also keeps a third hue out of a restrained palette.
 
 ### Neutral
+
 - **Paper** (`#F6F0E6`): The page.
 - **Paper Sunk** (`#EFE7DA`): A track or an inset well — the day strip's groove, the "your
   numbers" block inside a sheet.
@@ -238,6 +242,7 @@ link would break the offline shell *and* hand a third party an IP address on eve
 `tabular-nums` on all figures so schedule times and ranges stay column-aligned as they change.
 
 ### Hierarchy
+
 - **Countdown** (Faustina 500, `text-6xl`): The hero figure. The loudest type in the app, and
   the only thing at that size.
 - **Screen / article title** (Faustina 500, `text-3xl`).
@@ -270,6 +275,7 @@ Three elevations, and no others:
 | `--shadow-sheet` | The evidence sheet / drawer, which is genuinely over the page. |
 
 ### Named Rule
+
 **The Earned Shadow Rule.** A shadow means "this layer is above the page", and only two things
 in the app are. Everywhere else, separate surfaces with tone and a hairline. This is a real
 change from the dark theme's absolute no-shadow rule: on a dark surface a shadow is invisible,
@@ -286,12 +292,14 @@ Every control class in this section is a real CSS class in `src/style.css` (`@la
 components`), not a utility string copied around the templates.
 
 ### Inputs / Fields — `.field`
+
 Warm fill, ink text, `rounded-sm`, full-width, `min-h-11`. Native `<input type="date/number/
 datetime-local">`, `<select>` and `<textarea>` — standard controls, not reinvented. A global
 terracotta `focus-visible` ring (2px, 2px offset) applies to every interactive element.
 Placeholders use the muted ink, set globally; never overridden per field.
 
 ### Buttons — `.btn` plus one weight
+
 `.btn` carries the shared pill shape and the 44px height; a weight class carries the colour.
 
 - **`.btn-quiet`** — the default, and almost everything. Warm fill, ink text.
@@ -304,6 +312,7 @@ Placeholders use the muted ink, set globally; never overridden per field.
   A pressed state is not a third weight.
 
 ### Named Rule
+
 **The One Sizing Place Rule.** The 44px control height lives in `.btn` / `.btn-chip` / `.field`
 and nowhere else. It is not `min-h-11` typed at each call site. This is not tidiness: when it
 was per-call-site it had already drifted to 36px across six buttons in the sleep log and 26px on
@@ -312,6 +321,7 @@ A standard repeated by hand is a standard that quietly stops being true. The e2e
 measures every control on **all four screens**, because the way this breaks is a new screen.
 
 ### Layout — one column, then two
+
 Every screen is a single column on a phone and **two from `lg`**, in the same order, wrapped:
 
 | Screen | Left | Right |
@@ -328,6 +338,7 @@ control does not grow to the width of a desk monitor — the Log toggle is a *ta
 circle is not a better one.
 
 ### Navigation — `AppTabs`
+
 One component in two layouts: a bar pinned to the bottom edge on a phone, and a full **sidebar**
 from `md` up — card fill, right border, sticky and full height, carrying the mark, the nav, whose
 plan this is, and the evidence link. Same list, same order, same labels either way; building a
@@ -339,6 +350,7 @@ On a wide screen the sidebar carries the brand mark and its `alt`, and the page 
 to its invisible `<h1>`. One mark on screen, not two.
 
 ### Signature — The Countdown Hero
+
 The identity component. A `rounded-2xl` filled panel carrying, in order: a small uppercase
 kicker with an icon, the countdown in Faustina at 60px, one sentence naming **both ends of the
 window**, and a footer with "Where this time comes from" beside the one-tap sleep toggle. The
@@ -349,6 +361,7 @@ The figure counts down to when the window **opens**, and stops at zero rather th
 a deficit. A parent 20 minutes into a window is not late, and the app never says so.
 
 ### Signature — The Day Strip
+
 Midnight to midnight, left to right, with a 3px marker for right now. It replaced a three-block
 proportional bar that answered "how much of the day is nap/night/awake" — a question the stats
 table already answered in words — while the question a parent has in a dark nursery is "where am
@@ -362,6 +375,7 @@ condition that lets the strip be a thin ribbon: *anything the picture shows must
 nearby.*
 
 ### Signature — The Evidence Sheet
+
 One modal surface, opened from anywhere: a bottom sheet on a phone, a right-hand drawer from `sm`
 up, same markup either way. It carries the tier badge, plain-language reasoning, **the arithmetic
 on the user's own numbers**, and the citation with a working link. Every number on Today is a
@@ -376,6 +390,7 @@ The dismiss differs by form, and only because the form differs: the phone sheet 
 needs a `×` that is always in view. Neither is decoration, and there is never both.
 
 ### The "why?" chip — `TierWhyButton`
+
 `◐ Tier 2 · why?` beside a section heading: the badge and the explainer trigger as one control.
 A tier badge next to a heading was already a claim about the evidence under it, so making that
 same pill the button that opens the reasoning means nobody has to learn that the badge is one
@@ -386,6 +401,7 @@ transparent box around the pill. Shrinking the target to match the badge would h
 version and the 44px rule broken quietly.
 
 ### Lists that edit — the Edit affordance
+
 The Log screen lists what happened; the means of changing it is a control, not a permanent form.
 Three logged naps used to render six datetime fields, which is a form pretending to be a record.
 Every row still shows everything — kind, length, clock times, running state — and **only the
@@ -394,6 +410,7 @@ inputs are a settings *list* (label + one-line purpose left, control right-align
 row each), so the plan can be read back without reading a form.
 
 ### Signature — The Tier Badge
+
 A pill: tier ink on a 12% wash **mixed from that same ink**, so a tier can never end up with a
 tint that does not match its text. It encodes tier by **shape as well as colour** — a solid `●`
 for Tier 1, a half `◐` for Tier 2, a hollow `○` for Tier 3 — so it survives colour-blindness.
@@ -402,6 +419,7 @@ Never distinguish tiers by colour alone.
 ## 6. Do's and Don'ts
 
 ### Do:
+
 - **Do** keep terracotta as the only interactive family. If it's terracotta, you can press it.
 - **Do** render out-of-range and warning states in `#7F5D2C`, framed as information a parent can
   act on calmly.
@@ -423,6 +441,7 @@ Never distinguish tiers by colour alone.
   form per row is a form.
 
 ### Don't:
+
 - **Don't** introduce **generic baby-app pastel** — no pastel-pink/blue, no nursery-blob shapes,
   no cartoon stickers. Warmth comes from paper tone, not decoration.
 - **Don't** use **red** anywhere — not even for Stop. (The Amber-Not-Red Rule.)

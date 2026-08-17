@@ -69,9 +69,16 @@
   /* Quiet text. One shade now, not two: #6e635c clears AA on the paper body
      (5.01:1) AND on the card one step up (5.65:1), which the dark theme's
      muted pair could not do. muted-raised stays as an alias so the existing
-     call sites keep working and keep meaning the same thing. */
+     call sites keep working and keep meaning the same thing.
+
+     It does NOT clear AA on the darker `.field` fill (4.10:1 on #e5dbcc) —
+     which is why the placeholder below gets its own shade rather than reusing
+     this one. Quiet text on a filled control is a third surface, not a second. */
   --color-muted: #6e635c;
   --color-muted-raised: #6e635c;
+
+  /* Placeholder ink, tuned to the field fill it sits on: 5.20:1 on #e5dbcc. */
+  --color-placeholder: #5f554f;
 
   /* Surfaces the redesign added by name, for the new components. */
   --color-paper: #f6f0e6;
@@ -131,9 +138,11 @@ body {
   outline-offset: 2px;
 }
 
-/* Placeholders must clear 4.5:1 too, on the field fill they sit in. */
+/* Placeholders must clear 4.5:1 too, on the field fill they sit in — and that
+   fill is a step darker than the card, so the body-tuned muted shade is not
+   good enough here (4.10:1). Do not override this per field. */
 ::placeholder {
-  color: var(--color-slate-400, #6e635c);
+  color: var(--color-placeholder, #5f554f);
   opacity: 1;
 }
 

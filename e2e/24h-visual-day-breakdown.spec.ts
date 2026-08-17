@@ -15,7 +15,9 @@ test.describe('24-hour visual day breakdown [@feature:24h-visual-day-breakdown]'
     // Scope to the heading: "Sleep Stats" is also named in the accessibility
     // statement's prose, so a bare substring match is ambiguous.
     await expect(page.getByRole('heading', { name: 'Sleep Stats', exact: true })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Total Wake' })).toBeVisible();
+    // rowheader, not cell: the label column is `th scope="row"`, so a screen
+    // reader ties "Total Wake" to its figure rather than reading a bare pair.
+    await expect(page.getByRole('rowheader', { name: 'Total Wake' })).toBeVisible();
   });
 
   test('the strip covers the whole day and marks the current time inside it', async ({ page }) => {

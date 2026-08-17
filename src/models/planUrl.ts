@@ -84,7 +84,10 @@ export function withPlanExtras(baseQuery: string, extras: PlanExtras = {}): stri
     if (extras.at) query += `&at=${extras.at}`;
     if (extras.view) query += `&view=${extras.view}`;
     if (extras.tab) query += `&tab=${extras.tab}`;
-    if (extras.topic) query += `&topic=${extras.topic}`;
+    // Encoded, unlike `tab`: the tab is one of four literals this code owns,
+    // but the topic is seeded from the incoming query string, so an `&` in it
+    // would split into a second param and change what the link means.
+    if (extras.topic) query += `&topic=${encodeURIComponent(extras.topic)}`;
     // @doc:caregiver-handoff-notes — note is free text, so it must be encoded;
     // the timestamps are plain integers. napEnd omitted ⇒ nap still in progress.
     if (extras.note) query += `&hn=${encodeURIComponent(extras.note)}`;

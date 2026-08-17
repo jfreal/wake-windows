@@ -35,8 +35,40 @@ watch(sheet, async (value, previous) => {
   }
 })
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]),'
+  + ' textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
+
 function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') closeSheet()
+  if (event.key === 'Escape') {
+    closeSheet()
+    return
+  }
+  if (event.key !== 'Tab') return
+
+  // Keep Tab inside the panel.
+  //
+  // `aria-modal` tells assistive tech the rest of the page is inert; it does
+  // nothing to the tab order. Without this, tabbing past the last control in
+  // the sheet lands on the schedule behind the scrim — which is still fully
+  // operable, so a keyboard user can edit the plan through a modal they cannot
+  // see they have left.
+  const focusable = Array.from(
+    panel.value?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
+  ).filter((el) => el.offsetParent !== null || el === document.activeElement)
+  if (!focusable.length) return
+
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  const active = document.activeElement
+
+  if (event.shiftKey && (active === first || active === panel.value)) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault()
+    first.focus()
+  }
 }
 </script>
 

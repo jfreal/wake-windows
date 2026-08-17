@@ -34,6 +34,11 @@ function addPastSleep() {
  * so it lands on last night whatever time of day you tap it — and it stays
  * correct across a DST boundary, where "12 hours ago" and "7am today" are not
  * the same instant.
+ *
+ * The end is clamped to the current minute, because the most likely moment to
+ * reach for this button is during a 3am feed — and an unclamped 7am end would
+ * bank four hours of sleep that has not happened yet, straight into today's
+ * totals and the trends panel.
  */
 function addLastNight() {
   const start = new Date()
@@ -43,7 +48,7 @@ function addLastNight() {
   end.setDate(end.getDate() + 1)
   end.setHours(7, 0, 0, 0)
   const entry = createEntry(start.getTime(), 'night')
-  entry.end = end.getTime()
+  entry.end = Math.min(end.getTime(), floorToMinute(Date.now()))
   entries.push(entry)
 }
 

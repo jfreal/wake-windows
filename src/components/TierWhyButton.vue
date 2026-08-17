@@ -26,7 +26,7 @@ const glyph = computed(() => (props.tier === 1 ? '●' : props.tier === 2 ? '◐
   <button type="button" class="inline-flex min-h-11 items-center group">
     <span
       class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10.5px] uppercase tracking-[0.08em] whitespace-nowrap group-hover:brightness-95"
-      :style="{ color: t.color, background: `color-mix(in srgb, ${t.color} 12%, #fffdf9)` }">
+      :style="{ color: t.color, background: `color-mix(in srgb, ${t.color} 12%, var(--color-card))` }">
       <span aria-hidden="true">{{ glyph }}</span>
       <span>{{ t.shortLabel }} · why?</span>
     </span>

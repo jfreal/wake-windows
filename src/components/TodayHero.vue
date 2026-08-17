@@ -115,9 +115,29 @@ function toggleSleep() {
 // numbers, and they can read every one of them.
 function openWindowMath() {
   const next = upcoming.value
-  const windowHours = props.schedule.wws[Math.max(0, (next?.index ?? 1) - 1)] ?? props.schedule.wws[0]
+  const naps = props.schedule.napTimes
+
+  // The window that produced THIS event, and the sleep it is measured from.
+  //
+  // Nap N is reached through wake window N (1-based), and the clock starts at
+  // the end of nap N-1 — not at the morning wake time, which is only right for
+  // nap 1. Bedtime is the last window of all, measured from the final nap.
+  // Getting this wrong was worse than showing nothing: the sheet's whole claim
+  // is "here is the arithmetic on YOUR numbers", so a plausible-looking wrong
+  // sum is the one failure mode it cannot have.
+  const windowIndex = next
+    ? (next.kind === 'bedtime' ? props.schedule.wws.length - 1 : next.index - 1)
+    : 0
+  const windowHours = props.schedule.wws[windowIndex] ?? props.schedule.wws[0]
+
+  const precedingNap = next
+    ? (next.kind === 'bedtime' ? naps.at(-1) : naps[next.index - 2])
+    : undefined
+
   const math = [
-    { label: 'Wake time', value: formatClock(props.schedule.wakeMinutes) },
+    precedingNap
+      ? { label: `Woke from nap ${naps.indexOf(precedingNap) + 1}`, value: formatClock(precedingNap.end) }
+      : { label: 'Woke for the day', value: formatClock(props.schedule.wakeMinutes) },
     {
       label: `Wake window at ${props.schedule.monthsSinceBirth} months`,
       value: formatDuration(windowHours * 60),

@@ -134,7 +134,7 @@ const showBreakdown = ref(false)
      <!-- @doc:trends-daily-totals -->
      <section class="mt-6 rounded-lg border border-slate-800 p-4" aria-labelledby="trends-today-heading">
           <div class="flex items-baseline justify-between gap-2">
-               <h2 id="trends-today-heading" class="eyebrow">Today</h2>
+               <h3 id="trends-today-heading" class="eyebrow">Today</h3>
                <span v-if="inProgress" class="text-muted text-xs">so far</span>
           </div>
 

@@ -44,6 +44,29 @@ describe('daySegments', () => {
         const segs = daySegments(H(7), H(19), [{ start: H(12), end: H(11) }])
         expect(segs.every((s) => s.end > s.start)).toBe(true)
         expect(segs.some((s) => s.kind === 'nap')).toBe(false)
+
+        // …and the day is still exactly 24 contiguous hours. This is the part
+        // that regressed once: the cursor advanced only to the nap's END, which
+        // is BEFORE its start, so a second awake segment was emitted overlapping
+        // the first and the segments no longer tiled the day.
+        expect(segs[0].start).toBe(0)
+        expect(segs.at(-1)!.end).toBe(1440)
+        for (let i = 1; i < segs.length; i++) {
+            expect(segs[i].start).toBe(segs[i - 1].end)
+        }
+    })
+
+    it('keeps the day contiguous when a later nap starts before an earlier one ends', () => {
+        const segs = daySegments(H(7), H(19), [
+            { start: H(9), end: H(11) },
+            { start: H(10), end: H(12) }, // overlaps the first
+        ])
+        expect(segs.every((s) => s.end > s.start)).toBe(true)
+        expect(segs[0].start).toBe(0)
+        expect(segs.at(-1)!.end).toBe(1440)
+        for (let i = 1; i < segs.length; i++) {
+            expect(segs[i].start).toBe(segs[i - 1].end)
+        }
     })
 
     it('clamps a bedtime past midnight into the day', () => {
@@ -149,5 +172,14 @@ describe('hoursText', () => {
         expect(hoursText(13.25)).toBe('13 hr 15 min')
         expect(hoursText(12)).toBe('12 hr')
         expect(hoursText(0.75)).toBe('45 min')
+    })
+
+    // An impossible plan makes totalNap negative and that total is rendered.
+    // Printing the magnitude would turn a half-hour deficit into "30 min" of
+    // sleep — the opposite of what the warning beside it says.
+    it('keeps the sign on a negative total', () => {
+        expect(hoursText(-0.5)).toBe('−30 min')
+        expect(hoursText(-2)).toBe('−2 hr')
+        expect(hoursText(-2.25)).toBe('−2 hr 15 min')
     })
 })

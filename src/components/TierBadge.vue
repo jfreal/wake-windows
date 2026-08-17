@@ -16,7 +16,7 @@ const glyph = computed(() => (props.tier === 1 ? '●' : props.tier === 2 ? '◐
           with a tint that doesn't match its ink. -->
      <span
           class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium leading-none whitespace-nowrap"
-          :style="{ color: t.color, background: `color-mix(in srgb, ${t.color} 12%, #fffdf9)` }"
+          :style="{ color: t.color, background: `color-mix(in srgb, ${t.color} 12%, var(--color-card))` }"
           :title="t.description"
      >
           <span aria-hidden="true">{{ glyph }}</span>

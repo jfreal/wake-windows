@@ -10,9 +10,15 @@ test.describe('Anti-Anxiety Mechanics (Ranges, No Streaks) [@feature:anti-anxiet
     // Every nap start is a RANGE with endpoints on 5-minute marks — never a
     // single to-the-minute target. "done" is the only other thing a nap row is
     // allowed to say, once its window has passed.
+    //
+    // Anchored, and scoped to the row's time cell rather than the whole row: a
+    // regression that rendered a single target ("9:15 AM") somewhere in the row
+    // would satisfy a substring match on the row, which is exactly the failure
+    // this test exists to catch.
     for (const label of ['Nap 1', 'Nap 2', 'Nap 3', 'Bedtime']) {
-      await expect(schedule.getByRole('listitem').filter({ hasText: label }))
-        .toContainText(/(\d{1,2}:[0-5][05]\s?(AM|PM)?–\d{1,2}:[0-5][05]\s?(AM|PM))|done/);
+      const time = schedule.getByRole('listitem').filter({ hasText: label }).locator('span').last();
+      await expect(time).toHaveText(
+        /^(\d{1,2}:[0-5][05](\s?(AM|PM))?–\d{1,2}:[0-5][05]\s?(AM|PM)|done)$/);
     }
   });
 

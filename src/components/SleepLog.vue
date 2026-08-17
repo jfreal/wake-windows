@@ -89,11 +89,34 @@ function durationLabel(entry: SleepEntry): string {
      return formatDuration(elapsedMs(entry, now.value) / 60000)
 }
 
-// "8:45 – 10:00 AM", or "8:45 AM –" while it is still going.
+/**
+ * "8:45 AM – 10:00 AM", or "8:45 AM –" while it is still going.
+ *
+ * Entries are freely backdatable to any day, so a clock-only label makes two
+ * entries from different days read identically — and an overnight sleep reads
+ * "7:00 PM – 7:00 AM" with nothing to say the end is the next morning. The date
+ * is shown whenever an entry is not from today, and the end carries its own
+ * date whenever it lands on a later day than the start.
+ */
+function dayStamp(ms: number): string {
+     return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+}
+
+function sameLocalDay(a: number, b: number): boolean {
+     return startOfLocalDay(a) === startOfLocalDay(b)
+}
+
 function timeLabel(entry: SleepEntry): string {
-     const start = formatClock(minutesFromMidnight(new Date(entry.start)))
+     const isToday = sameLocalDay(entry.start, now.value)
+     const startClock = formatClock(minutesFromMidnight(new Date(entry.start)))
+     const start = isToday ? startClock : `${dayStamp(entry.start)}, ${startClock}`
      if (entry.end === null) return `${start} –`
-     return `${start} – ${formatClock(minutesFromMidnight(new Date(entry.end)))}`
+
+     const endClock = formatClock(minutesFromMidnight(new Date(entry.end)))
+     const end = sameLocalDay(entry.start, entry.end)
+          ? endClock
+          : `${dayStamp(entry.end)}, ${endClock}`
+     return `${start} – ${end}`
 }
 
 // Which entries have their editor open.
@@ -116,7 +139,7 @@ function toggleEdit(entry: SleepEntry) {
 
 <template>
      <section class="mt-8" aria-labelledby="sleep-log-heading">
-          <h2 id="sleep-log-heading" class="eyebrow">Sleep &amp; Nap Log</h2>
+          <h3 id="sleep-log-heading" class="eyebrow">Sleep &amp; Nap Log</h3>
           <p class="text-muted text-xs mb-3">
                One-tap timing that survives the app closing — the clock is figured from the start time, not a
                counter, so nothing is lost if you background the app or your phone restarts. Every entry is
@@ -153,7 +176,7 @@ function toggleEdit(entry: SleepEntry) {
           </p>
 
           <p v-if="!entries.length" class="text-muted text-sm mt-3">
-               No sleeps logged yet. Tap the big circle above when your baby goes down.
+               No sleeps logged yet. Tap the big circle when your baby goes down.
           </p>
 
           <ul v-if="entries.length" class="card mt-3 overflow-hidden">
@@ -253,10 +276,13 @@ function toggleEdit(entry: SleepEntry) {
 
                          <!-- Quieter ink than its neighbours, and one level in:
                               deleting should never be the easiest thing to hit by
-                              accident. -->
+                              accident. The name identifies WHICH entry, because
+                              a screen-reader user listing the controls would
+                              otherwise get a column of identical Deletes on the
+                              one destructive action in the app. -->
                          <button type="button"
                               class="btn btn-quiet px-3 mt-2 text-muted"
-                              :aria-label="`Delete this sleep entry`"
+                              :aria-label="`Delete ${entry.kind === 'night' ? 'night sleep' : 'nap'}, ${timeLabel(entry)}`"
                               v-on:click="remove(entry)">Delete</button>
                     </div>
                </li>

@@ -183,8 +183,29 @@ const tierMeaning = computed(() =>
 
 // Opening an article replaces the screen, so focus has to follow it — otherwise
 // a keyboard user's focus stays on a button that no longer exists and lands back
-// at the top of the document.
+// at the top of the document. Closing has to put it back on the card they came
+// from, or "← All topics" drops them at the top of a sixteen-item list with no
+// memory of where they were.
+//
+// Not `immediate`: a deep link (?topic=…) should land the reader at the top of
+// the article to read, not move focus for them before they have touched
+// anything. Focus follows an action; arriving is not an action.
 const article = ref<HTMLElement | null>(null)
+let opener: HTMLElement | null = null
+
+function openArticle(id: string, event: MouseEvent) {
+  opener = event.currentTarget as HTMLElement | null
+  openTopic.value = id
+}
+
+async function closeArticle() {
+  const returnTo = opener
+  openTopic.value = null
+  opener = null
+  await nextTick()
+  returnTo?.focus()
+}
+
 watch(current, async (value) => {
   if (value) {
     await nextTick()
@@ -228,7 +249,7 @@ function openTiers() {
       <li v-for="topic in TOPICS" :key="topic.id" class="flex">
         <button type="button"
           class="card flex w-full flex-col items-start gap-2 p-5 text-left hover:border-line-strong"
-          v-on:click="openTopic = topic.id">
+          v-on:click="openArticle(topic.id, $event)">
           <TierBadge v-if="topic.tier !== null" :tier="topic.tier" />
           <span class="display text-xl text-slate-200 text-pretty">{{ topic.title }}</span>
           <span class="text-sm text-muted leading-relaxed text-pretty">{{ topic.sub }}</span>
@@ -244,7 +265,7 @@ function openTiers() {
   <!-- An article is prose, so it is capped at a readable measure rather than
        stretched across the full width the grid above uses. -->
   <div v-else ref="article" tabindex="-1" class="space-y-4 max-w-[680px]">
-    <button type="button" class="btn-inline no-underline" v-on:click="openTopic = null">
+    <button type="button" class="btn-inline no-underline" v-on:click="closeArticle">
       ← All topics
     </button>
     <h2 class="display text-3xl text-slate-200 text-pretty lg:text-4xl">{{ current.title }}</h2>

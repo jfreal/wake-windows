@@ -23,7 +23,11 @@ import moonUrl from '../assets/moon.png'
 const todayEntries = computed<SleepEntry[]>(() => {
   const dayStart = startOfLocalDay(now.value)
   return entries
-    .filter((e) => e.start >= dayStart)
+    // A running entry counts as today's however long ago it started: night
+    // sleep begins the previous evening, so a plain `start >= dayStart` filter
+    // makes the baby vanish from this panel at midnight and shows "Nothing
+    // logged yet today" at 3am while the timer is still going.
+    .filter((e) => e.start >= dayStart || isRunning(e))
     .sort((a, b) => b.start - a.start)
 })
 

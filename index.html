@@ -12,6 +12,13 @@
 
   <link rel="canonical" href="https://wakewindows.guru/" />
 
+  <!-- The app's stylesheet is a module import, so with scripting disabled it
+       never loads and the fallback below would render on default white. This
+       paints the same paper the app uses, and only when there is no JS. -->
+  <noscript>
+    <style>body { background: #f6f0e6; }</style>
+  </noscript>
+
   <!-- Open Graph / Twitter — controls link previews when the plan or sitter
        link is shared. og:image is currently the PWA icon; swap for a dedicated
        1200x630 card when one exists. -->

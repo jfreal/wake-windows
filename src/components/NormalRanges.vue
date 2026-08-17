@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { ScheduleSetting } from '../models/ScheduleSetting'
 import { SleepRecommendationRepository } from '../models/SleepRecommendations'
-import { bandGeometry, hoursText } from '../models/today'
+import { bandGeometry, hoursText, type BandGeometry } from '../models/today'
 import { formatDuration } from '../models/time'
 import { openSheet, type SheetContent } from '../stores/sheet'
 import TierWhyButton from './TierWhyButton.vue'
@@ -40,13 +40,11 @@ interface Band {
   key: string
   label: string
   value: string
-  low: number
-  high: number
-  actual: number
-  scaleMin: number
-  scaleMax: number
   rangeText: string
   sheet: SheetContent
+  /** Resolved once here rather than by a template call: template functions are
+   * not cached, and the markup reads the geometry five times per band. */
+  geometry: BandGeometry
 }
 
 const bands = computed<Band[]>(() => {
@@ -61,11 +59,7 @@ const bands = computed<Band[]>(() => {
       key: 'total-sleep',
       label: 'Total sleep',
       value: hoursText(props.schedule.totalSleep),
-      low: b.minSleep,
-      high: b.maxSleep,
-      actual: props.schedule.totalSleep,
-      scaleMin: 8,
-      scaleMax: 18,
+      geometry: bandGeometry(b.minSleep, b.maxSleep, props.schedule.totalSleep, 8, 18),
       rangeText: `typical ${b.minSleep}–${b.maxSleep} hr`,
       sheet: {
         tier: 1,
@@ -90,11 +84,7 @@ const bands = computed<Band[]>(() => {
       key: 'naps',
       label: 'Naps',
       value: String(props.schedule.naps),
-      low: b.naps[0],
-      high: b.naps[1],
-      actual: props.schedule.naps,
-      scaleMin: 0,
-      scaleMax: 6,
+      geometry: bandGeometry(b.naps[0], b.naps[1], props.schedule.naps, 0, 6),
       rangeText: b.naps[0] === b.naps[1] ? `typically ${b.naps[0]}` : `typically ${b.naps[0]}–${b.naps[1]}`,
       sheet: {
         tier: 1,
@@ -115,11 +105,7 @@ const bands = computed<Band[]>(() => {
       key: 'awake',
       label: 'Longest awake stretch',
       value: formatDuration(longestAwakeHours.value * 60),
-      low: awakeLow,
-      high: awakeHigh,
-      actual: longestAwakeHours.value,
-      scaleMin: 0.5,
-      scaleMax: 5,
+      geometry: bandGeometry(awakeLow, awakeHigh, longestAwakeHours.value, 0.5, 5),
       rangeText: `typical ${formatDuration(b.wwTime[0])}–${formatDuration(b.wwTime[1])}`,
       sheet: {
         tier: 2,
@@ -140,10 +126,6 @@ const bands = computed<Band[]>(() => {
     },
   ]
 })
-
-function geometry(band: Band) {
-  return bandGeometry(band.low, band.high, band.actual, band.scaleMin, band.scaleMax)
-}
 
 // The section-level "why?": where the shaded bands themselves come from, as
 // opposed to what any single measure means.
@@ -195,13 +177,13 @@ function openRangesSheet() {
 
         <div class="relative h-3 rounded-full bg-paper-sunk">
           <div class="absolute inset-y-0 rounded-full bg-[color-mix(in_srgb,var(--color-violet-500)_22%,var(--color-card))]"
-            :style="{ left: geometry(band).bandLeft, width: geometry(band).bandWidth }"></div>
+            :style="{ left: band.geometry.bandLeft, width: band.geometry.bandWidth }"></div>
           <div class="absolute -top-1 h-5 w-1 rounded-full bg-slate-200"
-            :style="{ left: geometry(band).markLeft }"></div>
+            :style="{ left: band.geometry.markLeft }"></div>
         </div>
 
         <p class="text-xs text-muted mt-1.5">
-          {{ band.rangeText }}<span v-if="!geometry(band).inRange"> · your plan sits outside it, which is
+          {{ band.rangeText }}<span v-if="!band.geometry.inRange"> · your plan sits outside it, which is
             worth a glance rather than a worry</span>
         </p>
       </div>

@@ -54,10 +54,18 @@ export function daySegments(
     push(0, wake, 'night')
     let cursor = wake
     for (const nap of naps) {
-        if (nap.end <= cursor) continue // out of order / already covered
-        push(cursor, nap.start, 'awake')
-        push(Math.max(cursor, nap.start), nap.end, 'nap')
-        cursor = Math.max(cursor, clamp(nap.end))
+        const start = clamp(nap.start)
+        const end = clamp(nap.end)
+        push(cursor, start, 'awake')
+        push(Math.max(cursor, start), end, 'nap')
+        // Past the nap's START as well as its end. A nap that ends before it
+        // begins (negative nap length, from wake windows longer than the waking
+        // day) drops its own segment, but the awake segment before it has
+        // already been emitted up to `start` — so advancing the cursor only to
+        // `end` would rewind it and emit a SECOND awake segment overlapping the
+        // first. The strip is one gradient, so two overlapping stops silently
+        // paint one over the other and the day stops adding up to 24 hours.
+        cursor = Math.max(cursor, start, end)
     }
     push(cursor, bed, 'awake')
     push(Math.max(cursor, bed), DAY, 'night')
@@ -190,11 +198,19 @@ export function bandGeometry(
     }
 }
 
-/** Round hours for display without pretending to minute precision. */
+/**
+ * Round hours for display without pretending to minute precision.
+ *
+ * Signed, because an impossible plan produces a negative total (see
+ * `daySegments`) and those totals are rendered — `Math.floor(-0.5)` is `-1`, so
+ * formatting the magnitude and dropping the sign would print "30 min" for a
+ * half-hour deficit and hide the very thing the warning row is about.
+ */
 export function hoursText(hours: number): string {
-    const rounded = Math.round(hours * 4) / 4
+    const sign = hours < 0 ? '−' : ''
+    const rounded = Math.round(Math.abs(hours) * 4) / 4
     const whole = Math.floor(rounded)
     const mins = Math.round((rounded - whole) * 60)
-    if (whole <= 0) return `${mins} min`
-    return mins === 0 ? `${whole} hr` : `${whole} hr ${mins} min`
+    if (whole <= 0) return `${sign}${mins} min`
+    return mins === 0 ? `${sign}${whole} hr` : `${sign}${whole} hr ${mins} min`
 }

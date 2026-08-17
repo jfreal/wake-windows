@@ -23,7 +23,7 @@ Napper's circular "clock" view is genuinely loved, but users criticized a redesi
 Most schedulers show a list or a timeline; Napper's clock is the standout loved visual. No competitor markets a deliberately low-glare, dark-room-friendly rendering. That is the opening here.
 
 ## Our approach (spec)
-- Render the generated plan (A01) as both a **24-hour circular clock** and a **linear timeline**; user picks the default.
+- Render the generated plan (A01) as a **linear 24-hour timeline**, with a **circular clock** as a possible later alternative.
 - Sleep blocks and wake blocks visually distinct but low-contrast-friendly; naps show as ranges (bands), not razor-thin ticks — reinforcing "ranges, not a stopwatch."
 - Persistent **daily totals** (total sleep, total wake, nap count) with a Tier 1 badge comparing to AASM/NSF ranges.
 - Warm, low-glare palette, large tap targets, no bright white flashes; readable one-handed.
@@ -40,11 +40,12 @@ strip encodes lives in the Sleep Stats table directly beneath it. The circular c
 remains unbuilt.
 
 ## Scope — MVP
-- Circular clock + linear timeline of one day's plan.
+- Positional linear day strip (midnight to midnight) with a now-marker.
 - Daily totals with Tier 1 range check.
-- Dark-room dimming and high-legibility layout.
+- Low-glare, high-legibility layout.
 
 ## Scope — later
+- A circular 24-hour clock view as an alternative rendering (unbuilt).
 - Overlay logged actuals vs. planned (once C01 tracking exists).
 - Multi-day / week strip; twins overlay (A09).
 

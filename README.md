@@ -97,10 +97,12 @@ src/
 ```
 
 The app is four screens — Today / Log / Learn / Settings — with the countdown to
-the next nap as the largest thing on the first one. State is held in a single
-reactive `ScheduleSetting` in `stores/plan.ts`; the schedule (and the open
-screen) is serialized to and restored from the URL query string, keeping the app
-fully stateless.
+the next nap as the largest thing on the first one. The plan is a single
+reactive `ScheduleSetting` in `stores/plan.ts`, and it — along with the open
+screen — is serialized to and restored from the URL query string, so a plan
+needs no account and no server to travel. The sleep log is separate
+(`stores/sleepLog.ts`) and stays on the device in localStorage; it is never part
+of a shared link.
 
 ## Getting started
 

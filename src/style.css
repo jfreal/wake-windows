@@ -1,33 +1,115 @@
 @import "tailwindcss";
 
-/* Project tokens layered onto Tailwind v4's theme.
+/* Type. Self-hosted, not Google-hosted: this app is an offline-first PWA whose
+   whole pitch is that nothing about your baby leaves the phone, and a
+   fonts.gstatic.com <link> would both break the offline shell and hand a third
+   party an IP address on every open. Bundled through Vite, the faces get
+   precached with the rest of the build.
 
-   `--color-muted` is the accessible muted-text shade on the slate-900 body:
-   5.04:1 (slate-500 fails AA at 3.75:1), while staying visibly quieter than the
-   slate-400 labels.
+   Faustina is the display face (headings, the countdown numerals). Hanken
+   Grotesk is the UI face and carries everything else. */
+@import "@fontsource/faustina/latin-400.css";
+@import "@fontsource/faustina/latin-500.css";
+@import "@fontsource/faustina/latin-600.css";
+@import "@fontsource-variable/hanken-grotesk/wght.css";
 
-   `--color-muted-raised` is the same role one surface up. The body-tuned
-   `muted` only measures 4.13:1 against a slate-800 fill and 4.50:1 against
-   slate-800/60, so quiet text sitting ON a panel needs its own shade: this one
-   is 4.78:1 on slate-800 and 5.83:1 on the body. Rule of thumb — `text-muted`
-   on the body, `text-muted-raised` on any slate-800 surface, and slate-300 on a
-   slate-700 fill (neither muted shade clears 4.5:1 there). */
+/* ---------------------------------------------------------------------------
+   The paper palette.
+
+   This app used to be a dark-room utility. It is now a warm-paper one, and the
+   change is made HERE rather than across forty templates: Tailwind's `slate`,
+   `sky` and day-arc scales are re-pointed at the paper tokens, so `bg-slate-800`
+   means "the surface one step up from the page" wherever it already appears and
+   keeps meaning that. The ramp is inverted end to end — slate-900 is the
+   lightest value now and slate-100 the darkest — because the roles were always
+   semantic ("body", "surface", "emphasis ink") even when the names were not.
+
+   Every value below is measured against the surface it actually lands on. The
+   handoff palette's quietest ink (#8A7C70) is not here: it measures 3.48:1 on
+   paper and this app publishes an accessibility statement claiming AA. Its role
+   is filled by #6E635C at 5.01:1, which is the same colour family two steps
+   down. Same for the accent — the handoff's #C46B4C is 3.83:1 under white, so
+   filled terracotta surfaces use #A9502F (5.45:1 white-on-fill, 4.76:1 as link
+   text on paper) and the lighter tint survives only where nothing sits on it.
+--------------------------------------------------------------------------- */
 @theme {
-  --color-muted: #7c899e;
-  --color-muted-raised: #8894a9;
+  /* Neutrals — the inverted slate ramp. */
+  --color-slate-950: #241e1a; /* ink ON a coloured band (was: dark ink, still is) */
+  --color-slate-900: #f6f0e6; /* paper — the page */
+  --color-slate-800: #e5dbcc; /* surface one step up + every hairline */
+  --color-slate-700: #d5c7b3; /* the one heavier divider / a raised control */
+  --color-slate-600: #c9b7a2; /* raised control, hover */
+  --color-slate-500: #ac9f92; /* DECORATIVE ONLY — 2.9:1, never real text */
+  --color-slate-400: #6e635c; /* labels (5.01:1 on paper, 5.65:1 on card) */
+  --color-slate-300: #3d352f; /* default body ink (10.5:1) */
+  --color-slate-200: #2a2320; /* emphasis ink (13.9:1) */
+  --color-slate-100: #1f1a17; /* the darkest ink, on a raised fill */
+
+  /* Interactive. One family, terracotta, exactly as `sky` used to be. */
+  --color-sky-200: #7a3c24; /* ink of a pressed toggle on the /10 wash */
+  --color-sky-300: #8e4a2e; /* link hover (5.87:1) */
+  --color-sky-400: #a9502f; /* links, expanders, the focus ring (4.76:1) */
+  --color-sky-700: #a9502f; /* the one primary fill (white on it: 5.45:1) */
+  --color-sky-800: #8e4a2e; /* primary hover — DARKENS (6.58:1) */
+
+  /* The day arc. Warm-to-cool, read as literal time-of-day. */
+  --color-orange-500: #c7a470; /* awake */
+  --color-cyan-500: #4e5570; /* night */
+  --color-cyan-700: #434a63; /* night, as a pressed label under white */
+  --color-violet-500: #a9502f; /* nap */
+  --color-violet-600: #a9502f; /* nap, as a pressed label under white */
+
+  /* Semantic. */
+  --color-emerald-300: #35594a; /* safe-sleep heading */
+  --color-emerald-400: #3d6350; /* a value inside the guidance range (5.94:1) */
+  --color-emerald-700: #4e7a63; /* safe-sleep hairline (used at /50) */
+  --color-emerald-900: #2e4c3d; /* safe-sleep fill (used at /15) */
+  --color-amber-400: #7f5d2c; /* out-of-range + every warning (5.20:1) */
+
+  /* Quiet text. One shade now, not two: #6e635c clears AA on the paper body
+     (5.01:1) AND on the card one step up (5.65:1), which the dark theme's
+     muted pair could not do. muted-raised stays as an alias so the existing
+     call sites keep working and keep meaning the same thing. */
+  --color-muted: #6e635c;
+  --color-muted-raised: #6e635c;
+
+  /* Surfaces the redesign added by name, for the new components. */
+  --color-paper: #f6f0e6;
+  --color-paper-sunk: #efe7da; /* a track / an inset well */
+  --color-card: #fffdf9;
+  --color-line: #e3d9cb;
+  --color-line-strong: #c9b7a2;
+  --color-on-fill: #fff7ef; /* text on a terracotta or night fill */
+
+  /* Type. */
+  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", Inter, system-ui,
+    sans-serif;
+  --font-display: Faustina, Georgia, "Times New Roman", serif;
+
+  /* Radii. Soft, in the 14–28px range — the whole scale moves at once rather
+     than each template picking a new number. */
+  --radius-sm: 0.875rem; /* 14px — `rounded` / `rounded-sm` */
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem; /* 20px — panels */
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem; /* 28px — the hero */
+
+  /* Shadow. On paper, tone alone cannot separate a floating layer from the
+     page, so three defined elevations exist and no others. */
+  --shadow-lift: 0 14px 30px -14px rgba(42, 35, 32, 0.45);
+  --shadow-sheet: 0 -18px 44px -20px rgba(42, 35, 32, 0.5);
 }
 
-/* @doc:accessibility-dark-room */
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
 
-  /* Dark-only surface: native pickers (date calendar, select dropdown) must
-     render dark too, or they flash a bright panel in a dark room. */
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
+  /* Native pickers (date calendar, select dropdown) must match the page. */
+  color-scheme: light;
+  color: var(--color-slate-300);
+  background: var(--color-paper);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -36,17 +118,22 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* Visible focus for every interactive element — sky-400 ring (8.33:1 on the
-   body). Required for WCAG 2.2 AA; native controls shipped without one. */
+body {
+  margin: 0;
+  background: var(--color-paper);
+}
+
+/* Visible focus for every interactive element — the terracotta accent ring
+   (4.76:1 on paper, well past the 3:1 non-text minimum). Required for WCAG 2.2
+   AA; native controls shipped without one. */
 :focus-visible {
-  outline: 2px solid var(--color-sky-400, #38bdf8);
+  outline: 2px solid var(--color-sky-400, #a9502f);
   outline-offset: 2px;
 }
 
-/* Placeholders must clear 4.5:1 too — slate-400 on the slate-800 field.
-   Do not override this per-field: slate-500 measures 3.07:1 on slate-800. */
+/* Placeholders must clear 4.5:1 too, on the field fill they sit in. */
 ::placeholder {
-  color: var(--color-slate-400, #94a3b8);
+  color: var(--color-slate-400, #6e635c);
   opacity: 1;
 }
 
@@ -60,8 +147,7 @@
    Two weights only:
      .btn-quiet    the default. Input-driven app, URL-persisted, nothing to submit.
      .btn-primary  the one action that starts something (start a timer, take an
-                   update). sky-700 fill, darkening to sky-800 on hover — white
-                   on sky-600 measures 4.1:1 and fails AA, so it never lightens.
+                   update). Terracotta fill under #fff7ef.
 
    Toggles (`aria-pressed`) build on `.btn` / `.btn-chip` and supply their own
    on/off colours, because a pressed state is not a third weight. */
@@ -70,7 +156,7 @@
      nodes between children, so `{{ label }} <span>(hint)</span>` renders as
      "Spring forward(clocks jump ahead 1h)" without it. */
   .btn {
-    @apply inline-flex items-center justify-center gap-1 rounded text-sm min-h-11 px-4;
+    @apply inline-flex items-center justify-center gap-1 rounded-full text-sm min-h-11 px-4;
   }
 
   .btn:disabled {
@@ -113,11 +199,34 @@
   /* Native input / select / textarea. Same 44px rule as the buttons, and the
      same fill, so a control looks like a control wherever it appears. */
   .field {
-    @apply block w-full bg-slate-800 text-slate-200 text-sm rounded p-2.5 min-h-11;
+    @apply block w-full bg-slate-800 text-slate-200 text-sm rounded-sm p-2.5 min-h-11;
   }
 
   .field:disabled {
     @apply opacity-50;
+  }
+
+  /* The panel. On paper a card is lighter than the page, not darker, and it
+     needs the hairline to exist at all — the two are one decision, so they are
+     one class. */
+  .card {
+    @apply bg-card border border-line rounded-lg;
+  }
+
+  /* The section label. Tracked uppercase IS the sectioning device on paper —
+     the old rule forbidding tracking existed because the dark theme already had
+     an untracked uppercase label doing that job, and there is still exactly
+     one. Every section header in the app is this class and nothing else. */
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.14em] text-slate-400 font-normal;
+  }
+
+  /* Display type — the countdown, screen titles, article headings. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
   }
 }
 
@@ -130,6 +239,7 @@ summary {
   transition:
     color 180ms cubic-bezier(0.22, 1, 0.36, 1),
     background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
     outline-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 

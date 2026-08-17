@@ -1,143 +1,105 @@
 <script setup lang="ts">
 import OfflineIndicator from './components/OfflineIndicator.vue'
-import Summary from './components/Summary.vue'
-import TrendsToday from './components/TrendsToday.vue'
-import SleepLog from './components/SleepLog.vue'
+import AppTabs from './components/AppTabs.vue'
+import EvidenceSheet from './components/EvidenceSheet.vue'
+import SitterView from './components/SitterView.vue'
 import HandoffNotes from './components/HandoffNotes.vue'
-import PrivacyPromise from './components/PrivacyPromise.vue'
-import CalendarExport from './components/CalendarExport.vue'
-import WhiteNoise from './components/WhiteNoise.vue'
-import RemindersNudges from './components/RemindersNudges.vue'
-import NoAiStance from './components/NoAiStance.vue'
-import AccessibilityStatement from './components/AccessibilityStatement.vue'
-import RegressionExplainer from './components/RegressionExplainer.vue'
-import NapTransition from './components/NapTransition.vue'
-import SleepTrainingOverview from './components/SleepTrainingOverview.vue'
-import ContactNaps from './components/ContactNaps.vue'
-import DaycareGuidance from './components/DaycareGuidance.vue'
-import OvertiredUndertired from './components/OvertiredUndertired.vue'
-import FaqPanel from './components/FaqPanel.vue'
-import AboutAuthor from './components/AboutAuthor.vue'
-import TipJar from './components/TipJar.vue'
-import DeleteData from './components/DeleteData.vue'
+import TodayView from './views/TodayView.vue'
+import LogView from './views/LogView.vue'
+import LearnView from './views/LearnView.vue'
+import SettingsView from './views/SettingsView.vue'
 import { meta } from './models/Citations'
-import { sitterMode } from './stores/plan'
+import { schedule, sibling, sitterMode } from './stores/plan'
+import { activeTab } from './stores/tabs'
+import logoUrl from './assets/logo.png'
 
 // @doc:accessibility-dark-room
-
+//
+// The shell.
+//
+// This file used to BE the information architecture: twenty-odd panels listed
+// one after another, each gated on `!sitterMode`, in an order that had become
+// the order they were built in. It is now four screens and a nav, and the
+// question "where does this belong" has an answer instead of a bottom of a page.
+//
+//   Today     what happens next, and the day around it
+//   Log       one toggle, and the corrections
+//   Learn     every cited guidance panel, one tap away
+//   Settings  the plan's inputs, sharing, and the privacy promises
+//
 // @doc:read-only-babysitter-mode
-// A shared sitter link renders only the plan: no delete-data control, tip jar,
-// or app panels — the sitter sees today's schedule and the disclaimer, nothing
-// that changes state or asks anything of them. `sitterMode` is read once in
-// stores/plan.ts so every panel branches on the same value.
+// A shared sitter link renders only the plan: no tabs, no delete-data control,
+// no tip jar, no panels that change state — the sitter sees today's schedule and
+// the disclaimer and nothing that asks anything of them. `sitterMode` is read
+// once in stores/plan.ts so every screen branches on the same value.
 </script>
 
 <template>
-  <main class="max-w-3xl mx-auto px-4">
-
-    <!-- @doc:read-only-babysitter-mode — the update prompt renders Refresh /
-         Not-now buttons, so it stays out of the read-only sitter view. -->
-    <OfflineIndicator v-if="!sitterMode" />
-
-    <Summary />
-
-    <!-- @doc:trends-daily-totals — glanceable "Today" totals + 7-day sparkline,
-         built purely from on-device logs. Additive; hidden in the read-only
-         sitter view like the other state-reading panels. -->
-    <TrendsToday v-if="!sitterMode" />
-
-    <!-- @doc:sleep-nap-logging — logging mutates on-device data, so it is hidden
-         in the read-only sitter view, like the other state-changing panels. -->
-    <SleepLog v-if="!sitterMode" />
-
-    <!-- @doc:nap-transition-detector — gentle, dismissible 4→3→2→1 readiness prompt
-         + Tier-3 lengthening plan; reads local log/self-report, hidden in sitter view. -->
-    <NapTransition v-if="!sitterMode" />
-
-    <!-- @doc:caregiver-handoff-notes — the note editor + live recap show in the
-         normal view; the read-only "since you last had the baby" summary shows
-         in the sitter path (the component branches internally on view=sitter),
-         so it sits ungated here unlike the state-changing panels above. -->
+  <!-- Sitter mode is a different app, not a hidden version of this one: no
+       navigation exists in its DOM at all. -->
+  <main v-if="sitterMode" class="max-w-2xl mx-auto px-4 py-6">
+    <SitterView :schedule="schedule" :sibling="sibling" />
+    <!-- @doc:caregiver-handoff-notes — the read-only "since you last had the
+         baby" recap. It belongs to the sitter path specifically: the component
+         branches internally on view=sitter and renders no editor here, so this
+         is the recap only, not a second copy of the note UI. -->
     <HandoffNotes />
-
-    <div v-if="!sitterMode" class="mt-6">
-      <PrivacyPromise />
-    </div>
-
-    <!-- @doc:calendar-export — client-side .ics export of today's naps + bedtime.
-         State-reading only, but hidden in the read-only sitter view like the
-         other app panels. -->
-    <div v-if="!sitterMode" class="mt-6">
-      <CalendarExport />
-    </div>
-
-    <!-- @doc:white-noise-sounds — opt-in in-app sound machine, hidden until
-         enabled; state-changing/audio panel, so hidden in the read-only sitter view. -->
-    <WhiteNoise v-if="!sitterMode" />
-
-    <!-- @doc:reminders-nudges — opt-in pre-nap wind-down nudge; state-changing +
-         permission-gated, so hidden in the read-only sitter view. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <RemindersNudges />
-    </div>
-
-    <!-- @doc:no-ai-no-data-training — stance sits with the privacy promise;
-         the arithmetic walk it points to lives under the nap schedule. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <NoAiStance />
-    </div>
-
-    <div v-if="!sitterMode" class="mt-3">
-      <AccessibilityStatement />
-    </div>
-
-    <!-- @doc:regression-progression-explainer — calm, cited explainer that reframes
-         the 4-month change as a permanent progression and flags the 12/18-month
-         "regressions" as weakly supported. State-free content, hidden in sitter view. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <RegressionExplainer />
-    </div>
-
-    <!-- @doc:sleep-training-overview — neutral, cited menu of sleep-training methods
-         with the efficacy/safety evidence and the cortisol-myth correction. State-free
-         content, hidden in the read-only sitter view like the other guidance panels. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <SleepTrainingOverview />
-    </div>
-
-    <!-- Guidance panels from the 2026-08 gap analysis (research/09): the
-         highest-frequency parent questions that previously had no coverage.
-         State-free cited content, hidden in the sitter view like the rest. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <OvertiredUndertired />
-    </div>
-
-    <div v-if="!sitterMode" class="mt-3">
-      <ContactNaps />
-    </div>
-
-    <div v-if="!sitterMode" class="mt-3">
-      <DaycareGuidance />
-    </div>
-
-    <!-- @doc:methodology-sources-page — the cited FAQ catalog ("Parents ask"). -->
-    <div v-if="!sitterMode" class="mt-3">
-      <FaqPanel />
-    </div>
-
-    <!-- Author / first-hand Experience signal (YMYL E-E-A-T); hidden in the
-         read-only sitter view like the other non-plan panels. -->
-    <div v-if="!sitterMode" class="mt-3">
-      <AboutAuthor />
-    </div>
-
-    <footer class="mt-8 border-t border-slate-800 pt-3 pb-6 text-muted text-xs space-y-3">
-      <template v-if="!sitterMode">
-        <DeleteData />
-        <TipJar />
-      </template>
+    <footer class="mt-8 border-t border-line pt-4 text-muted text-xs space-y-2">
       <p>{{ meta.disclaimer }}</p>
-      <p class="mt-1">Guidance last reviewed: {{ meta.lastVerified }}.</p>
+      <p>Guidance last reviewed: {{ meta.lastVerified }}.</p>
     </footer>
   </main>
+
+  <template v-else>
+    <!-- Skip link: with a nav rail before the content on desktop, keyboard users
+         would otherwise tab through four items to reach the screen itself. -->
+    <a href="#screen"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-3 focus:rounded-full focus:bg-card focus:px-4 focus:py-2 focus:text-sm">
+      Skip to content
+    </a>
+
+    <!-- The sidebar is full-bleed against the left edge and floors the page, so
+         the shell is a flex row rather than a centred column with a rail inside
+         it. On a phone the row collapses to one child and the nav moves to the
+         bottom edge, where a thumb is. -->
+    <div class="flex min-h-screen">
+      <AppTabs layout="rail" class="hidden md:flex" />
+
+      <main class="min-w-0 flex-1 px-4 pb-28 md:px-8 md:pb-16 lg:px-12">
+        <!-- The mark carries the brand; the descriptive title is for crawlers
+             and screen readers, which is the same split the old header had. The
+             logo keeps a real `alt` — it is the only image in the app that
+             means something on its own. On desktop the sidebar already shows
+             it, so the header collapses to the invisible heading. -->
+        <header class="pt-5 pb-4 md:pt-8 md:pb-0">
+          <h1>
+            <img class="h-9 w-auto md:hidden" :src="logoUrl" alt="Wake Windows" width="32" height="36"
+              fetchpriority="high" />
+            <span class="sr-only">Wake Windows — Infant Nap Schedule &amp; Wake Windows Planner</span>
+          </h1>
+        </header>
+
+        <OfflineIndicator />
+
+        <!-- pb-28 above clears the fixed tab bar on phones, which would
+             otherwise sit on top of the last thing on every screen. -->
+        <div id="screen" tabindex="-1" class="mx-auto w-full max-w-[1180px] pt-2">
+          <TodayView v-if="activeTab === 'today'" />
+          <LogView v-else-if="activeTab === 'log'" />
+          <LearnView v-else-if="activeTab === 'learn'" />
+          <SettingsView v-else />
+
+          <footer class="mt-10 border-t border-line pt-4 text-muted text-xs space-y-2">
+            <p>{{ meta.disclaimer }}</p>
+            <p>Guidance last reviewed: {{ meta.lastVerified }}.</p>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <AppTabs layout="bar" class="md:hidden" />
+
+    <!-- @doc:evidence-tier-badges-citations — one sheet, opened from anywhere. -->
+    <EvidenceSheet />
+  </template>
 </template>

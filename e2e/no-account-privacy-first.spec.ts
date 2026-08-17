@@ -6,7 +6,7 @@ test.describe('No-Account, Privacy-First [@feature:no-account-privacy-first]', (
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
     // exact: the descriptive H1 ("Infant Nap Schedule & Wake Windows Planner")
     // also contains "Nap Schedule"; scope to the section heading.
-    await expect(page.getByRole('heading', { name: 'Nap Schedule', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rest of the day', exact: true })).toBeVisible();
     // No auth controls anywhere — the privacy copy *mentions* "no sign-up,
     // no password", so assert on inputs/buttons/links, not raw page text.
     await expect(page.locator('input[type="password"], input[type="email"]')).toHaveCount(0);
@@ -15,7 +15,7 @@ test.describe('No-Account, Privacy-First [@feature:no-account-privacy-first]', (
   });
 
   test('"What we don\'t collect" panel states the four promises in plain English', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?tab=settings');
     await page.getByText("What we don't collect").click();
     await expect(page.getByText('No account', { exact: true })).toBeVisible();
     await expect(page.getByText('No data sold — because none is collected')).toBeVisible();

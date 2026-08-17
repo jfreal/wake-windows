@@ -3,10 +3,30 @@
 ## What it is
 A Vue 3 + TypeScript + Vite app that helps parents of infants plan nap schedules
 from wake windows, baby age (with gestational-age adjustment), and bedtime. It
-computes nap/night/wake totals, draws a 24-hour sleep bar, renders an actual nap
-clock schedule, and compares the plan against published sleep recommendations by
-age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`, plus
-`&shift=spring|fall` when a DST transition plan is selected).
+computes nap/night/wake totals, draws the day as a midnight-to-midnight strip
+with a now-marker, renders an actual nap clock schedule, and compares the plan
+against published sleep recommendations by age bracket. Schedules are shareable
+via URL query string (`?bd=…&s=…`, plus `&shift=spring|fall` when a DST
+transition plan is selected, and `&tab=…&topic=…` for the open screen).
+
+## Screens
+
+The app is four tabs, not one scroll. `stores/tabs.ts` owns which is open;
+`plan.ts` folds it into the canonical query, so a screen is a place you can link
+to (`?tab=learn&topic=safe-sleep`).
+
+| Screen | Holds |
+|---|---|
+| **Today** | Countdown hero, day strip + Sleep Stats, reassurance note, guidance banner, nap schedule, normal-range bands, nap-transition prompt, atypical-day flag, sibling alignment. |
+| **Log** | The one big asleep/awake toggle, the editable entry list, today's totals and the 7-day sparkline. |
+| **Learn** | 16 cited guidance topics as a library — safe sleep, cues, overtired/undertired, the 4-month change, sleep training, contact naps, daycare, the troubleshooter, the arithmetic walk, FAQ, the full comparison table, the source library. |
+| **Settings** | Plan inputs (+ sibling), personalization, DST shift, reminders, white noise, sitter link, handoff notes, calendar export, the privacy/no-AI stances, delete-all. |
+
+Each screen is one column on a phone and two from `lg` (Learn is a card grid);
+navigation is a bottom bar on a phone and a sticky sidebar from `md`.
+
+A shared sitter link (`?view=sitter`) renders none of this: no navigation exists
+in its DOM at all, only the read-only plan and the handoff recap.
 
 ## Stack (current)
 
@@ -20,22 +40,47 @@ age bracket. Schedules are shareable via URL query string (`?bd=…&s=…`, plus
 | vue-tsc | 3.2.x |
 | vite-plugin-pwa | 1.3.x (Workbox `generateSW`) |
 
+Type is self-hosted via `@fontsource/faustina` + `@fontsource-variable/hanken-grotesk`,
+bundled through Vite and precached by the service worker — never a Google Fonts
+CDN link, which would break the offline shell and leak an IP on every open.
+
 - `npm run dev` — dev server
 - `npm run build` — `vue-tsc --noEmit && vite build`
-- `npm test` — Vitest (143 tests)
+- `npm test` — Vitest (347 tests)
+- `npm run test:e2e` — Playwright (90 tests + 12 stubs for unbuilt features)
 
 ## Architecture
 
 ```text
 src/
   main.ts                     Entry — mounts Vue app
-  App.vue                     Root shell (max-width, mobile padding)
-  style.css                   @import "tailwindcss" + base tokens
+  App.vue                     Shell: tab rail / bottom bar, header, footer,
+                              the sitter branch, and the evidence sheet
+  style.css                   @import "tailwindcss" + the paper palette wired
+                              into Tailwind's scales + self-hosted fonts
+  views/
+    TodayView.vue             Countdown, day strip, note, schedule, ranges
+    LogView.vue               Toggle, entries, week
+    LearnView.vue             The 16-topic library + article view
+    SettingsView.vue          Plan inputs, sharing, stances, delete
+  stores/
+    plan.ts                   The one reactive plan + the canonical URL writer
+    sleepLog.ts               The one log + the one adaptive display ticker
+    tabs.ts                   Which screen is open (+ which Learn topic)
+    sheet.ts                  The one evidence sheet's content
   components/
-    Summary.vue               <script setup> — inputs, bar chart, stats,
-                              nap schedule, warnings, URL persistence
+    AppTabs.vue               Nav, in two layouts (bottom bar / desktop sidebar)
+    TodayHero.vue             The countdown; terracotta awake, night asleep
+    DayStrip.vue              Midnight-to-midnight strip + Sleep Stats table
+    RestOfDay.vue             Wake, each nap window, bedtime — as ranges
+    NormalRanges.vue          Three published ranges with the plan marked on
+    RecentSleep.vue           Today's logged sleeps beside the plan, read-only
+    SleepToggle.vue           The one big asleep/awake control
+    QuickLogActions.vue       Add past sleep / add last night
+    EvidenceSheet.vue         Bottom sheet / drawer: tier, why, math, source
+    TierWhyButton.vue         "◐ Tier 2 · why?" — badge and trigger in one
+    PlanWarnings.vue          The four impossible-plan messages
     Recommendations.vue       Per-source bracket tables + validation
-  components/
     EvidenceGuidance.vue      Age-tied tier display: per-metric Tier 1/2
                               badges + tap-to-expand credentialed sources
     SafeSleep.vue             Prominent Tier 1 safe-sleep essentials
@@ -65,6 +110,8 @@ src/
     DstShift.ts               A08 shift math: 4-day ±15-min/day DST ramp,
                               URL param mapping (unit-tested)
     time.ts                   formatClock(minutes) helper
+    today.ts                  The Today screen's arithmetic as pure functions:
+                              day segments, "what happens next", band geometry
     *.test.ts                 Vitest unit tests
   components/
     OfflineIndicator.vue      F07 offline banner ("your plan still works") +
@@ -94,8 +141,13 @@ wake-window durations are Tier 2 and labeled as not trial-validated. Sources
 expand inline to show author credentials, organization, year, and a working
 link; a "Sources & Evidence" panel lists the full library by tier with a tier
 explainer; a persistent footer carries the medical disclaimer + lastVerified.
-State lives in a single `reactive(ScheduleSetting)` in `Summary.vue`; URL sync is
-handled in a `watch` (keyed on the schedule shorthand **and** birthday).
+Every number on the Today screen is a button that opens one evidence sheet
+(`stores/sheet.ts` + `EvidenceSheet.vue`) carrying the tier, the plain-language
+reason, the arithmetic on the parent's own figures, and the citation link.
+
+State lives in a single `reactive(ScheduleSetting)` in `stores/plan.ts`; the
+address bar is rewritten from a debounced `watch` on the canonical query, which
+folds in the DST preset, the atypical flag and the open tab/topic.
 
 ## History
 This project was modernized from a stale 2022 template (Vite 3 / TS 4.6 / Tailwind 3.1,

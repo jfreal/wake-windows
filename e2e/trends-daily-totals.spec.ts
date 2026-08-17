@@ -8,7 +8,7 @@ import { setEntryToMidday } from './helpers';
 // the read-only sitter view. Each test runs in a fresh context (empty storage).
 test.describe('Trends & Daily Totals at a Glance [@feature:trends-daily-totals]', () => {
   // ~4.5-month-old, so the Tier 1 total-sleep context band is available.
-  const plan = '/?bd=2026-03-01&s=7-2/2/2/2-7';
+  const plan = '/?bd=2026-03-01&s=7-2/2/2/2-7&tab=log';
 
   test('is hidden in read-only sitter mode, shown otherwise', async ({ page }) => {
     await page.goto(`${plan}&view=sitter`);
@@ -59,7 +59,7 @@ test.describe('Trends & Daily Totals at a Glance [@feature:trends-daily-totals]'
     const today = page.getByRole('region', { name: 'Today' });
     await expect(today).not.toContainText('so far');
 
-    await page.getByRole('button', { name: 'Start sleep timer' }).click();
+    await page.getByRole('button', { name: 'They went down' }).click();
     await expect(today.getByText('so far')).toBeVisible();
   });
 

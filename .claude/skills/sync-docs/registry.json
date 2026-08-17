@@ -9,14 +9,19 @@
     "sources": [
       "src/components/ChildInputs.vue:6",
       "src/components/ChildInputs.vue:16",
-      "src/components/ChildInputs.vue:99",
+      "src/components/ChildInputs.vue:136",
       "src/components/NapCaps.vue:5",
+      "src/components/PlanWarnings.vue:7",
+      "src/components/RestOfDay.vue:14",
+      "src/components/TodayHero.vue:13",
       "src/components/WindowMechanics.vue:5",
       "src/models/ScheduleSetting.ts:24",
       "src/models/scheduleTemplates.test.ts:9",
       "src/models/scheduleTemplates.ts:1",
       "src/models/SleepRecommendations.ts:16",
-      "src/models/time.ts:1"
+      "src/models/time.ts:1",
+      "src/models/today.ts:1",
+      "src/views/TodayView.vue:21"
     ],
     "tests": [
       "e2e/wake-window-schedule-generator.spec.ts:1"
@@ -30,9 +35,9 @@
     "status": "Built",
     "summary": "24-Hour Visual Day Breakdown",
     "sources": [
+      "src/components/DayStrip.vue:10",
       "src/components/NapTransition.vue:131",
-      "src/components/Summary.vue:51",
-      "src/components/Summary.vue:191"
+      "src/models/today.ts:2"
     ],
     "tests": [
       "e2e/24h-visual-day-breakdown.spec.ts:1"
@@ -64,17 +69,16 @@
     "sources": [
       "src/components/GuidanceBanner.vue:14",
       "src/components/GuidanceBanner.vue:28",
-      "src/components/Summary.vue:105",
-      "src/components/Summary.vue:185",
-      "src/components/Summary.vue:288",
-      "src/components/Summary.vue:302",
+      "src/components/RestOfDay.vue:15",
       "src/models/GuidanceMode.test.ts:140",
       "src/models/GuidanceMode.ts:1",
       "src/models/GuidanceMode.ts:94",
       "src/models/ScheduleSetting.test.ts:399",
       "src/models/ScheduleSetting.ts:158",
       "src/models/ScheduleSetting.ts:172",
-      "src/models/ScheduleSetting.ts:182"
+      "src/models/ScheduleSetting.ts:182",
+      "src/views/TodayView.vue:38",
+      "src/views/TodayView.vue:117"
     ],
     "tests": [
       "e2e/cues-vs-clock-mode.spec.ts:1"
@@ -88,6 +92,8 @@
     "status": "Built",
     "summary": "Bedtime Calculator + Preferred-Bedtime Cap",
     "sources": [
+      "src/components/RestOfDay.vue:14",
+      "src/components/TodayHero.vue:13",
       "src/models/ScheduleSetting.ts:24"
     ],
     "tests": [
@@ -96,17 +102,17 @@
   },
   "nap-transition-detector": {
     "doc": "docs/features/A06-nap-transition-detector.md",
-    "title": "Nap-Transition Detector & Guidance (4\u21923\u21922\u21921)",
+    "title": "Nap-Transition Detector & Guidance (4→3→2→1)",
     "category": "Scheduling & Prediction",
     "priority": "P1",
     "status": "Built",
-    "summary": "Detects an age-appropriate nap transition (4\u21923\u21922\u21921) from a signal cluster in the local log or self-report, and offers a gentle Tier-3 lengthening plan.",
+    "summary": "Detects an age-appropriate nap transition (4→3→2→1) from a signal cluster in the local log or self-report, and offers a gentle Tier-3 lengthening plan.",
     "sources": [
-      "src/App.vue:53",
       "src/components/NapTransition.vue:18",
       "src/components/NapTransition.vue:85",
       "src/components/NapTransition.vue:131",
-      "src/models/napTransition.ts:1"
+      "src/models/napTransition.ts:1",
+      "src/views/TodayView.vue:131"
     ],
     "tests": [
       "e2e/nap-transition-detector.spec.ts:1"
@@ -124,10 +130,6 @@
       "src/components/AtypicalDayFlag.vue:20",
       "src/components/DaycareGuidance.vue:5",
       "src/components/GuidanceBanner.vue:14",
-      "src/components/Summary.vue:105",
-      "src/components/Summary.vue:163",
-      "src/components/Summary.vue:185",
-      "src/components/Summary.vue:302",
       "src/models/GuidanceMode.ts:30",
       "src/models/GuidanceMode.ts:120",
       "src/models/GuidanceMode.ts:141",
@@ -136,8 +138,11 @@
       "src/models/ScheduleSetting.ts:36",
       "src/models/ScheduleSetting.ts:158",
       "src/models/ScheduleSetting.ts:172",
-      "src/stores/plan.ts:14",
-      "src/stores/plan.ts:47"
+      "src/stores/plan.ts:15",
+      "src/stores/plan.ts:48",
+      "src/views/TodayView.vue:38",
+      "src/views/TodayView.vue:117",
+      "src/views/TodayView.vue:135"
     ],
     "tests": [
       "e2e/atypical-day-flag.spec.ts:1"
@@ -152,10 +157,10 @@
     "summary": "DST presets -> gradual 15 min/day, 4-day shift plan in ranges, shareable via ?shift=",
     "sources": [
       "src/components/DstShift.vue:8",
-      "src/components/Summary.vue:353",
       "src/models/DstShift.ts:4",
-      "src/stores/plan.ts:14",
-      "src/stores/plan.ts:79"
+      "src/stores/plan.ts:15",
+      "src/stores/plan.ts:80",
+      "src/views/SettingsView.vue:126"
     ],
     "tests": [
       "e2e/dst-timezone-shift.spec.ts:1"
@@ -172,13 +177,12 @@
       "src/components/ChildInputs.vue:6",
       "src/components/SiblingAlignment.vue:8",
       "src/components/SiblingAlignment.vue:69",
-      "src/components/Summary.vue:40",
-      "src/components/Summary.vue:144",
-      "src/components/Summary.vue:248",
       "src/models/napOverlap.ts:1",
       "src/models/planUrl.ts:3",
-      "src/stores/plan.ts:13",
-      "src/stores/plan.ts:54"
+      "src/stores/plan.ts:14",
+      "src/stores/plan.ts:55",
+      "src/views/SettingsView.vue:103",
+      "src/views/TodayView.vue:138"
     ],
     "tests": [
       "e2e/sibling-twins-alignment.spec.ts:1"
@@ -190,12 +194,12 @@
     "category": "Scheduling & Prediction",
     "priority": "P2",
     "status": "Built",
-    "summary": "Optional, opt-in (OFF by default) on-device refinement of the plan's wake windows from the baby's own last-7-days sleep log: median wake-window per position, nudged toward the age default and capped at \u00b130 min (rounded to the 0.25h input step). Atypical days excluded statistically (MAD outlier on total awake time), too little data keeps the age default, plain-language 'what we changed' explainer with a Tier-3 badge, and one-tap reset. No account, no server, no AI (G01/G04).",
+    "summary": "Optional, opt-in (OFF by default) on-device refinement of the plan's wake windows from the baby's own last-7-days sleep log: median wake-window per position, nudged toward the age default and capped at ±30 min (rounded to the 0.25h input step). Atypical days excluded statistically (MAD outlier on total awake time), too little data keeps the age default, plain-language 'what we changed' explainer with a Tier-3 badge, and one-tap reset. No account, no server, no AI (G01/G04).",
     "sources": [
       "src/components/PersonalizedWindows.vue:17",
-      "src/components/Summary.vue:346",
       "src/models/PersonalizedWindows.ts:1",
-      "src/models/SleepRecommendations.ts:3"
+      "src/models/SleepRecommendations.ts:3",
+      "src/views/SettingsView.vue:122"
     ],
     "tests": [
       "e2e/personalized-from-local-history.spec.ts:1"
@@ -209,13 +213,19 @@
     "status": "Built",
     "summary": "Evidence Tier Badges & Inline Citations",
     "sources": [
+      "src/App.vue:102",
       "src/components/EvidenceGuidance.vue:6",
+      "src/components/EvidenceSheet.vue:7",
       "src/components/FaqPanel.vue:6",
       "src/components/NapCaps.vue:5",
+      "src/components/NormalRanges.vue:10",
       "src/components/TierBadge.vue:5",
+      "src/components/TierWhyButton.vue:5",
       "src/data/faq.test.ts:6",
       "src/data/faq.ts:1",
-      "src/models/Citations.ts:3"
+      "src/models/Citations.ts:3",
+      "src/stores/sheet.ts:3",
+      "src/views/LearnView.vue:27"
     ],
     "tests": [
       "e2e/evidence-tier-badges-citations.spec.ts:1"
@@ -229,11 +239,11 @@
     "status": "Built",
     "summary": "Methodology & Sources Page",
     "sources": [
-      "src/App.vue:123",
       "src/components/FaqPanel.vue:6",
       "src/components/SourcesEvidence.vue:6",
       "src/data/faq.ts:1",
-      "src/models/Citations.ts:3"
+      "src/models/Citations.ts:3",
+      "src/views/LearnView.vue:27"
     ],
     "tests": [
       "e2e/methodology-sources-page.spec.ts:1"
@@ -248,7 +258,8 @@
     "summary": "AAP Safe-Sleep Reference Panel",
     "sources": [
       "src/components/ContactNaps.vue:5",
-      "src/components/SafeSleep.vue:5"
+      "src/components/SafeSleep.vue:5",
+      "src/views/LearnView.vue:28"
     ],
     "tests": [
       "e2e/safe-sleep-panel.spec.ts:1"
@@ -262,7 +273,8 @@
     "status": "Built",
     "summary": "Sleepy-Cues Reference",
     "sources": [
-      "src/components/EvidenceGuidance.vue:6"
+      "src/components/EvidenceGuidance.vue:6",
+      "src/views/LearnView.vue:28"
     ],
     "tests": [
       "e2e/sleepy-cues-reference.spec.ts:1"
@@ -277,7 +289,6 @@
     "summary": "Free, cited, no-LLM decision trees for early rising, short naps, and false start vs split night",
     "sources": [
       "src/components/OvertiredUndertired.vue:5",
-      "src/components/Summary.vue:388",
       "src/components/Troubleshooter.vue:17",
       "src/data/troubleshooterTrees.ts:3",
       "src/models/Troubleshooter.test.ts:16",
@@ -293,9 +304,8 @@
     "category": "Guidance & Credibility",
     "priority": "P2",
     "status": "Built",
-    "summary": "Calm, cited explainer: 4-month change as permanent progression, 8\u201310 month window, and the honestly weakly-supported 12/18/24-month regressions",
+    "summary": "Calm, cited explainer: 4-month change as permanent progression, 8–10 month window, and the honestly weakly-supported 12/18/24-month regressions",
     "sources": [
-      "src/App.vue:94",
       "src/components/RegressionExplainer.vue:5",
       "src/models/Citations.test.ts:59"
     ],
@@ -311,7 +321,6 @@
     "status": "Built",
     "summary": "Neutral, cited menu of sleep-training methods (no ranking) with Tier-1 efficacy + long-term-safety evidence, the Middlemiss cortisol-myth correction in context, and a prominent under-4-month readiness caveat",
     "sources": [
-      "src/App.vue:101",
       "src/components/SleepTrainingOverview.vue:5",
       "src/models/Citations.test.ts:86"
     ],
@@ -327,12 +336,17 @@
     "status": "Built",
     "summary": "One-tap background-safe sleep/nap timer with pause, editable/backdatable entries, and live daily totals; local-only",
     "sources": [
-      "src/App.vue:49",
-      "src/components/SleepLog.vue:26",
+      "src/components/QuickLogActions.vue:7",
+      "src/components/RecentSleep.vue:11",
+      "src/components/SleepLog.vue:28",
+      "src/components/SleepToggle.vue:10",
+      "src/components/TodayHero.vue:14",
       "src/models/sleepLog.ts:1",
       "src/models/storage.ts:1",
       "src/models/tickRate.ts:1",
-      "src/stores/sleepLog.ts:10"
+      "src/stores/sleepLog.ts:10",
+      "src/views/LogView.vue:7",
+      "src/views/TodayView.vue:123"
     ],
     "tests": [
       "e2e/sleep-nap-logging.spec.ts:1"
@@ -418,7 +432,7 @@
     "status": "Built",
     "summary": "Home-screen Today totals (sleep + nap count) + 7-day sleep sparkline vs age band",
     "sources": [
-      "src/App.vue:44",
+      "src/components/RecentSleep.vue:11",
       "src/components/TrendsToday.vue:17",
       "src/components/TrendsToday.vue:54",
       "src/components/TrendsToday.vue:65",
@@ -428,7 +442,9 @@
       "src/models/tickRate.ts:1",
       "src/models/trends.test.ts:1",
       "src/models/trends.ts:1",
-      "src/stores/sleepLog.ts:10"
+      "src/stores/sleepLog.ts:10",
+      "src/views/LogView.vue:7",
+      "src/views/LogView.vue:33"
     ],
     "tests": [
       "e2e/trends-daily-totals.spec.ts:1"
@@ -466,9 +482,9 @@
     "status": "Built",
     "summary": "Shareable Plan URL",
     "sources": [
-      "src/components/Summary.vue:40",
       "src/models/planUrl.ts:3",
-      "src/stores/plan.ts:13"
+      "src/stores/plan.ts:14",
+      "src/views/SettingsView.vue:26"
     ],
     "tests": [
       "e2e/shareable-plan-url.spec.ts:1"
@@ -482,19 +498,16 @@
     "status": "Built",
     "summary": "?view=sitter renders the shared plan read-only with next nap/bedtime ranges; Copy sitter link in normal view",
     "sources": [
-      "src/App.vue:28",
-      "src/App.vue:38",
+      "src/App.vue:30",
       "src/components/SitterView.vue:11",
-      "src/components/Summary.vue:40",
-      "src/components/Summary.vue:82",
-      "src/components/Summary.vue:117",
-      "src/components/Summary.vue:358",
       "src/models/ScheduleSetting.test.ts:332",
       "src/models/ScheduleSetting.test.ts:348",
       "src/models/ScheduleSetting.ts:172",
       "src/models/ScheduleSetting.ts:182",
-      "src/stores/plan.ts:13",
-      "src/stores/plan.ts:37"
+      "src/stores/plan.ts:14",
+      "src/stores/plan.ts:38",
+      "src/views/SettingsView.vue:26",
+      "src/views/SettingsView.vue:40"
     ],
     "tests": [
       "e2e/read-only-babysitter-mode.spec.ts:1"
@@ -508,14 +521,15 @@
     "status": "Built",
     "summary": "Free-text handoff note + rule-based 'since you last had the baby' recap (last nap + next window) attached to a read-only handoff link; in-progress nap shows 'so far'; no AI",
     "sources": [
-      "src/App.vue:57",
+      "src/App.vue:42",
       "src/components/HandoffNotes.vue:12",
       "src/components/HandoffNotes.vue:129",
       "src/models/handoffSummary.ts:1",
       "src/models/planUrl.test.ts:138",
       "src/models/planUrl.ts:57",
-      "src/models/planUrl.ts:81",
-      "src/models/planUrl.ts:89"
+      "src/models/planUrl.ts:88",
+      "src/models/planUrl.ts:96",
+      "src/views/SettingsView.vue:151"
     ],
     "tests": [
       "e2e/caregiver-handoff-notes.spec.ts:1"
@@ -541,12 +555,12 @@
     "status": "Built",
     "summary": "Opt-in pre-nap wind-down nudge a selectable lead (15/30/45 min, default 30) before the wake-window range end; Web Notifications scheduled in the service worker with an in-page countdown fallback; range-based copy, daily cap + quiet hours by construction",
     "sources": [
-      "src/App.vue:78",
       "src/components/RemindersNudges.vue:2",
       "src/components/RemindersNudges.vue:237",
       "src/models/reminders.test.ts:1",
       "src/models/reminders.ts:1",
-      "src/sw.ts:1"
+      "src/sw.ts:1",
+      "src/views/SettingsView.vue:154"
     ],
     "tests": [
       "e2e/reminders-nudges.spec.ts:1"
@@ -596,10 +610,10 @@
     "status": "Built",
     "summary": "Opt-in, hidden-by-default in-app sound machine: 5 looping tracks (white/pink/brown noise + filter-shaped fan/rain) synthesised in-browser via the Web Audio API (no bundled/licensed audio), play/stop, volume, and a 15/30/45/60-min sleep timer. Sound only starts from an explicit user tap (no autoplay); honest locked-screen note; fully local/offline; hidden in the sitter view",
     "sources": [
-      "src/App.vue:74",
       "src/components/WhiteNoise.vue:2",
       "src/components/WhiteNoise.vue:176",
-      "src/models/whiteNoise.ts:1"
+      "src/models/whiteNoise.ts:1",
+      "src/views/SettingsView.vue:157"
     ],
     "tests": [
       "e2e/white-noise-sounds.spec.ts:1"
@@ -613,9 +627,9 @@
     "status": "Built",
     "summary": "Client-side ICS export of today's naps + bedtime as guidance-range VEVENTs with stable UIDs and TZID-anchored times",
     "sources": [
-      "src/App.vue:67",
       "src/components/CalendarExport.vue:2",
-      "src/models/ics.ts:1"
+      "src/models/ics.ts:1",
+      "src/views/SettingsView.vue:143"
     ],
     "tests": [
       "e2e/calendar-export.spec.ts:1"
@@ -644,14 +658,16 @@
     "status": "Built",
     "summary": "WCAG 2.2 AA: verified contrast, 44px targets, focus ring, reduced motion, SR labels, shape-coded badges, public statement",
     "sources": [
-      "src/App.vue:26",
+      "src/App.vue:16",
       "src/components/AccessibilityStatement.vue:2",
+      "src/components/AppTabs.vue:8",
+      "src/components/DayStrip.vue:10",
       "src/components/EvidenceGuidance.vue:6",
+      "src/components/EvidenceSheet.vue:7",
       "src/components/SafeSleep.vue:5",
-      "src/components/Summary.vue:45",
-      "src/components/Summary.vue:191",
+      "src/components/SleepToggle.vue:10",
       "src/components/TierBadge.vue:5",
-      "src/style.css:20"
+      "src/stores/tabs.ts:3"
     ],
     "tests": [
       "e2e/accessibility-dark-room.spec.ts:1"
@@ -695,9 +711,11 @@
     "sources": [
       "src/components/ContactNaps.vue:5",
       "src/components/DaycareGuidance.vue:5",
+      "src/components/NormalRanges.vue:10",
       "src/components/OvertiredUndertired.vue:5",
-      "src/components/Summary.vue:99",
-      "src/components/Summary.vue:301",
+      "src/components/RestOfDay.vue:15",
+      "src/components/RestOfDay.vue:36",
+      "src/components/TodayHero.vue:14",
       "src/components/TrendsToday.vue:184",
       "src/components/WindowMechanics.vue:5",
       "src/models/ScheduleSetting.test.ts:302",
@@ -706,7 +724,11 @@
       "src/models/time.ts:13",
       "src/models/time.ts:20",
       "src/models/time.ts:31",
-      "src/models/tone.ts:1"
+      "src/models/today.ts:1",
+      "src/models/tone.ts:1",
+      "src/views/TodayView.vue:21",
+      "src/views/TodayView.vue:54",
+      "src/views/TodayView.vue:102"
     ],
     "tests": [
       "e2e/anti-anxiety-mechanics.spec.ts:1"
@@ -720,10 +742,13 @@
     "status": "Built",
     "summary": "No-AI stance panel + per-plan 'How this was calculated' arithmetic walk",
     "sources": [
-      "src/App.vue:84",
+      "src/components/EvidenceSheet.vue:8",
+      "src/components/EvidenceSheet.vue:79",
       "src/components/HowCalculated.vue:7",
       "src/components/NoAiStance.vue:2",
-      "src/components/Summary.vue:330"
+      "src/components/TodayHero.vue:113",
+      "src/stores/sheet.ts:3",
+      "src/views/SettingsView.vue:170"
     ],
     "tests": [
       "e2e/no-ai-no-data-training.spec.ts:1"
@@ -738,7 +763,8 @@
     "summary": "Ephemerality & One-Click Data Deletion",
     "sources": [
       "src/components/DeleteData.vue:2",
-      "src/stores/sleepLog.ts:96"
+      "src/stores/sleepLog.ts:96",
+      "src/stores/tabs.ts:31"
     ],
     "tests": [
       "e2e/ephemerality-data-deletion.spec.ts:1"

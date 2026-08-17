@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
      type SleepEntry,
      type SleepKind,
@@ -18,10 +18,12 @@ import {
      startOfLocalDay,
      toLocalInput,
      fromLocalInput,
-     floorToMinute,
 } from '../models/sleepLog'
-import { formatDuration } from '../models/time'
+import { formatClock, formatDuration } from '../models/time'
+import { minutesFromMidnight } from '../models/today'
 import { entries, now } from '../stores/sleepLog'
+import napUrl from '../assets/sleeping-baby2.png'
+import moonUrl from '../assets/moon.png'
 
 // @doc:sleep-nap-logging
 // Thin shell over models/sleepLog.ts. All correctness (background-safe elapsed,
@@ -55,9 +57,6 @@ const totals = computed(() => {
 
 const running = computed(() => runningCount(entries))
 
-function startTimer() {
-     entries.push(createEntry(Date.now()))
-}
 function pause(entry: SleepEntry) {
      replace(entry, pauseEntry(entry, Date.now()))
 }
@@ -75,17 +74,6 @@ function remove(entry: SleepEntry) {
      if (i !== -1) entries.splice(i, 1)
 }
 
-// Add a completed, fully-editable entry to backdate a sleep you forgot to
-// time — defaults to a one-hour block ending now; every field is then editable,
-// including the date, so it can be moved to any day (across midnight included).
-function addPastEntry() {
-     const end = floorToMinute(Date.now())
-     const start = end - 60 * 60 * 1000
-     const entry = createEntry(start)
-     entry.end = end
-     entries.push(entry)
-}
-
 function onEditStart(entry: SleepEntry, event: Event) {
      const ms = fromLocalInput((event.target as HTMLInputElement).value)
      if (ms !== null) replace(entry, editEntry(entry, { start: ms }))
@@ -100,11 +88,35 @@ function onEditEnd(entry: SleepEntry, event: Event) {
 function durationLabel(entry: SleepEntry): string {
      return formatDuration(elapsedMs(entry, now.value) / 60000)
 }
+
+// "8:45 – 10:00 AM", or "8:45 AM –" while it is still going.
+function timeLabel(entry: SleepEntry): string {
+     const start = formatClock(minutesFromMidnight(new Date(entry.start)))
+     if (entry.end === null) return `${start} –`
+     return `${start} – ${formatClock(minutesFromMidnight(new Date(entry.end)))}`
+}
+
+// Which entries have their editor open.
+//
+// The redesign's rule for this screen is "no forms": the log is a list of what
+// happened, and the datetime pair that used to sit under every single row turned
+// three logged naps into six date fields on screen. Correcting a time is a real
+// need and a rare one, so it gets a control (Edit) rather than permanent
+// residency. The row itself still shows everything — kind, length, clock times —
+// so nothing is hidden behind the toggle except the means of changing it.
+const editing = ref(new Set<string>())
+
+function toggleEdit(entry: SleepEntry) {
+     const next = new Set(editing.value)
+     if (next.has(entry.id)) next.delete(entry.id)
+     else next.add(entry.id)
+     editing.value = next
+}
 </script>
 
 <template>
      <section class="mt-8" aria-labelledby="sleep-log-heading">
-          <h2 id="sleep-log-heading" class="text-slate-400 text-sm uppercase font-normal">Sleep &amp; Nap Log</h2>
+          <h2 id="sleep-log-heading" class="eyebrow">Sleep &amp; Nap Log</h2>
           <p class="text-muted text-xs mb-3">
                One-tap timing that survives the app closing — the clock is figured from the start time, not a
                counter, so nothing is lost if you background the app or your phone restarts. Every entry is
@@ -114,24 +126,24 @@ function durationLabel(entry: SleepEntry): string {
           <!-- Today's live totals -->
           <div class="flex gap-4 mb-3" aria-live="polite">
                <div>
-                    <div class="text-slate-400 text-xs uppercase">Naps today</div>
+                    <div class="eyebrow">Naps today</div>
                     <div class="text-xl text-slate-200 tabular-nums">{{ formatDuration(totals.napMs / 60000) }}</div>
                </div>
                <div>
-                    <div class="text-slate-400 text-xs uppercase">Night today</div>
+                    <div class="eyebrow">Night today</div>
                     <div class="text-xl text-slate-200 tabular-nums">{{ formatDuration(totals.nightMs / 60000) }}</div>
                </div>
                <div>
-                    <div class="text-slate-400 text-xs uppercase">Total today</div>
+                    <div class="eyebrow">Total today</div>
                     <div class="text-xl text-slate-200 tabular-nums font-medium">{{ formatDuration(totals.totalMs / 60000) }}</div>
                </div>
           </div>
 
-          <!-- The one primary action on this panel; everything else stays quiet. -->
-          <button type="button" class="btn btn-primary"
-               v-on:click="startTimer">Start sleep timer</button>
-          <button type="button" class="btn btn-quiet ml-2"
-               v-on:click="addPastEntry">Add past sleep</button>
+          <!-- Neither starting a sleep nor backfilling one happens in here. The
+               big circular control and the two quick actions above own those,
+               because two controls answering to "start the timer" is one too
+               many and the one a tired thumb should find is the one the size of
+               the screen. This panel is the record and the corrections. -->
 
           <!-- Two open timers: allowed (twins / caregiver overlap), but flagged. -->
           <p v-if="running > 1" role="status"
@@ -141,39 +153,34 @@ function durationLabel(entry: SleepEntry): string {
           </p>
 
           <p v-if="!entries.length" class="text-muted text-sm mt-3">
-               No sleeps logged yet. Tap “Start sleep timer” when your baby goes down.
+               No sleeps logged yet. Tap the big circle above when your baby goes down.
           </p>
 
-          <ul class="mt-3 space-y-3">
-               <li v-for="entry in ordered" :key="entry.id"
-                    class="rounded border border-slate-800 p-3">
-                    <div class="flex items-center justify-between gap-2 flex-wrap">
-                         <div class="flex items-center gap-2">
-                              <!-- Nap / night label, inferred but overridable. -->
-                              <!-- Nap/night keep the day-arc colours on purpose: here
-                                   they label which kind of sleep this was, the same
-                                   meaning the violet and cyan bands carry above. -->
-                              <div role="group" aria-label="Sleep type" class="inline-flex rounded overflow-hidden border border-slate-700">
-                                   <button type="button"
-                                        class="btn text-xs px-3"
-                                        :class="entry.kind === 'nap' ? 'bg-violet-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
-                                        :aria-pressed="entry.kind === 'nap'"
-                                        v-on:click="toggleKind(entry, 'nap')">Nap</button>
-                                   <button type="button"
-                                        class="btn text-xs px-3"
-                                        :class="entry.kind === 'night' ? 'bg-cyan-700 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
-                                        :aria-pressed="entry.kind === 'night'"
-                                        v-on:click="toggleKind(entry, 'night')">Night</button>
-                              </div>
-                              <span class="text-slate-200 text-sm tabular-nums">{{ durationLabel(entry) }}</span>
-                              <span v-if="isRunning(entry)"
-                                   class="text-xs px-1.5 rounded"
-                                   :class="isPaused(entry) ? 'bg-slate-700 text-slate-300' : 'bg-emerald-700/40 text-emerald-300'">
-                                   {{ isPaused(entry) ? 'paused' : 'running' }}
+          <ul v-if="entries.length" class="card mt-3 overflow-hidden">
+               <li v-for="(entry, i) in ordered" :key="entry.id"
+                    class="px-4 py-3.5" :class="i > 0 ? 'border-t border-paper-sunk' : ''">
+                    <!-- The row: what happened, when, and one way in. Everything
+                         that CHANGES the entry is behind Edit; everything that
+                         reports on it is right here. -->
+                    <div class="flex items-center gap-3.5">
+                         <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full"
+                              :style="{ background: entry.kind === 'night' ? 'var(--color-cyan-500)' : 'var(--color-violet-500)' }">
+                              <img :src="entry.kind === 'night' ? moonUrl : napUrl" alt="" aria-hidden="true"
+                                   width="17" height="17" class="h-4 w-4" />
+                         </span>
+                         <span class="min-w-0 flex-1">
+                              <span class="block text-[15px] text-slate-200">
+                                   {{ entry.kind === 'night' ? 'Night sleep' : 'Nap' }} ·
+                                   <span class="tabular-nums">{{ durationLabel(entry) }}</span>
+                                   <span v-if="isRunning(entry)" class="text-xs ml-1.5 px-1.5 py-0.5 rounded-full"
+                                        :class="isPaused(entry) ? 'bg-slate-700 text-slate-200' : 'bg-emerald-400/15 text-emerald-400'">
+                                        {{ isPaused(entry) ? 'paused' : 'running' }}
+                                   </span>
                               </span>
-                         </div>
+                              <span class="block text-xs text-muted tabular-nums">{{ timeLabel(entry) }}</span>
+                         </span>
 
-                         <div class="flex items-center gap-2">
+                         <span class="flex items-center gap-1.5">
                               <template v-if="isRunning(entry)">
                                    <button v-if="!isPaused(entry)" type="button"
                                         class="btn btn-quiet px-3"
@@ -181,51 +188,83 @@ function durationLabel(entry: SleepEntry): string {
                                    <button v-else type="button"
                                         class="btn btn-quiet px-3"
                                         v-on:click="resume(entry)">Resume</button>
-                                   <!-- Raised slate, not red. Stopping a timer is not
+                                   <!-- Raised tone, not red. Stopping a timer is not
                                         destructive, and red is not in this palette —
-                                        out-of-range and warnings are amber so a tired
-                                        parent is informed, never alarmed. -->
+                                        out-of-range and warnings are amber-brown so a
+                                        tired parent is informed, never alarmed. -->
                                    <button type="button"
                                         class="btn bg-slate-700 hover:bg-slate-600 text-slate-100 px-3"
                                         v-on:click="stop(entry)">Stop</button>
                               </template>
-                              <!-- Quieter ink than its neighbours: deleting should never
-                                   be the easiest thing to hit by accident. -->
-                              <button type="button"
-                                   class="btn btn-quiet px-3 text-slate-400"
-                                   :aria-label="`Delete this sleep entry`"
-                                   v-on:click="remove(entry)">Delete</button>
-                         </div>
+                              <button type="button" class="btn-inline no-underline"
+                                   :aria-expanded="editing.has(entry.id)"
+                                   v-on:click="toggleEdit(entry)">
+                                   {{ editing.has(entry.id) ? 'Done' : 'Edit' }}
+                              </button>
+                         </span>
                     </div>
 
                     <!-- Overnight runaway: prompt, never auto-stop or delete. -->
                     <p v-if="isStillAsleepPrompt(entry, now)" role="status"
-                         class="text-amber-400 text-sm p-2 bg-amber-400/10 rounded mt-2">
+                         class="text-amber-400 text-sm p-2 bg-amber-400/10 rounded-sm mt-2">
                          Still asleep? This timer has been running over 12 hours. Stop it or edit the end time if the
                          sleep already ended.
                     </p>
 
-                    <!-- Fully editable, backdatable start/end. The date is part of the
-                         input, so an entry can move to any day — no clamping to today. -->
-                    <div class="flex flex-col sm:flex-row gap-2 mt-2">
-                         <label class="flex-1 text-xs text-slate-400">
-                              Start
-                              <input type="datetime-local"
-                                   class="field mt-0.5"
-                                   :value="toLocalInput(entry.start)"
-                                   v-on:change="onEditStart(entry, $event)" />
-                         </label>
-                         <label class="flex-1 text-xs text-slate-400">
-                              End
-                              <input type="datetime-local"
-                                   class="field mt-0.5"
-                                   :value="entry.end !== null ? toLocalInput(entry.end) : ''"
-                                   :disabled="isRunning(entry)"
-                                   :placeholder="isRunning(entry) ? 'still running' : ''"
-                                   v-on:change="onEditEnd(entry, $event)" />
-                         </label>
+                    <div v-if="editing.has(entry.id)" class="mt-3 border-t border-paper-sunk pt-3">
+                         <!-- Nap / night label, inferred but overridable.
+                              Nap/night keep the day-arc colours on purpose: here
+                              they label which kind of sleep this was, the same
+                              meaning the two bands carry on the day strip. -->
+                         <div role="group" aria-label="Sleep type" class="inline-flex rounded-full overflow-hidden border border-line-strong">
+                              <button type="button"
+                                   class="btn text-xs px-4 rounded-none"
+                                   :class="entry.kind === 'nap' ? 'bg-violet-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
+                                   :aria-pressed="entry.kind === 'nap'"
+                                   v-on:click="toggleKind(entry, 'nap')">Nap</button>
+                              <button type="button"
+                                   class="btn text-xs px-4 rounded-none"
+                                   :class="entry.kind === 'night' ? 'bg-cyan-700 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
+                                   :aria-pressed="entry.kind === 'night'"
+                                   v-on:click="toggleKind(entry, 'night')">Night</button>
+                         </div>
+
+                         <!-- Fully editable, backdatable start/end. The date is part of
+                              the input, so an entry can move to any day — no clamping to
+                              today. -->
+                         <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                              <label class="flex-1 text-xs text-muted">
+                                   Start
+                                   <input type="datetime-local"
+                                        class="field mt-0.5"
+                                        :value="toLocalInput(entry.start)"
+                                        v-on:change="onEditStart(entry, $event)" />
+                              </label>
+                              <label class="flex-1 text-xs text-muted">
+                                   End
+                                   <input type="datetime-local"
+                                        class="field mt-0.5"
+                                        :value="entry.end !== null ? toLocalInput(entry.end) : ''"
+                                        :disabled="isRunning(entry)"
+                                        :placeholder="isRunning(entry) ? 'still running' : ''"
+                                        v-on:change="onEditEnd(entry, $event)" />
+                              </label>
+                         </div>
+
+                         <!-- Quieter ink than its neighbours, and one level in:
+                              deleting should never be the easiest thing to hit by
+                              accident. -->
+                         <button type="button"
+                              class="btn btn-quiet px-3 mt-2 text-muted"
+                              :aria-label="`Delete this sleep entry`"
+                              v-on:click="remove(entry)">Delete</button>
                     </div>
                </li>
           </ul>
+
+          <p class="text-xs text-muted mt-2 px-1 text-pretty">
+               Tap Edit on any entry to nudge its time — including to another day. Nothing here leaves
+               your device.
+          </p>
      </section>
 </template>

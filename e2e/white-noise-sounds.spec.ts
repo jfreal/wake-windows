@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 // UI contract (hidden → enable → play/stop → sleep timer) and that a real
 // AudioContext is created and running once the user taps a track.
 test.describe('White-Noise & Sleep Sounds [@feature:white-noise-sounds]', () => {
-  const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7';
+  const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7&tab=settings';
 
   test('is opt-in: hidden by default, then reveals controls when enabled', async ({ page }) => {
     await page.goto(PLAN);

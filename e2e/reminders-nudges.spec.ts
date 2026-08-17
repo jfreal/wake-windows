@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test';
 //
 // The clock is pinned to mid-morning so a nap window is always still ahead,
 // making the countdown deterministic regardless of when the suite runs.
-const plan = '/?bd=2026-01-15&s=7-2/2.25/2.5-19';
+const plan = '/?bd=2026-01-15&s=7-2/2.25/2.5-19&tab=settings';
 const pinnedMorning = new Date('2026-07-21T08:30:00');
 
 test.describe('Reminders & Pre-Nap Nudges [@feature:reminders-nudges]', () => {

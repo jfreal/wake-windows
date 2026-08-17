@@ -47,7 +47,7 @@ function spanPct(start: number, end: number) {
 <template>
   <div>
     <div class="flex flex-wrap items-center gap-2">
-      <h2 class="text-slate-400 text-sm uppercase font-normal">Shift my schedule</h2>
+      <h2 class="eyebrow">Shift my schedule</h2>
       <TierBadge :tier="3" />
     </div>
     <p class="text-muted text-xs mt-1 mb-2">

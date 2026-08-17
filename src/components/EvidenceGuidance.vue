@@ -17,7 +17,7 @@ function toggle(i: number) {
 <template>
      <div v-if="rec">
           <div class="flex items-baseline justify-between gap-3">
-               <h2 class="text-slate-400 text-sm uppercase font-normal">Evidence-based guidance</h2>
+               <h2 class="eyebrow">Evidence-based guidance</h2>
                <!-- text-muted, not slate-500: real text must clear the 4.5:1 floor -->
                <span class="text-muted text-xs whitespace-nowrap">{{ rec.ageLabel }}</span>
           </div>

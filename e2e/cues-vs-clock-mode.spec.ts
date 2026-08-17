@@ -1,5 +1,6 @@
 // @test:cues-vs-clock-mode
 import { test, expect } from '@playwright/test';
+import { openTab } from './helpers';
 
 /**
  * A birthday whose corrected age is EXACTLY `months` under the app's arithmetic,
@@ -50,8 +51,13 @@ test.describe('Cues-vs-Clock Mode by Age [@feature:cues-vs-clock-mode]', () => {
   test('preterm baby is classified by corrected age, not chronological', async ({ page }) => {
     // ~7 months chronological but born at 28 weeks (~3 months early) → ~4 months
     // corrected → still cues mode.
-    await page.goto(`/?bd=${birthdayMonthsAgo(7)}&s=7-2/2/2/2-7`);
+    // The gestational-age input lives in Settings and the guidance banner it
+    // re-classifies lives on Today, so this one has to cross screens for real —
+    // and crossing without a reload is the point: the plan is reactive, so the
+    // banner must already be right when the tab opens.
+    await page.goto(`/?bd=${birthdayMonthsAgo(7)}&s=7-2/2/2/2-7&tab=settings`);
     await page.getByLabel('Weeks in Womb').first().fill('28');
+    await openTab(page, 'Today');
     await expect(page.getByText('Watch the baby, not the clock')).toBeVisible();
   });
 });

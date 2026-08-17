@@ -134,30 +134,30 @@ const showBreakdown = ref(false)
      <!-- @doc:trends-daily-totals -->
      <section class="mt-6 rounded-lg border border-slate-800 p-4" aria-labelledby="trends-today-heading">
           <div class="flex items-baseline justify-between gap-2">
-               <h2 id="trends-today-heading" class="text-slate-400 text-sm uppercase font-normal">Today</h2>
+               <h2 id="trends-today-heading" class="eyebrow">Today</h2>
                <span v-if="inProgress" class="text-muted text-xs">so far</span>
           </div>
 
           <!-- Headline numbers — four max (sleep, naps [, feeds, oz]). -->
           <div class="flex flex-wrap gap-x-6 gap-y-2 mt-2" aria-live="polite">
                <div>
-                    <div class="text-slate-400 text-xs uppercase">Total sleep</div>
+                    <div class="eyebrow">Total sleep</div>
                     <div class="text-2xl text-slate-100 tabular-nums font-medium">
                          {{ hoursLabel(totals.totalMs) }}
                     </div>
                </div>
                <div>
-                    <div class="text-slate-400 text-xs uppercase">Naps</div>
+                    <div class="eyebrow">Naps</div>
                     <div class="text-2xl text-slate-100 tabular-nums font-medium">{{ napCount }}</div>
                </div>
                <!-- @doc:trends-daily-totals — feed tiles are guarded until C02 lands. -->
                <template v-if="feedTotals">
                     <div>
-                         <div class="text-slate-400 text-xs uppercase">Feeds</div>
+                         <div class="eyebrow">Feeds</div>
                          <div class="text-2xl text-slate-100 tabular-nums font-medium">{{ feedTotals.count }}</div>
                     </div>
                     <div>
-                         <div class="text-slate-400 text-xs uppercase">{{ feedTotals.unit }}</div>
+                         <div class="eyebrow">{{ feedTotals.unit }}</div>
                          <div class="text-2xl text-slate-100 tabular-nums font-medium">
                               {{ feedTotals.ozOrMl }}
                          </div>
@@ -197,7 +197,7 @@ const showBreakdown = ref(false)
           <!-- 7-day sleep sparkline — parent's own local data, no model. -->
           <div class="mt-4">
                <div class="flex items-baseline justify-between">
-                    <div class="text-slate-400 text-xs uppercase">Sleep · last 7 days</div>
+                    <div class="eyebrow">Sleep · last 7 days</div>
                     <button type="button"
                          class="btn-inline"
                          :aria-expanded="showBreakdown"
@@ -218,7 +218,7 @@ const showBreakdown = ref(false)
                </svg>
 
                <p v-if="!hasAnyData" class="text-muted text-xs mt-2">
-                    Nothing logged yet — this fills in on its own as you use the sleep log below. Nothing to keep up
+                    Nothing logged yet — this fills in on its own as you use the sleep log above. Nothing to keep up
                     with.
                </p>
 

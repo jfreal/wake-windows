@@ -236,7 +236,7 @@ function toggle(on: boolean) {
 <template>
   <!-- @doc:reminders-nudges -->
   <section class="rounded border border-slate-800 p-3" aria-labelledby="reminders-heading">
-    <h2 id="reminders-heading" class="text-slate-400 text-sm uppercase font-normal">Pre-nap reminder</h2>
+    <h2 id="reminders-heading" class="eyebrow">Pre-nap reminder</h2>
     <p class="text-muted text-xs mt-1 mb-3">
       One quiet heads-up before the wake window closes — nothing else. Off unless you turn it on, only on this
       device, and capped at one a day. No spam, no guilt.

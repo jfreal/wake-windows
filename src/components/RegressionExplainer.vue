@@ -127,7 +127,7 @@ const reassuranceSources = getSources(['galland-2012', 'littleones-night-waking'
                          {{ paragraph }}
                     </p>
 
-                    <p class="mt-3 text-slate-400 text-xs uppercase">What changes</p>
+                    <p class="mt-3 eyebrow">What changes</p>
                     <ul class="mt-1 space-y-1 text-sm text-slate-200 list-disc pl-5">
                          <li v-for="point in phase.changes" :key="point">{{ point }}</li>
                     </ul>

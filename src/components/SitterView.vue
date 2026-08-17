@@ -51,11 +51,11 @@ const children = computed<ChildView[]>(() =>
 <template>
   <div class="flex items-center gap-3 mb-2">
     <img class="h-20" :src="logoUrl" alt="Wake Windows" width="70" height="80" fetchpriority="high">
-    <span class="text-slate-400 text-xs uppercase border border-slate-700 rounded px-2 py-1">Sitter view · read-only</span>
+    <span class="eyebrow border border-slate-700 rounded px-2 py-1">Sitter view · read-only</span>
   </div>
 
   <div v-for="child in children" :key="child.label" class="mt-4">
-    <h2 v-if="child.label" class="text-slate-400 text-sm uppercase font-normal mb-2">{{ child.label }}</h2>
+    <h2 v-if="child.label" class="eyebrow mb-2">{{ child.label }}</h2>
 
     <p v-if="child.atypical" class="text-slate-300 text-sm p-2 bg-slate-800 rounded mb-3">
       {{ ATYPICAL_MESSAGE }}
@@ -63,7 +63,7 @@ const children = computed<ChildView[]>(() =>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div class="bg-slate-800 rounded-lg p-4">
-        <span class="flex items-center gap-2 text-slate-400 text-sm uppercase">
+        <span class="flex items-center gap-2 eyebrow">
           <img :src="napUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Next nap
         </span>
         <div v-if="child.nextNap" class="mt-1">
@@ -74,7 +74,7 @@ const children = computed<ChildView[]>(() =>
       </div>
 
       <div class="bg-slate-800 rounded-lg p-4">
-        <span class="flex items-center gap-2 text-slate-400 text-sm uppercase">
+        <span class="flex items-center gap-2 eyebrow">
           <img :src="moonUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Next bedtime
         </span>
         <div class="mt-1">
@@ -84,7 +84,7 @@ const children = computed<ChildView[]>(() =>
     </div>
 
     <div class="mt-4">
-      <span class="text-slate-400 text-sm uppercase">{{ child.label ? `${child.label} — today's plan` : "Today's plan" }}</span>
+      <span class="eyebrow">{{ child.label ? `${child.label} — today's plan` : "Today's plan" }}</span>
       <div class="flex justify-between text-sm py-1 text-slate-300">
         <span class="flex items-center gap-2"><img :src="sunUrl" class="h-5 w-5" alt="" aria-hidden="true" width="20" height="20" /> Wake</span>
         <span class="tabular-nums">{{ formatClock(child.wakeMinutes) }}</span>

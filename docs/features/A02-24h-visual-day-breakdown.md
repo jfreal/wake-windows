@@ -26,8 +26,18 @@ Most schedulers show a list or a timeline; Napper's clock is the standout loved 
 - Render the generated plan (A01) as both a **24-hour circular clock** and a **linear timeline**; user picks the default.
 - Sleep blocks and wake blocks visually distinct but low-contrast-friendly; naps show as ranges (bands), not razor-thin ticks — reinforcing "ranges, not a stopwatch."
 - Persistent **daily totals** (total sleep, total wake, nap count) with a Tier 1 badge comparing to AASM/NSF ranges.
-- **Dark-room mode:** dimmable, warm/low-blue palette, large tap targets, no bright white flashes; readable one-handed.
+- Warm, low-glare palette, large tap targets, no bright white flashes; readable one-handed.
 - Static SVG-style rendering — no animation, no clutter. Learn from Napper: calm beats busy.
+
+**Implementation note (2026-08).** The first build was a *proportional* bar: three
+blocks whose widths were each phase's share of 24h. That answered "how much of the
+day is nap/night/awake" — which the totals table already answered in words — while
+the question a parent has in a dark nursery is "where am I in the day". It is now a
+**positional** strip, midnight to midnight, with a marker for the current time, so a
+9am nap and a 4pm nap are visibly different things. Because segments are positional
+they can be very narrow, so no figure is ever drawn inside one; every number the
+strip encodes lives in the Sleep Stats table directly beneath it. The circular clock
+remains unbuilt.
 
 ## Scope — MVP
 - Circular clock + linear timeline of one day's plan.

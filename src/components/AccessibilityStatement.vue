@@ -3,7 +3,7 @@
 // Public accessibility statement (F08): conformance target, what is built,
 // known gaps, and a contact. A native <details> panel, matching the
 // Sources & Evidence disclosure.
-const lastReviewed = 'July 2026'
+const lastReviewed = 'August 2026'
 const contact = 'john.e.farrell@gmail.com'
 </script>
 
@@ -16,7 +16,7 @@ const contact = 'john.e.farrell@gmail.com'
 
           <div class="px-3 pb-3 space-y-3 text-xs text-slate-400">
                <p>
-                    Wake Windows is built for a parent using one hand, in a dark room, half awake —
+                    Wake Windows is built for a parent using one hand, half awake, often in a dark room —
                     which makes accessibility the core design constraint, not an add-on. The target is
                     <span class="text-slate-300">WCAG 2.2 Level AA</span>, self-assessed.
                </p>
@@ -25,21 +25,23 @@ const contact = 'john.e.farrell@gmail.com'
                     <h3 class="text-slate-300 font-medium mb-1">What this means in practice</h3>
                     <ul class="list-disc pl-5 space-y-1">
                          <li>Every piece of text measures at least 4.5:1 against whatever it sits on. The
-                              quietest shades are 5.04:1 on the page background and 4.78:1 on a raised
-                              panel — quiet text gets its own lighter shade one surface up, because the
-                              page-tuned one only reaches 4.13:1 there.</li>
+                              quietest shade is 5.01:1 on the page and 5.65:1 on a card, so one muted ink
+                              is legal on both surfaces rather than needing a lighter twin one step up.</li>
                          <li>All controls (inputs, selects, buttons, toggles, disclosures) are at least 44px
                               tall for one-handed use — that sizing lives in one shared style rule rather
                               than being repeated per control, so it cannot quietly drift. External
                               reference links meet the 24px WCAG 2.2 minimum.</li>
-                         <li>Everything is operable by keyboard, with a visible 2px sky-blue focus ring on
-                              every control.</li>
-                         <li>All motion — including the 24-hour bar's resizing — is disabled when your
-                              system asks for reduced motion.</li>
-                         <li>The 24-hour bar carries a full text alternative for screen readers; decorative
-                              images are hidden from them. When a band of the bar is too narrow to show its
-                              hour figure, the same three numbers are in the Sleep Stats table right below
-                              it — nothing is only available in the picture.</li>
+                         <li>Everything is operable by keyboard, with a visible 2px focus ring on every
+                              control. A "Skip to content" link is the first stop on every screen, so the
+                              four navigation items are never something you have to tab past.</li>
+                         <li>The four screens are real navigation: the open one is marked
+                              <code>aria-current</code>, so it is announced and not only coloured.</li>
+                         <li>All motion is disabled when your system asks for reduced motion.</li>
+                         <li>The day strip carries a full text alternative for screen readers; decorative
+                              images are hidden from them. The strip shows WHEN each nap falls, so its
+                              bands can be a few pixels wide — which is why no figure is written inside
+                              one. Every number it encodes is in the Sleep Stats table directly below it.
+                              Nothing is only available in the picture.</li>
                          <li>Evidence-tier badges are distinguished by shape (● / ◐) and text, never by
                               color alone; warnings are amber and informational, never red and alarming.</li>
                          <li>Native browser controls (date, number, select, disclosure) are used

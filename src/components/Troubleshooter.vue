@@ -52,7 +52,7 @@ function exit() {
 </script>
 
 <template>
-     <h2 class="text-slate-400 text-sm uppercase font-normal">Sleep Troubleshooter</h2>
+     <h2 class="eyebrow">Sleep Troubleshooter</h2>
      <p class="text-muted text-xs mb-2">
           Pick the problem and answer a few questions to narrow down the likely cause. This is a plain
           decision tree — every answer is pre-written and cited, no AI, no account, nothing leaves your
@@ -131,7 +131,7 @@ function exit() {
                          third nested box. Uppercase without extra tracking, matching
                          the app's section labels — one uppercase treatment, not two. -->
                     <div v-if="leaf.suggestion" class="mt-3 border-t border-slate-700 pt-2.5">
-                         <p class="text-slate-400 text-xs uppercase mb-1">Try this</p>
+                         <p class="eyebrow mb-1">Try this</p>
                          <p class="text-slate-200 text-sm">{{ leaf.suggestion }}</p>
                     </div>
 

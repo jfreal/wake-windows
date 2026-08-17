@@ -32,8 +32,8 @@ export default defineConfig({
         short_name: 'Wake Windows',
         description:
           "Plan an infant's nap schedule from wake windows, age, and bedtime — checked against cited sleep guidance.",
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#f6f0e6',
+        background_color: '#f6f0e6',
         display: 'standalone',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },

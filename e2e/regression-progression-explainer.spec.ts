@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 // framing, and confirms a tier badge renders alongside the cited claims.
 test.describe('Regression / Progression Explainer [@feature:regression-progression-explainer]', () => {
   test('reframes the 4-month change as a progression with a tier badge', async ({ page }) => {
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=learn&topic=four-month');
 
     const panel = page.getByText('Regressions & progressions', { exact: false });
     await expect(panel).toBeVisible();

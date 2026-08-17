@@ -176,7 +176,7 @@ onUnmounted(() => {
      <!-- @doc:white-noise-sounds -->
      <section class="mt-6 rounded-lg border border-slate-800 p-4" aria-labelledby="white-noise-heading">
           <div class="flex items-baseline justify-between gap-2">
-               <h2 id="white-noise-heading" class="text-slate-400 text-sm uppercase font-normal">White noise</h2>
+               <h2 id="white-noise-heading" class="eyebrow">White noise</h2>
                <button v-if="!enabled" type="button"
                     class="btn-inline text-sm"
                     v-on:click="enabled = true">Add white noise</button>
@@ -227,7 +227,7 @@ onUnmounted(() => {
 
                <!-- Volume -->
                <div class="mt-3">
-                    <label for="white-noise-volume" class="text-slate-400 text-xs uppercase">Volume</label>
+                    <label for="white-noise-volume" class="eyebrow">Volume</label>
                     <!-- h-11: a native range renders a ~16px box, so the draggable
                          thumb was a 16px target. Giving the input the full 44px
                          height centres the track and makes the whole strip
@@ -238,7 +238,7 @@ onUnmounted(() => {
 
                <!-- Sleep timer -->
                <div class="mt-3">
-                    <div class="text-slate-400 text-xs uppercase">Sleep timer</div>
+                    <div class="eyebrow">Sleep timer</div>
                     <div class="flex flex-wrap gap-2 mt-1" role="group" aria-label="Sleep timer">
                          <button type="button"
                               class="inline-flex items-center rounded border px-3 min-h-11 text-sm transition-colors"

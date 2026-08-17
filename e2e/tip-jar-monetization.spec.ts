@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Tip-Jar Monetization (No Subscription, No Auto-Renew) [@feature:tip-jar-monetization]', () => {
   test('single unobtrusive tip-jar link with the "no subscription, ever" statement', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?tab=settings');
     const tipLink = page.getByRole('link', { name: /tip jar/i });
     await expect(tipLink).toHaveCount(1); // one link, never nag-ware
     await expect(tipLink).toHaveAttribute('href', /.+/);
@@ -16,7 +16,13 @@ test.describe('Tip-Jar Monetization (No Subscription, No Auto-Renew) [@feature:t
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
     // exact: the descriptive H1 ("Infant Nap Schedule & Wake Windows Planner")
     // also contains "Nap Schedule"; scope to the section heading.
-    await expect(page.getByRole('heading', { name: 'Nap Schedule', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rest of the day', exact: true })).toBeVisible();
+    await expect(page.getByText(/upgrade|premium|unlock|pro plan/i)).toHaveCount(0);
+
+    // The evidence library moved to its own screen in the redesign, so check it
+    // there — "nothing is paywalled" has to cover the guidance too, not just the
+    // screen that happens to load first.
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=learn&topic=safe-sleep');
     await expect(page.getByText('Safe sleep', { exact: false }).first()).toBeVisible();
     await expect(page.getByText(/upgrade|premium|unlock|pro plan/i)).toHaveCount(0);
   });

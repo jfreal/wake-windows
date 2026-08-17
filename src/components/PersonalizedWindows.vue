@@ -71,7 +71,7 @@ const hasEnoughData = computed(() => result.value.daysUsed >= MIN_DAYS_TO_PERSON
 
 <template>
      <div>
-          <h2 class="text-slate-400 text-sm uppercase font-normal">Personalize from your logs</h2>
+          <h2 class="eyebrow">Personalize from your logs</h2>
           <p class="text-muted text-xs mb-2">
                Optional. Nudge your plan's wake windows toward your baby's own recent pattern —
                plain median arithmetic on your last {{ DEFAULT_LOOKBACK_DAYS }} days of sleep logs, worked out

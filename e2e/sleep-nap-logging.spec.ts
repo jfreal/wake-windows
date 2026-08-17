@@ -1,6 +1,6 @@
 // @test:sleep-nap-logging
 import { test, expect } from '@playwright/test';
-import { setEntryToMidday } from './helpers';
+import { openEntryEditor, setEntryToMidday } from './helpers';
 
 // Feature: Sleep & Nap Logging (Tracking & Logging) — status: Built.
 // Local-only timer + editable/backdatable entries; hidden from the read-only
@@ -10,13 +10,15 @@ test.describe('Sleep & Nap Logging [@feature:sleep-nap-logging]', () => {
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&view=sitter');
     await expect(page.getByRole('heading', { name: 'Sleep & Nap Log' })).toHaveCount(0);
 
-    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7&tab=log');
     await expect(page.getByRole('heading', { name: 'Sleep & Nap Log' })).toBeVisible();
   });
 
   test('starts and stops a sleep timer', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Start sleep timer' }).click();
+    await page.goto('/?tab=log');
+    // The one big control on the Log screen. Its accessible name deliberately
+    // avoids "start"/"stop" so it can't collide with the per-entry controls.
+    await page.getByRole('button', { name: 'They went down' }).click();
 
     // A running entry appears with a Stop control.
     await expect(page.getByText('running')).toBeVisible();
@@ -25,13 +27,16 @@ test.describe('Sleep & Nap Logging [@feature:sleep-nap-logging]', () => {
 
     await stop.click();
 
-    // Once stopped there is no running badge, and the End time becomes editable.
+    // Once stopped there is no running badge, and the End time becomes editable
+    // (the time fields live behind "Edit" — the log lists what happened, and
+    // changing it is a control rather than a form under every row).
     await expect(page.getByText('running')).toHaveCount(0);
+    await openEntryEditor(page);
     await expect(page.getByLabel('End')).toBeEnabled();
   });
 
   test('a backdated past sleep updates today\'s totals', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?tab=log');
     // "Add past sleep" drops in a completed one-hour block ending NOW, which is
     // only wholly inside today if the suite runs after 01:00 local. Between
     // midnight and 1am it straddles the boundary and dailyTotals correctly
@@ -46,8 +51,9 @@ test.describe('Sleep & Nap Logging [@feature:sleep-nap-logging]', () => {
   });
 
   test('an entry can be backdated across midnight without clamping to today', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/?tab=log');
     await page.getByRole('button', { name: 'Add past sleep' }).click();
+    await openEntryEditor(page);
 
     // A sleep that ran from 11pm one day to 6am the next — dates on two days.
     await page.getByLabel('Start').fill('2026-07-18T23:00');

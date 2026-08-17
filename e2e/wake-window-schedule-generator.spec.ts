@@ -5,7 +5,7 @@ test.describe('Wake-window schedule generator [@feature:wake-window-schedule-gen
   test('turns age + wake windows + bedtime into a clock-time nap schedule', async ({ page }) => {
     await page.goto('/?bd=2026-03-01&s=7-2/2/2/2-7');
     await expect(page.getByRole('img', { name: 'Wake Windows' })).toBeVisible();
-    await expect(page.getByText('Nap Schedule', { exact: true })).toBeVisible();
+    await expect(page.getByText('Rest of the day', { exact: true })).toBeVisible();
     // at least one nap row renders a clock-time range, e.g. "8:45–9:15 AM"
     // (formatClockRange repeats AM/PM only when the range crosses noon/midnight)
     await expect(

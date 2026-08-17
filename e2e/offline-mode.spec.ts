@@ -7,7 +7,9 @@ import { test, expect } from '@playwright/test';
 test.describe('Offline Mode [@feature:offline-mode]', () => {
   test('plan renders and recomputes fully offline', async ({ page, context }) => {
     // First visit online: service worker installs and precaches everything.
-    await page.goto('/?bd=2026-01-15&s=7-2/2.25/2.5-19');
+    // Settings: the wake-time control the recompute-offline step needs lives
+    // there, and the offline banner + cached footer render on every screen.
+    await page.goto('/?bd=2026-01-15&s=7-2/2.25/2.5-19&tab=settings');
     await page.waitForFunction(async () => {
       const reg = await navigator.serviceWorker?.ready;
       return !!reg?.active;
@@ -19,7 +21,10 @@ test.describe('Offline Mode [@feature:offline-mode]', () => {
     await page.reload();
 
     // App shell renders from cache — no error page.
-    await expect(page.locator('h1 img[alt="Wake Windows"]')).toBeVisible();
+    // The brand mark renders from cache. It lives in the page header on a phone
+    // and in the sidebar on a wide screen, so match it by name rather than by
+    // where it happens to sit at the runner's viewport.
+    await expect(page.getByRole('img', { name: 'Wake Windows' })).toBeVisible();
 
     // Honest indicator instead of a spinner or error.
     await expect(page.getByText('Offline — your plan still works')).toBeVisible();

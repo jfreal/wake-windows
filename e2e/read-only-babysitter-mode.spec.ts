@@ -26,7 +26,7 @@ test.describe('Read-Only Babysitter / Grandparent Mode [@feature:read-only-babys
 
   test('normal view offers a Copy sitter link action that produces the read-only URL', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.goto('/?bd=2024-06-01&s=7-2/2/2/2-7');
+    await page.goto('/?bd=2024-06-01&s=7-2/2/2/2-7&tab=settings');
     await page.getByRole('button', { name: 'Copy sitter link' }).click();
     await expect(page.getByText('Copied!')).toBeVisible();
     const copied = await page.evaluate(() => navigator.clipboard.readText());

@@ -59,33 +59,70 @@ function removeWW(index: number) {
 </script>
 
 <template>
-  <!-- `.field` / `.btn` carry the shared 44px control sizing (style.css), so the
+  <!-- A settings LIST, not a stacked form: label and its one-line "what this is
+       for" on the left, the control right-aligned, one hairline row each. The
+       inputs are answers to questions asked about once a month, and reading the
+       plan back should be possible without reading a form.
+
+       `.field` / `.btn` carry the shared 44px control sizing (style.css), so the
        one-handed-in-the-dark target size can't drift control by control. -->
-  <label :for="`${idPrefix}bd`" class="block text-slate-400 text-sm mb-1">Birthday</label>
-  <div class="mb-4">
-    <input :id="`${idPrefix}bd`" type="date" class="field peer"
-      v-model="schedule.birthdayDate" required />
-    <span class="hidden peer-invalid:block text-amber-100 text-sm mt-1">Please enter a birthdate.</span>
+  <div class="divide-y divide-paper-sunk">
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
+      <label :for="`${idPrefix}bd`" class="min-w-0">
+        <span class="block text-[15px] text-slate-200">Birthday</span>
+        <span class="block text-xs text-muted">drives corrected age and the whole plan</span>
+      </label>
+      <div class="w-full sm:w-48">
+        <input :id="`${idPrefix}bd`" type="date" class="field peer"
+          v-model="schedule.birthdayDate" required />
+        <span class="hidden peer-invalid:block text-amber-400 text-xs mt-1">Please enter a birthdate.</span>
+      </div>
+    </div>
+
+    <div class="py-3">
+      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <label :for="`${idPrefix}weeks`" class="min-w-0">
+          <span class="block text-[15px] text-slate-200">Weeks in Womb</span>
+          <span class="block text-xs text-muted">gestational age at birth — 40 if full term</span>
+        </label>
+        <input :id="`${idPrefix}weeks`" type="number" class="field w-full sm:w-48 text-right"
+          placeholder="Weeks" min="20" max="44" step="1" v-model="schedule.weeks" />
+      </div>
+      <p v-if="preterm" class="text-muted text-xs mt-2 text-pretty">
+        Born early — this plan uses adjusted age ({{ schedule.monthsSinceBirth }} mo), the standard
+        starting point through about age two. Many preemies land somewhere between adjusted and
+        actual age; follow your baby over either number.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
+      <label :for="`${idPrefix}dwt`" class="min-w-0">
+        <span class="block text-[15px] text-slate-200">Desired Wake Time</span>
+        <span class="block text-xs text-muted">when their day usually starts</span>
+      </label>
+      <select :id="`${idPrefix}dwt`" class="field w-full sm:w-48 text-right"
+        v-model.number="schedule.dwt">
+        <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
+      </select>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
+      <label :for="`${idPrefix}bed`" class="min-w-0">
+        <span class="block text-[15px] text-slate-200">Bedtime</span>
+        <span class="block text-xs text-muted">the target the day is built back from</span>
+      </label>
+      <select :id="`${idPrefix}bed`" class="field w-full sm:w-48 text-right"
+        v-model.number="schedule.bed">
+        <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
+      </select>
+    </div>
   </div>
 
-  <label :for="`${idPrefix}weeks`" class="block text-slate-400 text-sm mb-1">Weeks in Womb</label>
-  <input :id="`${idPrefix}weeks`" type="number" class="field" placeholder="Weeks" min="20"
-    max="44" step="1" v-model="schedule.weeks" />
-  <p v-if="preterm" class="text-muted text-xs mt-1 mb-4">
-    Born early — this plan uses adjusted age ({{ schedule.monthsSinceBirth }} mo), the standard
-    starting point through about age two. Many preemies land somewhere between adjusted and
-    actual age; follow your baby over either number.
-  </p>
-  <div v-else class="mb-4"></div>
-
-  <label :for="`${idPrefix}dwt`" class="block text-slate-400 text-sm mb-1">Desired Wake Time</label>
-  <select :id="`${idPrefix}dwt`" class="field mb-4 text-right"
-    v-model.number="schedule.dwt">
-    <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
-  </select>
-
-  <span :id="`${idPrefix}ww-label`" class="block text-slate-400 text-sm mb-1">Wake Windows</span>
-  <div role="group" :aria-labelledby="`${idPrefix}ww-label`" class="mb-4">
+  <!-- The one input that is a list rather than a value, so it gets its own
+       block below the rows instead of being squeezed into one. -->
+  <span :id="`${idPrefix}ww-label`" class="block text-[15px] text-slate-200 mt-4 mb-1">Wake Windows</span>
+  <p class="text-xs text-muted mb-2">how long they can comfortably stay awake, in order</p>
+  <div role="group" :aria-labelledby="`${idPrefix}ww-label`">
     <div v-for="(find, index) in schedule.wws" class="flex items-center gap-2 mb-1">
       <input type="number" class="field" placeholder="Hours"
         v-model.number="schedule.wws[index]" min="0" max="6" step="0.25" :aria-label="`Wake window ${index + 1} (hours)`" />
@@ -114,10 +151,4 @@ function removeWW(index: number) {
       low-sleep-needs babies often need longer windows than any template.
     </p>
   </div>
-
-  <label :for="`${idPrefix}bed`" class="block text-slate-400 text-sm mb-1">Bedtime</label>
-  <select :id="`${idPrefix}bed`" class="field text-right"
-    v-model.number="schedule.bed">
-    <option v-for="opt in hourOptions" :key="opt.label" :value="opt.value">{{ opt.label }}</option>
-  </select>
 </template>

@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
 //
 // Birthday pinned far in the past so the baby is always in clock-guidance mode
 // (>6 mo corrected → ±15 min windows), independent of the run date.
-const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7';
+const PLAN = '/?bd=2024-06-01&s=7-2/2/2/2-7&tab=settings';
 
 test.describe('Caregiver Handoff Notes & Summary [@feature:caregiver-handoff-notes]', () => {
   test('note + since-last summary ride a read-only handoff link', async ({ page, context }) => {

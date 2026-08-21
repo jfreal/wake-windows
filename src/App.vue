@@ -93,6 +93,16 @@ import logoUrl from './assets/logo.png'
           <footer class="mt-10 border-t border-line pt-4 text-muted text-xs space-y-2">
             <p>{{ meta.disclaimer }}</p>
             <p>Guidance last reviewed: {{ meta.lastVerified }}.</p>
+            <!-- The static /sleep-schedule pages are built outside the SPA
+                 (vite.config.ts), so this is a real navigation, not a tab. It is
+                 also the only in-app link into that cluster — without it the
+                 pages are reachable from the sitemap alone, which is discovery
+                 but not internal linking. -->
+            <p>
+              <a class="underline" href="/sleep-schedule/">Sample sleep schedules by age</a>
+              ·
+              <a class="underline" href="/wake-windows/">Wake windows by age</a>
+            </p>
           </footer>
         </div>
       </main>

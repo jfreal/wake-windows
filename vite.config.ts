@@ -1,15 +1,78 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { configDefaults } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { buildAgePages, hubBracketRows } from './src/content/agePages'
+import { renderContentPages, renderSitemap } from './src/content/renderContentPage'
+import { buildWakeWindowPages, wakeWindowChartRows } from './src/content/wakeWindowPages'
+
+/** Paths the generated content pages own. Keep in step with the navigation
+ * denylist in src/sw.ts — both must cover exactly the same routes. */
+const CONTENT_ROUTES = /^\/(sleep-schedule|wake-windows)(\/|$)/
+
+/** Both clusters, in one list: the age schedules and the wake-window pages. */
+function allContentPages() {
+  const pages = buildAgePages()
+  const wakeWindows = buildWakeWindowPages(pages)
+  return renderContentPages(pages, hubBracketRows(pages), wakeWindows, wakeWindowChartRows(wakeWindows))
+}
+
+// SEO clusters 1 and 2 (docs/research/seo-topic-clusters.md): emit the static
+// `/sleep-schedule/*` and `/wake-windows/*` pages, plus the sitemap, at build
+// time.
+//
+// Static emission rather than a router + SSG framework: these pages are
+// documents with no app state, the app itself stays a single-route SPA, and
+// nothing new is added to the client bundle. The sitemap is generated here so
+// it can never fall behind the pages that exist — the hand-maintained
+// public/sitemap.xml listed one URL and would have gone stale on the first
+// page added.
+function wakeWindowsContentPages(): Plugin {
+  return {
+    name: 'wake-windows-content-pages',
+    // Dev serves the same rendered HTML from memory. Without this the pages
+    // only exist after a production build, so `npm run dev` would 404 on the
+    // footer link and there would be no way to look at them while editing.
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const path = (req.url ?? '').split('?')[0]
+        // Boundary-aware, and deliberately the same shape as the service
+        // worker's denylist in src/sw.ts: a plain startsWith would also claim
+        // /sleep-schedule-archive and friends.
+        if (!CONTENT_ROUTES.test(path)) return next()
+
+        const emitted = allContentPages()
+        const wanted = path.endsWith('/') ? `${path.slice(1)}index.html` : `${path.slice(1)}/index.html`
+        const match = emitted.find((page) => page.fileName === wanted)
+        if (!match) return next()
+
+        res.setHeader('Content-Type', 'text/html; charset=utf-8')
+        res.end(match.html)
+      })
+    },
+    generateBundle() {
+      const emitted = allContentPages()
+
+      for (const page of emitted) {
+        this.emitFile({ type: 'asset', fileName: page.fileName, source: page.html })
+      }
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: renderSitemap(emitted.map((page) => page.path)),
+      })
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     tailwindcss(),
+    wakeWindowsContentPages(),
     // F07 Offline Mode — precache the whole built app so a plan renders and
     // recomputes with no network. citations.json is bundled into the JS via
     // import (models/Citations.ts), so evidence content is covered by the JS

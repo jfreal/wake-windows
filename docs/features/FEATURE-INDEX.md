@@ -123,6 +123,12 @@ Verdict: from the competitor fact-check (Confirmed gap / Partial / Table-stakes)
 | G04 | No-AI / no-data-training stance | P1 | Confirmed gap (everyone's racing to add AI) |
 | G05 | Ephemerality & one-click data deletion | P1 | **Confirmed gap** (everyone wants to retain you forever) |
 
+### H. Reach & Discovery
+
+| Doc | Feature | Pri | Verdict |
+|---|---|---|---|
+| H01 | Static content pages (SEO topic cluster) | P1 | Gap in our funnel: competitors own `{age} sleep schedule`, we had one indexable URL |
+
 ---
 
 ## Suggested build order (MVP → v1 → later)

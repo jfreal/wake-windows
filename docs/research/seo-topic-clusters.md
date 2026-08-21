@@ -24,7 +24,9 @@ not bare tool pages.
 
 ## Cluster 1 — Sleep schedule by age (highest volume, lowest difficulty)
 
-Hub: `/sleep-schedule` — "Baby sleep schedules by age (newborn to 2 years)"
+Hub: `/sleep-schedule` — "Baby sleep schedules by age". The hub's table covers
+every bracket to 24 months; spokes exist only for the ages listed below, and the
+hub says so rather than implying a page per month.
 
 | Spoke page | Keyword | Vol | KD |
 |---|---|---|---|
@@ -70,7 +72,8 @@ Hub: `/wake-windows` — "Wake windows by age: chart + calculator"
 | FAQ block on hub | do wake windows include feeding time | 110 | 0 |
 
 Note `4/6/9/12 month old wake windows` are tagged **transactional** intent — those
-searchers want a tool, which is the one place a calculator-first layout wins.
+searchers want a tool, so keep the article format the SERPs reward and put the
+planner above the prose rather than replacing it.
 
 ## Cluster 3 — Nap transitions (4→3→2→1)
 
@@ -102,18 +105,18 @@ Hub: `/sleep-regressions`
 | `/sleep-regressions/12-month` | 12 month sleep regression | 4,400 | 5 |
 | also | 4 month old sleep regression | 1,900 | 1 |
 
-Highest-volume cluster on the list, and the one furthest from what the app does
-today. Angle that keeps it honest: "is this a regression or just the wrong wake
+The largest single query in the set (cluster 1 is bigger in total), and the one
+furthest from what the app does today. Angle that keeps it honest: "is this a regression or just the wrong wake
 window?" — send readers into the planner and the transition detector.
 
 ## Cluster 5 — Nap troubleshooting
 
 Hub: `/nap-help` (feeds the existing sleep troubleshooter)
 
-Members: contact naps (3,600 / KD 0), short naps, catnapping, overtired signs,
-early morning wakings, split nights, 4 month old nap length (170 / KD 0),
-nap length by age (170 / KD 24), how many naps by age (50 / KD 16).
-The last six returned no volume estimate — real but small; treat as long tail.
+Members: contact naps (3,600 / KD 0), 4 month old nap length (170 / KD 0),
+nap length by age (170 / KD 24), how many naps by age (50 / KD 16), plus five
+that returned no volume estimate at all — short naps, catnapping, overtired
+signs, early morning wakings, split nights. Real but small; treat as long tail.
 
 ## Cluster 6 — How much sleep does a baby need
 
@@ -131,7 +134,9 @@ Foundation, BabyCenter. Build it for citation/E-E-A-T, not for quick wins.
 
 `nap calculator` — 590 vol, KD 3, **CPC $1.42** (10-25x every other keyword here).
 Also `wake window calculator` and `baby sleep calculator` (near-zero measured volume).
-One `/calculator` page, canonical to the app, linked from every spoke.
+One `/calculator` page, **self-canonical and indexable** — canonicalising it to `/`
+would hand its ranking to the app root and waste the page. It embeds the planner
+and is linked from every spoke.
 
 ## Cluster 8 — Edge cases the app already handles
 
@@ -147,7 +152,8 @@ daylight saving time baby sleep, travel nap schedule.
 1. Every spoke links up to its hub and down to the planner.
 2. Age spokes link to age±1 (a 4-month page should catch the 5-month searcher next month).
 3. Age spokes link sideways to the transition and regression page for that age —
-   4-month schedule ↔ 4-month regression ↔ 3-to-2 transition.
+   4-month schedule ↔ 4-month regression ↔ 4-to-3 transition (the drop that is
+   actually due around then; 3-to-2 belongs on the 6-8 month pages).
 4. Hubs link to each other; the wake-windows hub is the site's semantic center.
 
 ## Build order
@@ -172,5 +178,6 @@ daylight saving time baby sleep, travel nap schedule.
   with no JavaScript at all.
 - ~~`public/sitemap.xml` has one URL~~ — now generated from the emitted routes.
 - **Still open:** connect Search Console to the OpenSEO project. Without it there
-  is no way to measure whether any of this lands, and no basis for choosing
-  tranche two.
+  is no *first-party query data* — no impressions, positions, or indexed-page
+  count. Netlify analytics, server logs, and third-party rank tracking can still
+  show traffic and rankings, but not what a page is being shown for.

@@ -8,6 +8,10 @@ import { buildAgePages, hubBracketRows } from './src/content/agePages'
 import { renderContentPages, renderSitemap } from './src/content/renderContentPage'
 import { buildWakeWindowPages, wakeWindowChartRows } from './src/content/wakeWindowPages'
 
+/** Paths the generated content pages own. Keep in step with the navigation
+ * denylist in src/sw.ts — both must cover exactly the same routes. */
+const CONTENT_ROUTES = /^\/(sleep-schedule|wake-windows)(\/|$)/
+
 /** Both clusters, in one list: the age schedules and the wake-window pages. */
 function allContentPages() {
   const pages = buildAgePages()
@@ -34,7 +38,10 @@ function wakeWindowsContentPages(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const path = (req.url ?? '').split('?')[0]
-        if (!path.startsWith('/sleep-schedule') && !path.startsWith('/wake-windows')) return next()
+        // Boundary-aware, and deliberately the same shape as the service
+        // worker's denylist in src/sw.ts: a plain startsWith would also claim
+        // /sleep-schedule-archive and friends.
+        if (!CONTENT_ROUTES.test(path)) return next()
 
         const emitted = allContentPages()
         const wanted = path.endsWith('/') ? `${path.slice(1)}index.html` : `${path.slice(1)}/index.html`

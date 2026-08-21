@@ -28,15 +28,18 @@ test.describe('Static content pages [@feature:static-content-pages]', () => {
 
   // The whole cluster exists to be read without JavaScript — an article that
   // needs the bundle to render is invisible to the crawlers it is written for.
-  test('renders with JavaScript disabled', async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
-    const page = await context.newPage();
-    await page.goto('/sleep-schedule/6-month-old/');
+  // A fixture override rather than a hand-rolled context: a failed assertion
+  // would leak a manually created context for the rest of the worker.
+  test.describe('without JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
 
-    await expect(page.getByRole('heading', { level: 1, name: '6 month old sleep schedule' })).toBeVisible();
-    // The published range for 6-8 months, straight from the Tier-1 bracket.
-    await expect(page.getByText('120–180 min')).toBeVisible();
-    await context.close();
+    test('renders with JavaScript disabled', async ({ page }) => {
+      await page.goto('/sleep-schedule/6-month-old/');
+
+      await expect(page.getByRole('heading', { level: 1, name: '6 month old sleep schedule' })).toBeVisible();
+      // The published range for 6-8 months, straight from the Tier-1 bracket.
+      await expect(page.getByText('120–180 min')).toBeVisible();
+    });
   });
 
   test('call to action opens the planner on the day the page printed', async ({ page }) => {

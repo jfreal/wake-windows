@@ -261,7 +261,12 @@ export function buildWakeWindowPage(
 
     return {
         ...page,
-        title: `${page.keyword.replace(/^(\d+) month old/, '$1-month-old')}: how long, and what to do when they do not fit`,
+        // The keyword for the newborn page reads "wake windows newborn", which
+        // would put a lowercase inverted phrase in the SERP headline. Every other
+        // page's keyword already leads with the age.
+        title: `${page.months === 0
+            ? 'Newborn wake windows'
+            : page.keyword.replace(/^(\d+) month old/, '$1-month-old')}: how long, and what to do when they do not fit`,
         heading: page.months === 0 ? 'Newborn wake windows' : `${agePage.label} wake windows`,
         label,
         description:

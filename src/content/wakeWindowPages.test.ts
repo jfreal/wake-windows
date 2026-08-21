@@ -10,6 +10,7 @@ import {
 } from './wakeWindowPages'
 import { renderContentPages, renderWakeWindowChart, renderWakeWindowHub, renderWakeWindowPage } from './renderContentPage'
 import { hubBracketRows } from './agePages'
+import { formatDuration } from '../models/time'
 
 const agePages = buildAgePages()
 const pages = buildWakeWindowPages(agePages)
@@ -48,7 +49,7 @@ describe('buildWakeWindowPages', () => {
     it('prints exactly the windows the matching schedule page prints', () => {
         for (const page of pages) {
             const agePage = agePages.find((p) => p.months === page.months)!
-            expect(page.sampleWindows).toHaveLength(agePage.wws.length)
+            expect(page.sampleWindows).toEqual(agePage.wws.map((ww) => formatDuration(ww * 60)))
             expect(page.plannerHref).toBe(agePage.plannerHref)
             expect(page.schedulePath).toBe(agePage.path)
         }

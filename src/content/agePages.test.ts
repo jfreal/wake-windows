@@ -10,6 +10,23 @@ import {
 } from './agePages'
 import { applyPlanParams } from '../models/planUrl'
 import { ScheduleSetting } from '../models/ScheduleSetting'
+import { formatDuration, roundToStep } from '../models/time'
+
+/** Minutes between the two ends of a rendered range like "8:30–9:25 AM". The
+ * AM/PM marker is only repeated when the range crosses noon (see formatClockRange). */
+function minutesSpanned(range: string): number {
+    const [rawStart, rawEnd] = range.split('–')
+    const endPeriod = rawEnd.slice(-2)
+    const start = toMinutes(rawStart.includes('M') ? rawStart : `${rawStart} ${endPeriod}`)
+    return toMinutes(rawEnd) - start
+}
+
+function toMinutes(clock: string): number {
+    const [time, period] = clock.trim().split(' ')
+    const [hours, minutes] = time.split(':').map(Number)
+    const base = (hours % 12) * 60 + minutes
+    return period === 'PM' ? base + 12 * 60 : base
+}
 
 describe('age page definitions', () => {
     it('has a unique slug per page', () => {
@@ -76,6 +93,25 @@ describe('buildAgePages', () => {
             expect(page.rows).toHaveLength(page.napCount + 2)
             expect(page.rows[0].label).toBe('Wake')
             expect(page.rows[page.rows.length - 1].label).toBe('Bedtime')
+        }
+    })
+
+    // "naps of about 55 min each" printed above a row spanning 50 minutes is the
+    // kind of small contradiction that makes a page look generated. The rows and
+    // the published length must come from one rounding, not two.
+    it('publishes one nap length that every nap row actually spans', () => {
+        for (const page of pages) {
+            const napRows = page.rows.filter((row) => row.label.startsWith('Nap'))
+            expect(napRows).toHaveLength(page.napCount)
+
+            const expected = roundToStep(
+                scheduleFor(page).napTimes[0].end - scheduleFor(page).napTimes[0].start,
+            )
+            expect(page.napLength).toBe(formatDuration(expected))
+
+            for (const row of napRows) {
+                expect(minutesSpanned(row.time)).toBe(expected)
+            }
         }
     })
 

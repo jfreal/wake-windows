@@ -690,10 +690,15 @@ export function buildAgePage(page: AgePageDefinition, index: number, pages: AgeP
     // Displayed to 5-minute marks. The generator's even split of total nap time
     // produces ends like 9:23, and a to-the-minute nap end on a page a parent
     // reads at 2am is false precision — the app rounds the same way.
-    const napBlocks = naps.map((nap) => ({
-        start: roundToStep(nap.start),
-        end: roundToStep(nap.end),
-    }))
+    //
+    // The length is rounded ONCE and reused for every nap, rather than rounding
+    // each start and end separately: the splits are equal, so separate rounding
+    // could print "naps of about 55 min each" above a row that spans 50.
+    const napLengthMinutes = naps.length ? roundToStep(naps[0].end - naps[0].start) : 0
+    const napBlocks = naps.map((nap) => {
+        const start = roundToStep(nap.start)
+        return { start, end: start + napLengthMinutes }
+    })
 
     const rows: SampleDayRow[] = [
         { label: 'Wake', time: formatClock(schedule.wakeMinutes) },
@@ -709,7 +714,6 @@ export function buildAgePage(page: AgePageDefinition, index: number, pages: AgeP
         },
     ]
 
-    const napLengthMinutes = napBlocks.length ? napBlocks[0].end - napBlocks[0].start : 0
     const previous = pages[index - 1]
     const next = pages[index + 1]
 

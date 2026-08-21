@@ -25,6 +25,16 @@ export function escapeHtml(value: string): string {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+}
+
+/** JSON-LD is inlined into a <script> element, where the HTML parser still
+ * honours `</script>` even inside a JSON string. Escaping `<` as a unicode
+ * escape keeps the payload valid JSON that cannot close its own element. The
+ * page copy is ours today, but a future FAQ answer containing markup should
+ * not be able to break the page open. */
+function jsonLdScript(graph: unknown): string {
+    return JSON.stringify(graph).replace(/</g, '\\u003c')
 }
 
 const STYLES = `
@@ -109,7 +119,7 @@ function shell({ title, description, path, body, jsonLd }: PageShell): string {
   <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${SITE_ORIGIN}/pwa-512x512.png" />
   <style>${STYLES}</style>
-  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <script type="application/ld+json">${jsonLdScript(jsonLd)}</script>
 </head>
 
 <body>

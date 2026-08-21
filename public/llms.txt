@@ -22,6 +22,17 @@ Guidance last reviewed: 2026-06-07.
 - NICHD "Safe to Sleep" (US NIH): https://safetosleep.nichd.nih.gov/reduce-risk/reduce
 - The Lullaby Trust (UK) — safer sleep overview: https://www.lullabytrust.org.uk/baby-safety/safer-sleep-information/safer-sleep-overview/
 
+## Sample schedules by age
+
+Static, no-JS pages with a computed sample day, the age's wake-window range, nap count, and total sleep:
+
+- https://wakewindows.guru/sleep-schedule/ — every age bracket, 0-24 months
+- https://wakewindows.guru/sleep-schedule/3-month-old/
+- https://wakewindows.guru/sleep-schedule/4-month-old/
+- https://wakewindows.guru/sleep-schedule/5-month-old/
+- https://wakewindows.guru/sleep-schedule/6-month-old/
+- https://wakewindows.guru/sleep-schedule/7-month-old/
+
 ## Stance
 
 - Informational only, not medical advice. Infant sleep needs vary widely; families should consult their pediatrician.

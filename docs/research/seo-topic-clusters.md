@@ -152,7 +152,9 @@ daylight saving time baby sleep, travel nap schedule.
 
 ## Build order
 
-1. Cluster 1, ages 4/6/3/5/7 months — ~52k combined volume at KD 0-7.
+1. **Shipped** — Cluster 1, ages 3/4/5/6/7 months (~52k combined volume at KD 0-7),
+   plus the hub. See `../features/H01-static-content-pages.md`; the pages are
+   generated from the app's models by `src/content/` and emitted at build time.
 2. Cluster 2 hub + the four transactional age spokes.
 3. Cluster 3 (content already exists in the A06 feature).
 4. Cluster 4 — biggest volume, hardest editorially, needs real sourcing.
@@ -160,8 +162,11 @@ daylight saving time baby sleep, travel nap schedule.
 
 ## Prerequisites
 
-- The site is a single-route SPA. Clusters need real routes, per-route `<title>`/
-  meta/canonical, and prerendering or SSG — Netlify + `vite-plugin-ssg` or similar.
-- `public/sitemap.xml` has one URL; it must be generated from the route list.
-- Connect Search Console to the OpenSEO project. Without it there is no way to
-  measure whether any of this lands.
+- ~~The site is a single-route SPA.~~ Solved without a router: the content pages
+  are emitted as static HTML by a Vite plugin (`wakeWindowsContentPages` in
+  `vite.config.ts`), so the app stays a single-route SPA and the pages render
+  with no JavaScript at all.
+- ~~`public/sitemap.xml` has one URL~~ — now generated from the emitted routes.
+- **Still open:** connect Search Console to the OpenSEO project. Without it there
+  is no way to measure whether any of this lands, and no basis for choosing
+  tranche two.

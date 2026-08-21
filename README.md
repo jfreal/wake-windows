@@ -46,6 +46,7 @@ birthday, wake time, wake-window lengths, and bedtime, then instantly see:
 | 👶 **Corrected-age adjustment** | Accounts for gestational age, so a premature baby is mapped to the right developmental stage. |
 | 📚 **Cited recommendations** | Compares the schedule against age brackets (0–24 months) from multiple sources, each linked back to its origin, with values color-coded in / out of range. |
 | 🔗 **Shareable schedules** | Full state lives in the URL query string, so a plan can be bookmarked or shared with a partner or caregiver. |
+| 📄 **Static schedule pages** | Age-by-age sample schedules at `/sleep-schedule/`, generated from the same models at build time and readable with no JavaScript. |
 | 📱 **Responsive & accessible** | Mobile-first layout, dark theme, semantic markup, and decorative imagery hidden from screen readers. |
 
 ## Engineering highlights

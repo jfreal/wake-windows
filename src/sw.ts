@@ -61,7 +61,17 @@ cleanupOutdatedCaches();
 // F07: SPA navigation fallback — any in-app navigation (e.g. /?bd=…&s=…) is
 // served the precached index.html, so a shared plan link renders offline. This
 // replaces the navigateFallback generateSW gave us for free before injectManifest.
-registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
+//
+// The denylist is load-bearing: /sleep-schedule/* are real static documents
+// emitted by the build, not SPA routes. Without it the fallback would answer
+// every one of them with the app shell, so an installed user (and only an
+// installed user) would see the planner where the article should be. They are
+// precached by the same globPatterns, so they still work offline on their own.
+registerRoute(
+    new NavigationRoute(createHandlerBoundToURL('index.html'), {
+        denylist: [/^\/sleep-schedule(\/|$)/],
+    }),
+);
 
 const NUDGE_TAG = 'ww-prenap-nudge';
 

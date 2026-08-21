@@ -13,6 +13,8 @@
 
 import type { AgePageModel, HubBracketRow } from './agePages'
 import { CLUSTER_BASE, SITE_ORIGIN } from './agePages'
+import type { WakeWindowChartRow, WakeWindowPageModel } from './wakeWindowPages'
+import { WAKE_WINDOW_BASE } from './wakeWindowPages'
 
 /** Last content review. Surfaced on the page and in `dateModified`. */
 export const CONTENT_REVIEWED = '2026-08-21'
@@ -203,7 +205,7 @@ ${faqs
         .join('\n')}`
 }
 
-export function renderAgePage(page: AgePageModel): string {
+export function renderAgePage(page: AgePageModel, wakeWindowPath?: string): string {
     const rows = page.rows
         .map(
             (row) => `        <tr><th scope="row">${escapeHtml(row.label)}</th><td class="time">${escapeHtml(row.time)}</td>`
@@ -217,7 +219,7 @@ export function renderAgePage(page: AgePageModel): string {
     <h1>${escapeHtml(page.heading)}</h1>
     <p class="lede">${escapeHtml(page.intro)}</p>
 
-    <h2>A sample ${escapeHtml(String(page.months))}-month-old day</h2>
+    <h2>A sample ${escapeHtml(page.dayLabel)} day</h2>
     <p>Wake at ${escapeHtml(page.rows[0].time)}, ${page.napCount} nap${page.napCount === 1 ? '' : 's'} of about
       ${escapeHtml(page.napLength)} each, bedtime at ${escapeHtml(page.rows[page.rows.length - 1].time)}. Nap times are
       windows, not deadlines — anywhere inside one counts.</p>
@@ -233,7 +235,7 @@ ${rows}
     <p>The planner adjusts it to your baby's own wake time, bedtime, and birthday — including
       corrected age if your baby was born early.</p>
 
-    <h2>How much sleep a ${escapeHtml(String(page.months))} month old needs</h2>
+    <h2>How much sleep a ${escapeHtml(page.label)} needs</h2>
     <div class="card">
       <dl class="stats">
         <div><dt>Wake windows</dt><dd>${page.wakeWindowRange[0]}–${page.wakeWindowRange[1]} min</dd></div>
@@ -248,6 +250,10 @@ ${rows}
 
     <h2>What changes next</h2>
     <p>${escapeHtml(page.whatChangesNext)}</p>
+${wakeWindowPath
+        ? `    <p>Want the wake windows on their own, without the whole day around them?
+      See <a href="${wakeWindowPath}">${escapeHtml(page.label)} wake windows</a>.</p>`
+        : ''}
 
 ${faqBlock(page.faqs)}
 
@@ -335,7 +341,8 @@ ${bracketTable}
       </table>
     </div>
     <p>Ages without a linked page above are still covered by the planner: it matches your baby's
-      corrected age to the bracket it falls in and checks your schedule against it.</p>
+      corrected age to the bracket it falls in and checks your schedule against it. For the awake
+      stretches on their own, see <a href="${WAKE_WINDOW_BASE}/">wake windows by age</a>.</p>
 
 ${sourcesBlock()}`
 
@@ -362,6 +369,224 @@ ${sourcesBlock()}`
     return shell({ title, description, path, body, jsonLd })
 }
 
+/** A wake-window spoke. Transactional intent, so the planner comes before the
+ * prose rather than after it — these searchers want the number and the tool. */
+export function renderWakeWindowPage(page: WakeWindowPageModel): string {
+    const windows = page.sampleWindows
+        .map((window, i) => `        <tr><th scope="row">Window ${i + 1}</th><td class="time">${escapeHtml(window)}</td>`
+            + `<td>${i === 0 ? '<span class="detail">after morning wake-up</span>' : i === page.sampleWindows.length - 1 ? '<span class="detail">before bedtime</span>' : '<span class="detail">between naps</span>'}</td></tr>`)
+        .join('\n')
+
+    const body = `    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Wake Windows</a> › <a href="${WAKE_WINDOW_BASE}/">Wake windows by age</a> › ${escapeHtml(page.heading)}
+    </nav>
+    <h1>${escapeHtml(page.heading)}</h1>
+    <div class="card">
+      <dl class="stats">
+        <div><dt>Awake between sleeps</dt><dd>${escapeHtml(page.rangeLabel)}</dd></div>
+        <div><dt>Naps a day</dt><dd>${page.napRange[0] === page.napRange[1] ? page.napRange[0] : `${page.napRange[0]}–${page.napRange[1]}`}</dd></div>
+      </dl>
+    </div>
+    <p><a class="cta" href="${page.plannerHref}">Turn these windows into clock times</a></p>
+    <p class="lede">${escapeHtml(page.intro)}</p>
+
+    <h2>A day built from these windows</h2>
+    <div class="card scroll">
+      <table>
+        <thead><tr><th scope="col">Wake window</th><th scope="col">Length</th><th scope="col">Where it falls</th></tr></thead>
+        <tbody>
+${windows}
+        </tbody>
+      </table>
+    </div>
+    <p>The same day with clock times, naps and bedtime is on the
+      <a href="${page.schedulePath}">${escapeHtml(page.scheduleLabel)}</a> page.</p>
+
+    <h2>When the window does not fit</h2>
+    <p>${escapeHtml(page.whenItDoesNotFit)}</p>
+
+${faqBlock(page.faqs)}
+
+${sourcesBlock()}
+
+    <nav class="nav-pair" aria-label="Related pages">
+      <span><a href="${WAKE_WINDOW_BASE}/">Wake windows by age</a></span>
+      <span><a href="${WAKE_WINDOW_BASE}/chart/">Wake window chart →</a></span>
+    </nav>`
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            ...publisherNodes(),
+            {
+                '@type': 'Article',
+                '@id': `${page.url}#article`,
+                headline: page.heading,
+                description: page.description,
+                inLanguage: 'en',
+                mainEntityOfPage: page.url,
+                author: { '@id': `${SITE_ORIGIN}/#author` },
+                publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+                dateModified: CONTENT_REVIEWED,
+                isAccessibleForFree: true,
+            },
+            {
+                '@type': 'FAQPage',
+                '@id': `${page.url}#faq`,
+                mainEntity: page.faqs.map((f) => ({
+                    '@type': 'Question',
+                    name: f.question,
+                    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+                })),
+            },
+            wakeWindowBreadcrumbs(page.path, page.heading),
+        ],
+    }
+
+    return shell({ title: page.title, description: page.description, path: page.path, body, jsonLd })
+}
+
+function wakeWindowBreadcrumbs(path: string, name: string) {
+    const items = [
+        { '@type': 'ListItem', position: 1, name: 'Wake Windows', item: `${SITE_ORIGIN}/` },
+        { '@type': 'ListItem', position: 2, name: 'Wake windows by age', item: `${SITE_ORIGIN}${WAKE_WINDOW_BASE}/` },
+    ]
+    if (path !== `${WAKE_WINDOW_BASE}/`) {
+        items.push({ '@type': 'ListItem', position: 3, name, item: `${SITE_ORIGIN}${path}` })
+    }
+    return { '@type': 'BreadcrumbList', itemListElement: items }
+}
+
+function chartTable(rows: WakeWindowChartRow[]): string {
+    const body = rows
+        .map((row) => `        <tr><th scope="row">${row.href ? `<a href="${row.href}">${escapeHtml(row.ageLabel)}</a>` : escapeHtml(row.ageLabel)}</th>`
+            + `<td class="time">${escapeHtml(row.range)}</td><td>${escapeHtml(row.naps)}</td></tr>`)
+        .join('\n')
+    return `    <div class="card scroll">
+      <table>
+        <thead><tr><th scope="col">Age</th><th scope="col">Awake between sleeps</th><th scope="col">Naps a day</th></tr></thead>
+        <tbody>
+${body}
+        </tbody>
+      </table>
+    </div>`
+}
+
+/** The cluster-2 hub: the wake-windows term itself, and the site's semantic centre. */
+export function renderWakeWindowHub(pages: WakeWindowPageModel[], rows: WakeWindowChartRow[]): string {
+    const path = `${WAKE_WINDOW_BASE}/`
+    const title = 'Wake windows by age: how long babies stay awake between naps'
+    const description =
+        'How long a baby can comfortably stay awake at each age, from newborn to two years, with the '
+        + 'published ranges, a sample day for each age, and a free planner that turns them into clock times.'
+
+    const spokes = pages
+        .map((page) => `      <li><a href="${page.path}">${escapeHtml(page.heading)}</a> — ${escapeHtml(page.rangeLabel)}</li>`)
+        .join('\n')
+
+    const body = `    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Wake Windows</a> › Wake windows by age</nav>
+    <h1>Wake windows by age</h1>
+    <p class="lede">A wake window is the stretch a baby is awake between sleeps — feeding, changing and
+      playing included. It is a useful way to time naps, and it is worth knowing up front that the term
+      comes from sleep consultants rather than from the medical literature. Treat the numbers below as
+      starting estimates that your baby is allowed to disagree with.</p>
+
+${chartTable(rows)}
+    <p><a class="cta" href="/">Turn your baby's windows into a day</a></p>
+
+    <h2>Wake windows for a specific age</h2>
+    <ul>
+${spokes}
+    </ul>
+
+    <h2>How to use a wake window</h2>
+    <p>Start the clock when your baby wakes, not when the last nap ended, and count the whole awake
+      stretch. Aim for somewhere inside the range rather than at a specific minute — the first window of
+      the day is usually the shortest and the one before bedtime the longest.</p>
+    <p>Two failure modes look almost identical from the outside. An overtired baby fights sleep because
+      the window ran long; an under-tired one fights it because the window was too short. If a nap goes
+      badly, move the next window by fifteen minutes in one direction and give it several days before
+      judging it.</p>
+    <p>Full day-by-day schedules with clock times live on the
+      <a href="${CLUSTER_BASE}/">sleep schedules by age</a> pages.</p>
+
+${sourcesBlock()}`
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            ...publisherNodes(),
+            {
+                '@type': 'CollectionPage',
+                '@id': `${SITE_ORIGIN}${path}#webpage`,
+                url: `${SITE_ORIGIN}${path}`,
+                name: title,
+                description,
+                inLanguage: 'en',
+                publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+                dateModified: CONTENT_REVIEWED,
+                isAccessibleForFree: true,
+                hasPart: pages.map((p) => ({ '@type': 'Article', '@id': `${p.url}#article`, url: p.url, headline: p.heading })),
+            },
+            wakeWindowBreadcrumbs(path, 'Wake windows by age'),
+        ],
+    }
+
+    return shell({ title, description, path, body, jsonLd })
+}
+
+/** The chart page. One table, no preamble — it answers a query that wants a
+ * chart, and burying the chart under 400 words would be a worse answer. */
+export function renderWakeWindowChart(rows: WakeWindowChartRow[]): string {
+    const path = `${WAKE_WINDOW_BASE}/chart/`
+    const title = 'Wake window chart: awake times by age, newborn to 2 years'
+    const description =
+        'A wake window chart for every age from newborn to two years: how long babies stay awake between '
+        + 'sleeps, and how many naps go with it, from cited guidance.'
+
+    const body = `    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Wake Windows</a> › <a href="${WAKE_WINDOW_BASE}/">Wake windows by age</a> › Chart
+    </nav>
+    <h1>Wake window chart</h1>
+    <p class="lede">Awake time between sleeps, by age, with the nap count that goes with it.</p>
+
+${chartTable(rows)}
+
+    <p><a class="cta" href="/">Build the day around these windows</a></p>
+    <p>Ranges are wide on purpose: babies of the same age differ by an hour or more, and a baby at the
+      short end of the range is not behind. Under about six months of corrected age, sleepy cues are a
+      better guide than any chart on this page.</p>
+
+${sourcesBlock()}
+
+    <nav class="nav-pair" aria-label="Related pages">
+      <span><a href="${WAKE_WINDOW_BASE}/">Wake windows by age</a></span>
+      <span><a href="${CLUSTER_BASE}/">Sleep schedules by age →</a></span>
+    </nav>`
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            ...publisherNodes(),
+            {
+                '@type': 'Article',
+                '@id': `${SITE_ORIGIN}${path}#article`,
+                headline: 'Wake window chart',
+                description,
+                inLanguage: 'en',
+                mainEntityOfPage: `${SITE_ORIGIN}${path}`,
+                author: { '@id': `${SITE_ORIGIN}/#author` },
+                publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+                dateModified: CONTENT_REVIEWED,
+                isAccessibleForFree: true,
+            },
+            wakeWindowBreadcrumbs(path, 'Wake window chart'),
+        ],
+    }
+
+    return shell({ title, description, path, body, jsonLd })
+}
+
 export interface EmittedPage {
     /** Path relative to the build output root, e.g. 'sleep-schedule/4-month-old/index.html'. */
     fileName: string
@@ -370,9 +595,17 @@ export interface EmittedPage {
     path: string
 }
 
-/** Every static page this build emits, hub first. */
-export function renderContentPages(pages: AgePageModel[], bracketRows: HubBracketRow[]): EmittedPage[] {
-    return [
+/** Every static page this build emits: each cluster's hub, then its spokes. */
+export function renderContentPages(
+    pages: AgePageModel[],
+    bracketRows: HubBracketRow[],
+    wakeWindowPages: WakeWindowPageModel[] = [],
+    chartRows: WakeWindowChartRow[] = [],
+): EmittedPage[] {
+    // Cross-link: an age page points at its wake-window sibling when one exists.
+    const wakeWindowByMonths = new Map(wakeWindowPages.map((page) => [page.months, page.path]))
+
+    const cluster1: EmittedPage[] = [
         {
             fileName: `${CLUSTER_BASE.replace(/^\//, '')}/index.html`,
             path: `${CLUSTER_BASE}/`,
@@ -381,7 +614,21 @@ export function renderContentPages(pages: AgePageModel[], bracketRows: HubBracke
         ...pages.map((page) => ({
             fileName: `${CLUSTER_BASE.replace(/^\//, '')}/${page.slug}/index.html`,
             path: page.path,
-            html: renderAgePage(page),
+            html: renderAgePage(page, wakeWindowByMonths.get(page.months)),
+        })),
+    ]
+
+    if (!wakeWindowPages.length) return cluster1
+
+    const base = WAKE_WINDOW_BASE.replace(/^\//, '')
+    return [
+        ...cluster1,
+        { fileName: `${base}/index.html`, path: `${WAKE_WINDOW_BASE}/`, html: renderWakeWindowHub(wakeWindowPages, chartRows) },
+        { fileName: `${base}/chart/index.html`, path: `${WAKE_WINDOW_BASE}/chart/`, html: renderWakeWindowChart(chartRows) },
+        ...wakeWindowPages.map((page) => ({
+            fileName: `${base}/${page.slug}/index.html`,
+            path: page.path,
+            html: renderWakeWindowPage(page),
         })),
     ]
 }

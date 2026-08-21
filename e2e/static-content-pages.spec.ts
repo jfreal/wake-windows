@@ -51,6 +51,28 @@ test.describe('Static content pages [@feature:static-content-pages]', () => {
     expect(bedtime).toContain('7:00 PM');
   });
 
+  test('wake-windows hub links its spokes and the schedule cluster', async ({ page }) => {
+    await page.goto('/wake-windows/');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'Wake windows by age' })).toBeVisible();
+    await expect(page.getByRole('link', { name: '6 month old wake windows' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'sleep schedules by age' })).toBeVisible();
+  });
+
+  // The two clusters describe the same age from different angles. If they ever
+  // disagreed about the windows, one of the two pages would be wrong.
+  test('wake-window page and schedule page agree on the same age', async ({ page }) => {
+    await page.goto('/wake-windows/6-month-old/');
+    const windowPageCta = await page.getByRole('link', { name: 'Turn these windows into clock times' }).getAttribute('href');
+
+    await page.goto('/sleep-schedule/6-month-old/');
+    const schedulePageCta = await page.getByRole('link', { name: 'Open this day in the planner' }).getAttribute('href');
+
+    expect(windowPageCta).toBe(schedulePageCta);
+    // And the schedule page links back to the wake-window page for its age.
+    await expect(page.getByRole('link', { name: '6 month old wake windows' })).toBeVisible();
+  });
+
   test('survives the service worker\'s SPA navigation fallback', async ({ page }) => {
     // Install the worker from the app, then navigate to a content page: without
     // the denylist in src/sw.ts the fallback answers with the app shell.
@@ -62,5 +84,9 @@ test.describe('Static content pages [@feature:static-content-pages]', () => {
 
     await page.goto('/sleep-schedule/5-month-old/');
     await expect(page.getByRole('heading', { level: 1, name: '5 month old sleep schedule' })).toBeVisible();
+
+    // Same seam, second cluster — /wake-windows/* needs its own denylist entry.
+    await page.goto('/wake-windows/chart/');
+    await expect(page.getByRole('heading', { level: 1, name: 'Wake window chart' })).toBeVisible();
   });
 });

@@ -4,6 +4,7 @@ import {
     bracketForMonths,
     buildAgePages,
     CLUSTER_BASE,
+    generalGuidance,
     hubBracketRows,
     scheduleFor,
 } from './agePages'
@@ -109,14 +110,17 @@ describe('hubBracketRows', () => {
     const rows = hubBracketRows()
 
     it('lists every Tier-1 bracket, youngest first', () => {
-        expect(rows.length).toBeGreaterThan(AGE_PAGES.length)
+        expect(rows).toHaveLength(generalGuidance().brackets.length)
         expect(rows[0].ageLabel).toBe('0–2 months')
     })
 
-    it('links only the brackets that have a spoke page', () => {
-        const linked = rows.filter((r) => r.href)
-        expect(linked.length).toBeGreaterThan(0)
-        expect(rows.find((r) => r.ageLabel === '0–2 months')?.href).toBeUndefined()
-        expect(rows.find((r) => r.ageLabel === '3–5 months')?.href).toContain(CLUSTER_BASE)
+    // Every bracket now has at least one page in it. The row links the youngest
+    // spoke inside the bracket, so a parent landing on the hub from a bracket
+    // row arrives at the page nearest the age they were reading about.
+    it('links each bracket to the youngest spoke inside it', () => {
+        expect(rows.every((r) => r.href?.startsWith(CLUSTER_BASE))).toBe(true)
+        expect(rows.find((r) => r.ageLabel === '0–2 months')?.href).toBe('/sleep-schedule/newborn/')
+        expect(rows.find((r) => r.ageLabel === '3–5 months')?.href).toBe('/sleep-schedule/3-month-old/')
+        expect(rows.find((r) => r.ageLabel === '18–24 months')?.href).toBe('/sleep-schedule/18-month-old/')
     })
 })

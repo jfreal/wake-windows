@@ -6,9 +6,18 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { buildAgePages, hubBracketRows } from './src/content/agePages'
 import { renderContentPages, renderSitemap } from './src/content/renderContentPage'
+import { buildWakeWindowPages, wakeWindowChartRows } from './src/content/wakeWindowPages'
 
-// SEO cluster 1 (docs/research/seo-topic-clusters.md): emit the static
-// `/sleep-schedule/*` pages and the sitemap at build time.
+/** Both clusters, in one list: the age schedules and the wake-window pages. */
+function allContentPages() {
+  const pages = buildAgePages()
+  const wakeWindows = buildWakeWindowPages(pages)
+  return renderContentPages(pages, hubBracketRows(pages), wakeWindows, wakeWindowChartRows(wakeWindows))
+}
+
+// SEO clusters 1 and 2 (docs/research/seo-topic-clusters.md): emit the static
+// `/sleep-schedule/*` and `/wake-windows/*` pages, plus the sitemap, at build
+// time.
 //
 // Static emission rather than a router + SSG framework: these pages are
 // documents with no app state, the app itself stays a single-route SPA, and
@@ -25,10 +34,9 @@ function wakeWindowsContentPages(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const path = (req.url ?? '').split('?')[0]
-        if (!path.startsWith('/sleep-schedule')) return next()
+        if (!path.startsWith('/sleep-schedule') && !path.startsWith('/wake-windows')) return next()
 
-        const pages = buildAgePages()
-        const emitted = renderContentPages(pages, hubBracketRows(pages))
+        const emitted = allContentPages()
         const wanted = path.endsWith('/') ? `${path.slice(1)}index.html` : `${path.slice(1)}/index.html`
         const match = emitted.find((page) => page.fileName === wanted)
         if (!match) return next()
@@ -38,8 +46,7 @@ function wakeWindowsContentPages(): Plugin {
       })
     },
     generateBundle() {
-      const pages = buildAgePages()
-      const emitted = renderContentPages(pages, hubBracketRows(pages))
+      const emitted = allContentPages()
 
       for (const page of emitted) {
         this.emitFile({ type: 'asset', fileName: page.fileName, source: page.html })

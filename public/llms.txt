@@ -24,14 +24,19 @@ Guidance last reviewed: 2026-06-07.
 
 ## Sample schedules by age
 
-Static, no-JS pages with a computed sample day, the age's wake-window range, nap count, and total sleep:
+Static, no-JS pages with a computed sample day, the age's wake-window range, nap count, and total sleep.
+Every number on them is generated from the same models the app uses, and checked against the Tier-1 bracket
+for that age.
 
-- https://wakewindows.guru/sleep-schedule/ — every age bracket, 0-24 months
-- https://wakewindows.guru/sleep-schedule/3-month-old/
-- https://wakewindows.guru/sleep-schedule/4-month-old/
-- https://wakewindows.guru/sleep-schedule/5-month-old/
-- https://wakewindows.guru/sleep-schedule/6-month-old/
-- https://wakewindows.guru/sleep-schedule/7-month-old/
+- https://wakewindows.guru/sleep-schedule/ — hub: every age bracket, 0-24 months
+- https://wakewindows.guru/sleep-schedule/newborn/
+- https://wakewindows.guru/sleep-schedule/1-month-old/ (also 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 and 18-month-old)
+
+## Wake windows by age
+
+- https://wakewindows.guru/wake-windows/ — hub: how long babies stay awake between sleeps
+- https://wakewindows.guru/wake-windows/chart/ — the full chart, newborn to 2 years
+- https://wakewindows.guru/wake-windows/newborn/ (also 4, 6, 9 and 12-month-old)
 
 ## Stance
 

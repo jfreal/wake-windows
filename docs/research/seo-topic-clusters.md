@@ -152,12 +152,16 @@ daylight saving time baby sleep, travel nap schedule.
 
 ## Build order
 
-1. **Shipped** — Cluster 1, ages 3/4/5/6/7 months (~52k combined volume at KD 0-7),
-   plus the hub. See `../features/H01-static-content-pages.md`; the pages are
-   generated from the app's models by `src/content/` and emitted at build time.
-2. Cluster 2 hub + the four transactional age spokes.
-3. Cluster 3 (content already exists in the A06 feature).
-4. Cluster 4 — biggest volume, hardest editorially, needs real sourcing.
+1. **Shipped** — Cluster 1 in full: the hub plus 14 age spokes (newborn, 1-12 and
+   18 months, ~100k combined volume, most of it at KD 0-7).
+2. **Shipped** — Cluster 2: the `/wake-windows/` hub, a chart page, and the four
+   transactional age spokes plus newborn.
+
+   Both are generated from the app's models by `src/content/` and emitted at build
+   time. See `../features/H01-static-content-pages.md`.
+3. Cluster 3 — nap transitions (content already exists in the A06 feature).
+4. Cluster 4 — sleep regressions: biggest volume, hardest editorially, needs real
+   sourcing before a word of it is written.
 5. Clusters 5-8 as fill.
 
 ## Prerequisites

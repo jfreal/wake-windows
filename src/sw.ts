@@ -62,14 +62,15 @@ cleanupOutdatedCaches();
 // served the precached index.html, so a shared plan link renders offline. This
 // replaces the navigateFallback generateSW gave us for free before injectManifest.
 //
-// The denylist is load-bearing: /sleep-schedule/* are real static documents
-// emitted by the build, not SPA routes. Without it the fallback would answer
-// every one of them with the app shell, so an installed user (and only an
-// installed user) would see the planner where the article should be. They are
-// precached by the same globPatterns, so they still work offline on their own.
+// The denylist is load-bearing: /sleep-schedule/* and /wake-windows/* are real
+// static documents emitted by the build, not SPA routes. Without it the
+// fallback would answer every one of them with the app shell, so an installed
+// user (and only an installed user) would see the planner where the article
+// should be. They are precached by the same globPatterns, so they still work
+// offline on their own. Any new content cluster must be added here too.
 registerRoute(
     new NavigationRoute(createHandlerBoundToURL('index.html'), {
-        denylist: [/^\/sleep-schedule(\/|$)/],
+        denylist: [/^\/sleep-schedule(\/|$)/, /^\/wake-windows(\/|$)/],
     }),
 );
 

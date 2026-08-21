@@ -100,6 +100,8 @@ import logoUrl from './assets/logo.png'
                  but not internal linking. -->
             <p>
               <a class="underline" href="/sleep-schedule/">Sample sleep schedules by age</a>
+              ·
+              <a class="underline" href="/wake-windows/">Wake windows by age</a>
             </p>
           </footer>
         </div>

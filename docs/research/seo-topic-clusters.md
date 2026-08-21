@@ -1,0 +1,167 @@
+# SEO Topic Clusters — wakewindows.guru
+
+Source: OpenSEO MCP (DataForSEO), US / English, pulled 2026-08-21.
+Method: 5 seed keyword-research calls (481 unique keywords) + a 65-keyword metrics
+hydration + 3 live SERP checks. Search Console is **not connected** to the project,
+so nothing here is first-party data — all volumes are third-party estimates.
+
+Site today: one URL (`https://wakewindows.guru/`, SPA, single sitemap entry). Every
+page below is new. KD = keyword difficulty 0-100.
+
+## Headline finding
+
+The money is in **age-indexed schedule pages**, not in generic "baby sleep" content.
+Dozens of `{age} sleep schedule` and `{age} wake windows` queries have 1k–12k monthly
+searches at **KD 0–7** — unusually soft. The app already computes exactly what those
+searchers want (a clock-time nap plan), so each page can carry a pre-filled planner.
+
+SERP evidence: `wake windows by age` and `6 month old sleep schedule` are won by
+article pages (Cleveland Clinic, Huckleberry, Taking Cara Babies) and Reddit threads.
+No calculator/tool ranks. So spokes must be **content pages with the tool embedded**,
+not bare tool pages.
+
+---
+
+## Cluster 1 — Sleep schedule by age (highest volume, lowest difficulty)
+
+Hub: `/sleep-schedule` — "Baby sleep schedules by age (newborn to 2 years)"
+
+| Spoke page | Keyword | Vol | KD |
+|---|---|---|---|
+| `/sleep-schedule/4-month-old` | 4 month old sleep schedule | 12,100 | 7 |
+| `/sleep-schedule/6-month-old` | 6 month old sleep schedule | 12,100 | 0 |
+| `/sleep-schedule/3-month-old` | 3 month old sleep schedule | 9,900 | 5 |
+| `/sleep-schedule/5-month-old` | 5 month old sleep schedule | 9,900 | 0 |
+| `/sleep-schedule/7-month-old` | 7 month old sleep schedule | 8,100 | 0 |
+| `/sleep-schedule/newborn` | newborn sleep schedule | 8,100 | 40 |
+| `/sleep-schedule/2-month-old` | 2 month old sleep schedule | 6,600 | 17 |
+| `/sleep-schedule/8-month-old` | 8 month old sleep schedule | 6,600 | 0 |
+| `/sleep-schedule/10-month-old` | 10 month old sleep schedule | 6,600 | 0 |
+| `/sleep-schedule/11-month-old` | 11 month old sleep schedule | 5,400 | 4 |
+| `/sleep-schedule/9-month-old` | 9 month old sleep schedule | 5,400 | 0 |
+| `/sleep-schedule/12-month-old` | 12 month old sleep schedule | 3,600 | 0 |
+| `/sleep-schedule/1-month-old` | 1 month old sleep schedule | 2,400 | 19 |
+| `/sleep-schedule/18-month-old` | 18 month old sleep schedule | 2,400 | 0 |
+
+Week-level long tail for the newborn spoke (own H2s or child pages):
+6-week 1,300 (KD 2) · 8-week 880 (KD 19) · 7-week 880 (KD 7) · 10-week 720 (KD 0) ·
+5-week 590 (KD 9) · 3-week 590 (KD 13) · 12-week 480 (KD 11) · 4-week 480 (KD 23) ·
+9-week 390 (KD 7) · 11-week 390 (KD 9).
+
+Page recipe: sample clock schedule table → wake windows for that age → total sleep
+needs (cited) → the planner pre-filled to that age → "what changes next month" link
+to the next spoke and to the relevant nap-transition page.
+
+## Cluster 2 — Wake windows by age (brand-defining term)
+
+Hub: `/wake-windows` — "Wake windows by age: chart + calculator"
+
+| Spoke | Keyword | Vol | KD |
+|---|---|---|---|
+| hub | wake windows by age | 8,100 | 6 |
+| hub | wake windows | 3,600 | 11 |
+| `/wake-windows/4-month-old` | 4 month old wake windows | 6,600 | 0 |
+| `/wake-windows/6-month-old` | 6 month old wake windows | 4,400 | 2 |
+| `/wake-windows/9-month-old` | 9 month old wake windows | 2,900 | 0 |
+| `/wake-windows/12-month-old` | 12 month old wake windows | 1,000 | 0 |
+| `/wake-windows/newborn` | wake windows newborn | 720 | 1 |
+| `/wake-windows/newborn` | newborn wake windows by week | 590 | 13 |
+| `/wake-windows/chart` | wake window chart | 260 | 21 |
+| FAQ block on hub | do wake windows include feeding time | 110 | 0 |
+
+Note `4/6/9/12 month old wake windows` are tagged **transactional** intent — those
+searchers want a tool, which is the one place a calculator-first layout wins.
+
+## Cluster 3 — Nap transitions (4→3→2→1)
+
+Hub: `/nap-transitions` — matches the shipped A06 nap-transition detector.
+
+| Spoke | Keyword | Vol | KD |
+|---|---|---|---|
+| `/nap-transitions/2-to-1` | 2 to 1 nap transition | 590 | 0 |
+| `/nap-transitions/3-to-2` | 3 to 2 nap transition | 320 | 0 |
+| `/nap-transitions/one-nap` | one nap schedule | 1,600 | 0 |
+| `/nap-transitions/two-naps` | 2 nap schedule | 880 | 3 |
+| `/nap-transitions/three-naps` | 3 nap schedule | 390 | 0 |
+| section on hub | dropping from 2 naps to 1 | 320 | 0 |
+| section on hub | 4 to 3 nap transition | 140 | 0 |
+
+SERP for `2 to 1 nap transition` is Reddit + sleep consultants giving step plans
+("push nap 15-30 min every few days"). Ship a day-by-day ramp the app can generate.
+
+## Cluster 4 — Sleep regressions (biggest single query in the space)
+
+Hub: `/sleep-regressions`
+
+| Spoke | Keyword | Vol | KD |
+|---|---|---|---|
+| `/sleep-regressions/4-month` | 4 month sleep regression | 22,200 | 10 |
+| hub | sleep regression | 18,100 | 17 |
+| `/sleep-regressions/18-month` | 18 month sleep regression | 8,100 | 0 |
+| `/sleep-regressions/8-month` | 8 month sleep regression | 8,100 | 0 |
+| `/sleep-regressions/12-month` | 12 month sleep regression | 4,400 | 5 |
+| also | 4 month old sleep regression | 1,900 | 1 |
+
+Highest-volume cluster on the list, and the one furthest from what the app does
+today. Angle that keeps it honest: "is this a regression or just the wrong wake
+window?" — send readers into the planner and the transition detector.
+
+## Cluster 5 — Nap troubleshooting
+
+Hub: `/nap-help` (feeds the existing sleep troubleshooter)
+
+Members: contact naps (3,600 / KD 0), short naps, catnapping, overtired signs,
+early morning wakings, split nights, 4 month old nap length (170 / KD 0),
+nap length by age (170 / KD 24), how many naps by age (50 / KD 16).
+The last six returned no volume estimate — real but small; treat as long tail.
+
+## Cluster 6 — How much sleep does a baby need
+
+Hub: `/sleep-needs` — total sleep per 24h by age, straight off the cited data the
+app already ships (AASM / NSF / WHO / AAP).
+
+Members: how much sleep for 3 month old (390 / KD 22), how much sleep for 6 month
+old (390 / KD 22), how much sleep does a 6 month old need (1,000 / KD 28),
+infant sleep times (480 / KD 44), how many hours of sleep 3 month old (210 / KD 28),
+how long should a newborn be awake (720 / KD 14).
+Higher KD than the schedule cluster — these are held by Cleveland Clinic, Sleep
+Foundation, BabyCenter. Build it for citation/E-E-A-T, not for quick wins.
+
+## Cluster 7 — Calculators (small volume, high commercial value)
+
+`nap calculator` — 590 vol, KD 3, **CPC $1.42** (10-25x every other keyword here).
+Also `wake window calculator` and `baby sleep calculator` (near-zero measured volume).
+One `/calculator` page, canonical to the app, linked from every spoke.
+
+## Cluster 8 — Edge cases the app already handles
+
+Thin on volume, strong on differentiation and internal linking:
+preemie sleep schedule (50 / KD 0, matches the corrected-age feature),
+daycare nap schedule (20 / KD 0), white noise for baby sleep (matches F05),
+daylight saving time baby sleep, travel nap schedule.
+
+---
+
+## Internal linking rule
+
+1. Every spoke links up to its hub and down to the planner.
+2. Age spokes link to age±1 (a 4-month page should catch the 5-month searcher next month).
+3. Age spokes link sideways to the transition and regression page for that age —
+   4-month schedule ↔ 4-month regression ↔ 3-to-2 transition.
+4. Hubs link to each other; the wake-windows hub is the site's semantic center.
+
+## Build order
+
+1. Cluster 1, ages 4/6/3/5/7 months — ~52k combined volume at KD 0-7.
+2. Cluster 2 hub + the four transactional age spokes.
+3. Cluster 3 (content already exists in the A06 feature).
+4. Cluster 4 — biggest volume, hardest editorially, needs real sourcing.
+5. Clusters 5-8 as fill.
+
+## Prerequisites
+
+- The site is a single-route SPA. Clusters need real routes, per-route `<title>`/
+  meta/canonical, and prerendering or SSG — Netlify + `vite-plugin-ssg` or similar.
+- `public/sitemap.xml` has one URL; it must be generated from the route list.
+- Connect Search Console to the OpenSEO project. Without it there is no way to
+  measure whether any of this lands.

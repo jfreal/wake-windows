@@ -15,6 +15,7 @@
       "src/components/RestOfDay.vue:14",
       "src/components/TodayHero.vue:13",
       "src/components/WindowMechanics.vue:5",
+      "src/content/agePages.ts:1",
       "src/models/ScheduleSetting.ts:24",
       "src/models/scheduleTemplates.test.ts:9",
       "src/models/scheduleTemplates.ts:1",
@@ -213,7 +214,7 @@
     "status": "Built",
     "summary": "Evidence Tier Badges & Inline Citations",
     "sources": [
-      "src/App.vue:102",
+      "src/App.vue:113",
       "src/components/EvidenceGuidance.vue:6",
       "src/components/EvidenceSheet.vue:7",
       "src/components/FaqPanel.vue:6",
@@ -527,8 +528,8 @@
       "src/models/handoffSummary.ts:1",
       "src/models/planUrl.test.ts:138",
       "src/models/planUrl.ts:57",
-      "src/models/planUrl.ts:88",
-      "src/models/planUrl.ts:96",
+      "src/models/planUrl.ts:91",
+      "src/models/planUrl.ts:99",
       "src/views/SettingsView.vue:151"
     ],
     "tests": [
@@ -743,7 +744,7 @@
     "summary": "No-AI stance panel + per-plan 'How this was calculated' arithmetic walk",
     "sources": [
       "src/components/EvidenceSheet.vue:8",
-      "src/components/EvidenceSheet.vue:79",
+      "src/components/EvidenceSheet.vue:130",
       "src/components/HowCalculated.vue:7",
       "src/components/NoAiStance.vue:2",
       "src/components/TodayHero.vue:113",
@@ -768,6 +769,22 @@
     ],
     "tests": [
       "e2e/ephemerality-data-deletion.spec.ts:1"
+    ]
+  },
+  "static-content-pages": {
+    "doc": "docs/features/H01-static-content-pages.md",
+    "title": "Static Content Pages (SEO topic cluster)",
+    "category": "Reach & Discovery",
+    "priority": "P1",
+    "status": "Built",
+    "summary": "Static Content Pages (SEO topic cluster)",
+    "sources": [
+      "src/content/agePages.ts:1",
+      "src/content/renderContentPage.ts:1",
+      "src/content/wakeWindowPages.ts:1"
+    ],
+    "tests": [
+      "e2e/static-content-pages.spec.ts:1"
     ]
   }
 }

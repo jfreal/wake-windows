@@ -5,14 +5,10 @@ on:
     branches: ['**']
   pull_request:
   workflow_dispatch:
-  schedule:
-    # Daily live smoke test against the deployed site (08:00 UTC)
-    - cron: '0 8 * * *'
 
 jobs:
   unit:
     name: Unit tests (Vitest)
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +21,6 @@ jobs:
 
   e2e:
     name: E2E (Playwright, local preview)
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,8 +43,10 @@ jobs:
 
   e2e-hosted:
     name: E2E smoke (live site)
-    # Runs on the daily schedule and on manual dispatch — verifies the deployed app.
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    # Manual only. There is no daily run: Netlify's bot challenge answers a
+    # share of requests from Actions IPs with a "verifying your connection"
+    # page, which failed a different random test most mornings.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

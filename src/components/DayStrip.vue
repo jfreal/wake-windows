@@ -36,7 +36,13 @@ const segments = computed(() =>
 
 const gradient = computed(() => segmentsToGradient(segments.value, COLORS))
 
-const nowPercent = computed(() => `${((minutesFromMidnight(new Date(now.value)) / 1440) * 100).toFixed(2)}%`)
+// Clamped to the track: the marker is 3px wide and positioned from its left
+// edge, so in the last minutes before midnight its tail would otherwise sit
+// past the end of the strip.
+const nowPercent = computed(() => {
+  const pct = ((minutesFromMidnight(new Date(now.value)) / 1440) * 100).toFixed(2)
+  return `clamp(0px, ${pct}%, calc(100% - 3px))`
+})
 
 // The text alternative. Hours are spelled out so a screen reader doesn't
 // announce a bare "h", and the sentence says the same thing the picture does.

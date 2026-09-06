@@ -75,13 +75,13 @@ Applying one replaces the wake-window array in place; every window stays editabl
 - 24h totals: **Tier 1** — AASM 2016 (4–12 mo: 12–16h), NSF 2015 (0–3 mo: 14–17h).
 - Conventions (first-shortest/last-longest, includes feeding, window boundaries): research 01 §2; the boundary disagreement between published sources is research 08 T2.
 - Nap caps: **Tier 3** convention (`tcb-wake-sleeping`, `huckleberry-day-sleep`, `mayo-baby-naps`) shown against **Tier 1** actigraphy (`reynaud-2026-bmc`: in 2–5-year-olds an extra hour of napping cost ~14 min of night sleep, and nap *end time* mattered more than length — adjacent-age evidence, applied loosely under two).
-- Named templates: **Tier 3** community shorthand (research 08 T9). No study tests "2-3-4"; the doc-facing claim is only that these are the shapes parents search for.
+- Named templates: **Tier 2** — `citations.json` files "specific sample nap schedules" under Tier 2, and `agePages.ts` calls 2-3-4 "a practice-based convention rather than a validated rule". Community shorthand (research 08 T9); no study tests "2-3-4", and the doc-facing claim is only that these are the shapes parents search for. The template chips in `ChildInputs.vue` carry no badge of their own — they fill the wake-window inputs, which are badged Tier 2.
 
 ## Effort
 Medium. Pure arithmetic + a citation/badge layer; no backend, no model.
 
 ## Risks / open questions
-- Presenting heuristic numbers with authority they don't have — mitigated by the Tier 3 badge and honest "guidance, not a rule" copy.
+- Presenting heuristic numbers with authority they don't have — mitigated by the Tier 2 badge and honest "guidance, not a rule" copy.
 - How prominently to nudge toward cues under 6 months without undercutting the tool's usefulness.
 
 ## Success metric

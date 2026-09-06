@@ -49,7 +49,7 @@ Badges on troubleshooter answers (B05), regression explainer (B06), sleep-traini
 - T3 must never visually outrank T1 — keep hierarchy clear.
 
 ## Evidence & citations
-Tier framework and numbers from research 00/01. T1: AASM 2016 (Paruthi), NSF 2015 (Hirshkowitz), AAP 2022 safe sleep. T2: Mindell 2016 (PubMed 27252030), Iglowstein 2003. T3: Taking Cara Babies / Huckleberry / Cleveland Clinic wake-window charts (which disagree — itself proof they are heuristics). Canapari: wake windows are "not taught, discussed, or researched in pediatric sleep medicine."
+Tier framework and numbers from research 00/01; every tier below is the one the source carries in `src/data/citations.json`. Tier 1: AASM 2016 (`paruthi-2016`), NSF 2015 (`hirshkowitz-2015`), AAP 2022 safe sleep, and the cohort work — Mindell 2016 (`mindell-2016-app`) and Iglowstein 2003 (`iglowstein-2003`). Tier 2: the wake-window charts — Taking Cara Babies (`tcb-wake-windows`), Huckleberry (`huckleberry-expectations`), Cleveland Clinic (`cleveland-wake-windows`) — which disagree with each other, itself proof they are heuristics; and Canapari (`canapari-critique`), who says wake windows are "not taught, discussed, or researched in pediatric sleep medicine." Tier 3 holds the narrower practitioner answers: nap transitions (`huckleberry-nap-transitions`), short naps and early waking (`tcb-short-naps`, `tcb-early-waking`, `huckleberry-early-risers`).
 
 ## Effort
 Medium. Design system for badges + citation card; a maintained claim→tier→source table. No backend.

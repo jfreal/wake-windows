@@ -25,12 +25,12 @@ Huckleberry (SweetSpot) and Napper both predict, but as app-only, account-gated,
 ## Our approach (spec)
 Deterministic arithmetic, no model:
 1. Compute age (adjusted if preterm — see A03).
-2. Look up the age-band wake window range (Tier 3 table below).
+2. Look up the age-band wake window range (Tier 2 table below).
 3. Look up typical nap count for the band.
 4. From wake time, lay out: window → nap → window → nap ... to bedtime.
 5. Apply the convention **first window shortest, last window longest**, distributing the range across the day.
 6. Each window **includes feeding time** — everything the baby is awake for counts, and the window does not reset after a feed.
-Show every step: "Wake 7:00 + first window 2h → nap ~9:00." Attach a Tier 3 badge + citation to the window numbers and a Tier 1 badge to the 24h-total sanity check (AASM 2016 / NSF 2015).
+Show every step: "Wake 7:00 + first window 2h → nap ~9:00." Attach a Tier 2 badge + citation to the window numbers and a Tier 1 badge to the 24h-total sanity check (AASM 2016 / NSF 2015).
 
 ### Where a window starts and ends
 Shipped in the **"What counts as awake?"** panel (`WindowMechanics.vue`), under the nap schedule:
@@ -71,7 +71,7 @@ Applying one replaces the wake-window array in place; every window stays editabl
 - Nap caps stay a suggestion, not an alarm: no timer, no "wake the baby now" prompt. A baby sleeping through a needed feed is routed to the pediatrician, not to a schedule answer.
 
 ## Evidence & citations
-- Wake-window numbers: **Tier 3** heuristic; sources disagree (Taking Cara Babies, Huckleberry, Cleveland Clinic). Label as guidance.
+- Wake-window numbers: **Tier 2** practice-based heuristic; sources disagree (Taking Cara Babies, Huckleberry, Cleveland Clinic). Label as guidance. The *boundary definitions* underneath them are a separate, weaker claim — **Tier 3** practitioner convention (`WindowMechanics.vue`).
 - 24h totals: **Tier 1** — AASM 2016 (4–12 mo: 12–16h), NSF 2015 (0–3 mo: 14–17h).
 - Conventions (first-shortest/last-longest, includes feeding, window boundaries): research 01 §2; the boundary disagreement between published sources is research 08 T2.
 - Nap caps: **Tier 3** convention (`tcb-wake-sleeping`, `huckleberry-day-sleep`, `mayo-baby-naps`) shown against **Tier 1** actigraphy (`reynaud-2026-bmc`: in 2–5-year-olds an extra hour of napping cost ~14 min of night sleep, and nap *end time* mattered more than length — adjacent-age evidence, applied loosely under two).
